@@ -1,0 +1,26 @@
+@font-face {
+    font-family: BebasNeue;
+    src:url(BebasNeue.otf);
+}
+@font-face {
+    font-family: HarabaraMais;
+    src: url(HarabaraMaisDemo.otf);
+}
+.exp {
+    font-family: BebasNeue;
+    font-size: 24;
+}
+.exp:before {
+    content: '';
+    display: inline-block;
+    height: 107%;
+    vertical-align: middle;
+    margin-right: -0.25em;
+}
+.exp words {
+    width: 100%;
+    display: inline-block;
+    vertical-align:middle;
+    text-transform: uppercase;
+    text-align: center;
+}
