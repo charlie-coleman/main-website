@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+
+<!-- Mirrored from orteil.dashnet.org/computerclicker/ by HTTrack Website Copier/3.x [XR&CO'2013], Tue, 24 Sep 2013 20:46:22 GMT -->
+<head>
+<title>Trusty Clicker</title>
+<!--
+Code and graphics copyright Orteil, 2013
+Feel free to alter this code to your liking, but please do not re-host it, do not profit from it and do not present it as your own.
+
+-TODO :
+	-milk toys
+	-temple building
+	-dungeons
+	-gambling
+	-better tooltips
+	-better prestige
+	-add canvas support
+	-timer bars for golden computer effects
+	-set event listeners instead of onclick
+	-more zebras
+-->
+
+<link rel="shortcut icon" href="img/favicon.ico" />
+<link href="http://fonts.googleapis.com/css?family=Kavoon&amp;subset=latin,latin-ext" rel="stylesheet" type="text/css">
+<link href="style7682.css?v=1.5028" rel="stylesheet" type="text/css">
+<script src="http://charlie-coleman.com/jquery-1.11.2.js"></script>
+<script src="base64.js"></script>
+<script src="ajax.js"></script>
+<script src="dungeons8831.js?v=1.5026"></script>
+<script src="main70b5.js?v=1.5031"></script>
+<script src="Sound.js"></script>
+<script>
+    (function($) {
+  $.fn.nodoubletapzoom = function() {
+      $(this).bind('touchstart', function preventZoom(e) {
+        var t2 = e.timeStamp
+          , t1 = $(this).data('lastTouch') || t2
+          , dt = t2 - t1
+          , fingers = e.originalEvent.touches.length;
+        $(this).data('lastTouch', t2);
+        if (!dt || dt > 500 || fingers > 1) return; // not double-tap
+
+        e.preventDefault(); // double tap - prevent the zoom
+        // also synthesize click events we just swallowed up
+        $(this).trigger('click').trigger('click');
+      });
+  };
+})(jQuery);</script>
+
+
+</head>
+<body>
+
+<div id="topBar">
+	<div>
+		<b>Trusty Clicker</b> &copy; <a href="http://charlie-coleman.com" target="_blank">Charlie Coleman</a>, 2013 | <a href="http://twitter.com/coleman_charlie" target="_blank">twitter</a> | Help? Bugs? Ideas? Email me: <a href="https://mail.google.com/mail/?view=cm&fs=1&tf=1&source=mailto&to=thoughts@charlie-coleman.com" target="_blank">My Email</a>!| Getting a black screen? Try pressing ctrl-F5!
+		<div id="links" style="display:block;position:absolute;right:8px;top:4px;"></div>
+	</div>
+</div>
+
+<div id="game">
+	<div id="javascriptError">
+		<div style="padding:64px 128px;">
+			<div class="title">Oops, looks like the game isn't loading right!</div>
+			<div>Please make sure your javascript is enabled, then refresh.<br>
+			This could also be caused by a problem on our side, in which case - wait a moment, then refresh!</div>
+		</div>
+	</div>
+
+	<div id="backgroundLayers">
+		<div id="backgroundLayer1"></div>
+		<div id="backgroundLayer2"></div>
+	</div>
+	
+	<div id="goldenComputer" class="goldenComputer"></div>
+	<div id="alert"></div>
+	<div id="particles"></div>
+	<div id="versionNumber" class="title"></div>
+	
+	<div id="sectionLeft" class="inset">
+		<div id="computerShower"></div>
+		<div class="blackGradient"></div>
+		<div class="blackFiller"></div>
+		<div id="sectionLeftInfo"></div>
+		<div id="computers" class="title"></div>
+		<div id="computerAnchor">
+			<div id="computerShine"></div>
+			<div id="computerCursors"></div>
+			<div id="bigComputer"></div>
+			<div id="computerNumbers"></div>
+		</div>
+		<div id="milk">
+			<div id="milkLayer1" class="milkLayer"></div>
+			<div id="milkLayer2" class="milkLayer"></div>
+		</div>
+	</div>
+
+	<div class="separatorLeft"></div>
+	<div class="separatorRight"></div>
+		
+	<div id="sectionMiddle" class="inset">
+		<div id="comments" class="inset title">
+			<div id="prefsButton" class="button">Menu</div>			
+            <div id="musicButton" class="button" style="font-size:80%;" onclick="location.href='http://charlie-coleman.com/random'">Random Site</div>
+			<div id="statsButton" class="button">Stats</div>	
+			<div id="logButton" class="button" style="font-size:90%;">Updates</div>
+			<div id="commentsText"></div>
+			
+			<div class="separatorBottom"></div>
+		</div>
+		<div id="menu"></div>
+		<div id="rows"></div>
+		
+	
+	</div>
+
+	<div id="sectionRight" class="inset">
+		<div id="store">
+			<div id="storeTitle" class="inset title">Store				</div>
+			<div id="upgrades">
+			</div>
+			<div id="products">
+			</div>
+		</div>
+	</div>
+    <div id="tooltipAnchor"><div id="tooltip" onMouseOut="Game.tooltip.hide();"></div></div>
+ </div>
+
+</body>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-50502616-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+</html>
