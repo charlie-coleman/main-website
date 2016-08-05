@@ -1,0 +1,54 @@
+@font-face {
+    font-family: BebasNeue;
+    src:url(/fonts/BebasNeue.otf);
+}
+@font-face {
+    font-family: OpenSans;
+    src:url(/fonts/open-sans/OpenSans-Regular.ttf);
+}
+@font-face {
+    font-family: seasrn;
+    src:url(/fonts/SEASRN.ttf);
+}
+
+html, body {
+    -webkit-transition: background 0.2s ease-in-out;
+    -moz-transition: background 0.2s ease-in-out;
+    -o-transition: background 0.2s ease-in-out;
+    transition: background 0.2s ease-in-out;
+    background: white;
+    color: black;
+    height:97%;
+}
+#RGB-text {
+    -webkit-transition: background 0.2s ease-in-out, font-size 0.05s ease-in-out;
+    -moz-transition: background 0.2s ease-in-out, font-size 0.05s ease-in-out;
+    -o-transition: background 0.2s ease-in-out, font-size 0.05s ease-in-out;
+    transition: background 0.2s ease-in-out, font-size 0.05s ease-in-out;
+    font-family: BebasNeue;
+    font-size: 30px;
+    text-align: center;
+    width: 100%;
+    text-transform: uppercase;
+}
+#hexcolor, #hextext {
+    text-transform: uppercase;
+    -webkit-transition: background 0.2s ease-in-out, font-size 0.05s ease-in-out;
+    -moz-transition: background 0.2s ease-in-out, font-size 0.05s ease-in-out;
+    -o-transition: background 0.2s ease-in-out, font-size 0.05s ease-in-out;
+    transition: background 0.2s ease-in-out, font-size 0.05s ease-in-out;
+    font-family: BebasNeue;
+    font-size: 30px;
+    text-align: center;
+    width: 100%;
+}
+#container {
+    display: table;
+    height: 98.5vh;
+    width: 100%;
+}
+#container2 {
+    display: table-cell;
+    vertical-align: middle;
+    width: 100%;
+}

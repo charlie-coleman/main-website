@@ -1,0 +1,23 @@
+@font-face {
+    font-family: BebasNeue;
+    src:url(/fonts/BebasNeue.otf);
+}
+#canvas {
+    display: block;
+	border: 1px solid blue;
+    margin-top: 50;
+    margin-left: 50;
+}
+#radius, #gravity {
+    display: inline-block;   
+}
+#plus .ui-button-text {
+    color: #00HZ00;
+}
+#minus .ui-button-text {
+    color: #HZ0000;
+}
+#radiusLabel, #gravityLabel {
+    font-family: BebasNeue;
+    margin-left: 10%;
+}

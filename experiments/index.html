@@ -1,0 +1,97 @@
+<html>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <head>
+        <title>Experiments made in JS, HTML, and CSS</title>
+        <link rel="stylesheet" type="text/css" href="/fonts/leaguegothic.css">
+        <link rel="stylesheet" type="text/css" href="/fonts/opensans.css">
+        <link rel="stylesheet" type="text/css" href="/resources/sharebuttons.css">
+        <link rel="stylesheet" type="text/css" href="/style.css">
+        <link rel="stylesheet" type="text/css" href="./backpics.css">
+        <link rel="icon" href="/resources/favicon.ico">
+        <script src="/resources/jquery.js"></script>
+        <script src="/script.js"></script>
+    </head>
+    <div id="header">
+        <div id="header-title"><a href="/">Experiments by Charlie Coleman</a></div>
+    </div>
+    <div id="main-body">
+        <div class="main-link" id="1">
+            <a href="/experiments/1">
+                <div id="titl">1. Text to Color!</div>
+            </a>
+            <div id="desc"><p>This experiment first takes a string of any length divides it into three seperate strings. It then takes these three strings and transforms it from a base 36 number into a base 16 number. It then scales the base 16 number down so that is is between 0 and FF (255 in base 10). This makes it possible to concatenate each of those three strings into one hexadecimal color, defining the background. Lots of fun math that makes nice colors (sometimes).</p></div>
+        </div>
+        <div class="main-link" id="2" >
+            <a href="/experiments/2">
+                <div id="titl">2. Bouncing, Colorful Balls!</div>
+            </a>
+            <div id="desc"><p>This experiment draws a canvas that contains any number of (almost) perfectly elastic balls. You may say, "Well that sounds boring!" But wait, there's more! The experiment then takes the average distance between the balls and puts it through a series of needlessly complex equations (quartic, believe it or not) and spits out an RGB color to which the background is set, and the balls, the inverse. A great follow-up in terms of useless math like the first experiment.</p></div>
+        </div>
+        <div class="main-link" id="3">
+            <a href="/experiments/3">
+                <div id="titl">3. Bouncing Text!</div>
+            </a>
+            <div id="desc">This experiment draws a canvas that contains any number of strings of text and images. These strings and/or images bounce around the canvas. Type your name into the text box and hit add to see your name. To add an image, start with a backslash (\) and then input the link to the image and hit add. This will (hopefully) be used at he graduation party for Megan Siembieda and Charlie Coleman.</div>
+        </div>
+        <div class='main-link' id='lsystem'>
+            <a href='/experiments/lsystem/'>
+                <div id='titl'>4. Fractal Generator</div>
+            </a>
+            <div id='desc'>This experiment uses Lindenmayer Systems to draw fractals and space filling curves. A lot of examples to show you what it can do. Check it out! Choose some constants, an axiom, and define the rules and see how it turns out. Learn more about L-Systems <a href='https://en.wikipedia.org/wiki/L-system'>here</a> or <a href='http://algorithmicbotany.org/papers/abop/abop.pdf'>here</a>.</div>
+        </div>
+    </div>
+    
+    
+    <div id="footer">
+        <div id="footer-title">More Coming Soon!</div>
+        <div id="footer-desc">
+            Check out my other sites when you get bored with these ones. Check them all out here, or click <a href="/random">here</a> for a random website of mine.
+        </div>
+        <!-- Sharingbutton Facebook -->
+        <a class="resp-sharing-button__link" href="https://facebook.com/sharer/sharer.php?u=http%3A%2F%2Fcharlie-coleman.com%2Fexperiments%2F" target="_blank" aria-label="">
+          <div class="resp-sharing-button resp-sharing-button--facebook resp-sharing-button--small"><div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solid">
+            <svg version="1.1" x="0px" y="0px" width="24px" height="24px" viewBox="0 0 24 24" enable-background="new 0 0 24 24" xml:space="preserve">
+                <g>
+                    <path d="M18.768,7.465H14.5V5.56c0-0.896,0.594-1.105,1.012-1.105s2.988,0,2.988,0V0.513L14.171,0.5C10.244,0.5,9.5,3.438,9.5,5.32 v2.145h-3v4h3c0,5.212,0,12,0,12h5c0,0,0-6.85,0-12h3.851L18.768,7.465z"/>
+                </g>
+            </svg>
+            </div>
+          </div>
+        </a>
+
+        <!-- Sharingbutton Twitter -->
+        <a class="resp-sharing-button__link" href="https://twitter.com/intent/tweet/?text=Fun%20experiments%20made%20in%20JS%2C%20HTML%2C%20and%20CSS&amp;url=http%3A%2F%2Fcharlie-coleman.com%2Fexperiments%2F" target="_blank" aria-label="">
+          <div class="resp-sharing-button resp-sharing-button--twitter resp-sharing-button--small"><div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solid">
+            <svg version="1.1" x="0px" y="0px" width="24px" height="24px" viewBox="0 0 24 24" enable-background="new 0 0 24 24" xml:space="preserve">
+                <g>
+                    <path d="M23.444,4.834c-0.814,0.363-1.5,0.375-2.228,0.016c0.938-0.562,0.981-0.957,1.32-2.019c-0.878,0.521-1.851,0.9-2.886,1.104 C18.823,3.053,17.642,2.5,16.335,2.5c-2.51,0-4.544,2.036-4.544,4.544c0,0.356,0.04,0.703,0.117,1.036 C8.132,7.891,4.783,6.082,2.542,3.332C2.151,4.003,1.927,4.784,1.927,5.617c0,1.577,0.803,2.967,2.021,3.782 C3.203,9.375,2.503,9.171,1.891,8.831C1.89,8.85,1.89,8.868,1.89,8.888c0,2.202,1.566,4.038,3.646,4.456 c-0.666,0.181-1.368,0.209-2.053,0.079c0.579,1.804,2.257,3.118,4.245,3.155C5.783,18.102,3.372,18.737,1,18.459 C3.012,19.748,5.399,20.5,7.966,20.5c8.358,0,12.928-6.924,12.928-12.929c0-0.198-0.003-0.393-0.012-0.588 C21.769,6.343,22.835,5.746,23.444,4.834z"/>
+                </g>
+            </svg>
+            </div>
+          </div>
+        </a>
+
+        <!-- Sharingbutton Reddit -->
+        <a class="resp-sharing-button__link" href="https://reddit.com/submit/?url=http%3A%2F%2Fcharlie-coleman.com%2Fexperiments%2F" target="_blank" aria-label="">
+          <div class="resp-sharing-button resp-sharing-button--reddit resp-sharing-button--small"><div aria-hidden="true" class="resp-sharing-button__icon resp-sharing-button__icon--solid">
+            <svg version="1.1" x="0px" y="0px" width="24px" height="24px" viewBox="0 0 24 24" enable-background="new 0 0 24 24" xml:space="preserve">
+                <path d="M24,11.5c0-1.654-1.346-3-3-3c-0.964,0-1.863,0.476-2.422,1.241c-1.639-1.006-3.747-1.64-6.064-1.723 c0.064-1.11,0.4-3.049,1.508-3.686c0.72-0.414,1.733-0.249,3.01,0.478C17.189,6.317,18.452,7.5,20,7.5c1.654,0,3-1.346,3-3 s-1.346-3-3-3c-1.382,0-2.536,0.944-2.883,2.217C15.688,3,14.479,2.915,13.521,3.466c-1.642,0.945-1.951,3.477-2.008,4.551 C9.186,8.096,7.067,8.731,5.422,9.741C4.863,8.976,3.964,8.5,3,8.5c-1.654,0-3,1.346-3,3c0,1.319,0.836,2.443,2.047,2.844 C2.019,14.56,2,14.778,2,15c0,3.86,4.486,7,10,7s10-3.14,10-7c0-0.222-0.019-0.441-0.048-0.658C23.148,13.938,24,12.795,24,11.5z  M2.286,13.366C1.522,13.077,1,12.351,1,11.5c0-1.103,0.897-2,2-2c0.635,0,1.217,0.318,1.59,0.816 C3.488,11.17,2.683,12.211,2.286,13.366z M6,13.5c0-1.103,0.897-2,2-2s2,0.897,2,2c0,1.103-0.897,2-2,2S6,14.603,6,13.5z  M15.787,18.314c-1.063,0.612-2.407,0.949-3.787,0.949c-1.387,0-2.737-0.34-3.803-0.958c-0.239-0.139-0.321-0.444-0.182-0.683 c0.139-0.24,0.444-0.322,0.683-0.182c1.828,1.059,4.758,1.062,6.59,0.008c0.239-0.138,0.545-0.055,0.683,0.184 C16.108,17.871,16.026,18.177,15.787,18.314z M16,15.5c-1.103,0-2-0.897-2-2c0-1.103,0.897-2,2-2s2,0.897,2,2 C18,14.603,17.103,15.5,16,15.5z M21.713,13.365c-0.397-1.155-1.201-2.195-2.303-3.048C19.784,9.818,20.366,9.5,21,9.5 c1.103,0,2,0.897,2,2C23,12.335,22.468,13.073,21.713,13.365z"/>
+            </svg>
+            </div>
+          </div>
+        </a>
+
+    </div>
+    
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-50502616-1', 'auto');
+      ga('send', 'pageview');
+
+    </script>
+
+</html>

@@ -1,0 +1,62 @@
+@font-face {
+    font-family: BebasNeue;
+    src: url(/fonts/BebasNeue.otf);
+}
+@font-face {
+    font-family: GoodDog;
+    src: url(/fonts/GoodDog.otf);
+}
+@font-face {
+    font-family: Exo;
+    src: url(/fonts/Exo-Regular.otf);
+}
+@font-face {
+    font-family: Seaside;
+    src: url(/fonts/SEASRN.ttf);
+}
+@font-face {
+    font-family: Titillium;
+    src: url(/fonts/Titillium-Regular.otf);
+}
+@font-face {
+    font-family: Lobster;
+    src: url(/fonts/Lobster-Regular.ttf);
+}
+html {
+    position: relative;
+    background: #002e6d;
+}
+#hide {
+    visibility: hidden;   
+}
+#addText {
+    border-radius: 2px;
+    height: 20px;
+    text-indent: 12px;
+    width:79%;
+    border: 0px;
+    background: #04449C;
+    color: #fff;
+}
+#addTextButton {
+    border-radius: 2px;
+    height: 20px;
+    width:18%;
+    border: 0px;
+    background: #4C8EE8;
+    color: #fff;
+}
+#addHolder {
+    padding-top:10px;
+}
+#drawSpace {
+    border-radius: 10px;
+    display: block;
+    margin: 0 auto;
+    background: #fff;   
+}
+#addHold2 {
+    width:52%;
+    display: block;
+    margin: 0 auto;
+}

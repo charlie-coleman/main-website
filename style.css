@@ -1,0 +1,218 @@
+a {
+    all: unset;
+}
+
+body {
+    margin: 0;
+    background-color: #FAFAFA;
+}
+
+#header {
+    padding: 1% 2% 0 2.2%;
+    font-size: 40;
+    font-family: OpenSans, 'Arial Black', sans-serif;
+    font-weight: 300;
+    text-align: left;
+    margin: 0 0 2% 0;
+    background-color: #444;
+    color: #e2e2e2;
+}
+
+#holder {
+    width:100%;
+    background-color: #444;
+    font-family: OpenSans, 'Arial Black';
+    font-weight: 300;
+    display: block;
+}
+    #holder::after {
+        clear: both;
+        content:"";
+        display: table;
+    }
+
+.navbar {
+    list-style: none;
+    color: #e8c5a5;
+    padding: 0;
+    padding-right: 2vw;
+}
+    .navbar #title {
+        color: #e2e2e2;
+        float: left;
+        padding-left: 2vw;
+    }
+    .navbar .choice {
+        float: right;
+        padding: 0 2% 0 2%;
+        height: 1em;
+        text-align: center;
+        text-decoration: none;
+        border-bottom: 1px solid transparent;
+        -webkit-transition: all ease-in-out 1s;
+        transition: all ease-in-out 0.25s;
+    }
+    .navbar .choice:hover, .choice:active{
+        background-color: #fff39a!important;
+        color: #777!important;
+    }
+
+#main-body {
+    padding: 2% 2% 2% 2%;
+    display: table;
+    width: 96%;
+}
+    #main-body .main-link {
+        margin: 0.25%;
+        padding: 1%;
+        display: table-cell;
+        float: left;
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
+        box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+        -moz-osx-font-smoothing: grayscale;
+        overflow: hidden;
+        transition-duration: 0.75s;
+        -webkit-transition-property: all;
+        transition-property: all;
+        background-color: #EEE;
+    }
+        .main-link:hover, .main-link:focus, .main-link:active {
+            background-color: #444!important;
+            color: #e2e2e2!important;
+        }
+        .main-link #titl {
+            font-family: OpenSans, 'Helvetica', sans-serif;
+            font-weight: bold;
+            font-size: 15;
+        }
+        .main-link #desc {
+            margin-left: 5%;
+            font-family: OpenSans, 'Helvetica', sans-serif;
+            font-size: 14;
+        }
+        .main-link a {
+            text-decoration: underline;
+        }
+        .main-link::after {
+            clear: both;
+            content:"";
+            display: table;
+        }
+
+#footer {
+    position:fixed;
+    bottom: 0;
+    left: 0;
+    text-align: center;
+    width: 100%;
+    padding: 0;
+    background: #FFF;
+}
+    #footer-title {
+        text-transform: uppercase;
+        font-family: LeagueGothic, 'Arial Black', sans-serif;
+        text-align: center;
+        vertical-align: bottom;
+    }
+    #footer-desc {
+        font-family: OpenSans, 'Helvetica', sans-serif;
+        text-align: center;
+        font-weight: 200;
+    }
+    #footer-desc a {
+        color: #555555;
+        text-decoration: underline;
+    }
+
+#about-me {
+    display: table;
+    padding: 2% 2% 2% 2%;
+    font-family: OpenSans;
+}
+    #about-me h1 {
+        margin: 0;
+        padding: 0;
+        font-size: 32;
+        font-weight: bold;
+    }
+    #about-me h6 {
+        margin: 0;
+        padding: 0;
+        font-size: 16;
+        font-weight: normal;
+    }
+    #about-me h6 a {
+        text-decoration: underline;
+        font-weight: 600;
+    }
+    .about-title {
+        font-size: 20;
+        font-weight: bold;
+    }
+    .about-section-title {
+        font-weight: 600;
+        text-decoration: underline;
+    }
+    .about-tabbed {
+        padding-left: 30;
+    }
+    .about-italicize {
+        font-style: italic;
+    }
+    .about-bold {
+        font-weight: 600;
+    }
+#about-me::after {
+    clear: both;
+    content:"";
+    display: table;
+}
+
+@media (max-width: 800px) {
+    #header {
+        font-size: 5.8vw;
+    }
+    .navbar #title {
+        font-size: 5.8vw;
+        line-height: 0.75em;
+        margin-top: 0.6em;
+    }
+    .navbar .choice {
+        font-size: 4.5vw;
+        line-height: 1.3em;
+        width: 12vw;
+    }
+    #main-body .main-link {
+        width: 98%;
+    }
+    #footer-title {
+        font-size: 20;
+    }
+    #footer-desc {
+        font-size: 10;
+    }
+}
+@media (min-width: 800px) {
+    #header {
+        font-size: 40;
+    }
+    .navbar #title {
+        font-size: 40;
+        line-height: 0.75em;
+        margin-top: 0.6em;
+    }
+    .navbar .choice {
+        font-size: 25;
+        line-height: 1.35em;
+        width: 150;
+    }
+    #main-body .main-link {
+        width: 47.5%
+    }
+    #footer-title {
+        font-size: 30;
+    }
+}
