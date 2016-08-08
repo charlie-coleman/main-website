@@ -11,8 +11,11 @@ $(function() {
         if(e.keyCode != 27) { //What happens when you type
             changeTextSize($("#RGB-text").css("font-size")); //change the text size to fit the screen
             var stringVal = $("#RGB-text").val(); //gets the text in the input location
-            var symbols = ["!","@","#","$","%","^","&","*","(",")","-","_","=","+","[","{","]","}","\\","|",";",":","\'","\"",",","<",".",">","/","?","`","~"]; //All accepted symbols currently
-            var replaced = ["1","2","3","4","5","6","7","8","9","0","a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","y","v"]; //What they will be replaced with
+            //" , < . > / ? ` ~
+            var  symbols = ["!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "-", "_", "=", "+", "[", "{", "]", "}", "\\",]+
+                           ["|", ";", ":", "\'", "\"", ",", "<", ".", ">", "/", "?", "`", "~"]; //All accepted symbols currently
+            var replaced = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "a", "b", "c", "d", "e", "f", "g", "h",  "i",]+
+                           ["j", "k", "l",  "m",  "n", "o", "p", "q", "r", "s", "t", "y", "v"]; //What they will be replaced with
             for(var i = 0; i < symbols.length; i++) //replace all those symbols if they are found
                 stringVal = stringVal.replace(symbols[i], replaced[i]);
             matchPreDef = false;
@@ -60,13 +63,12 @@ function base36to16(color) { //Function to turn the string into a color. Most im
         color+=color.substring(0, add); //x is the number of characters to be added, takes x characters from the start of the string and adds them to the end.
     else { //if length == 1, basically
         for(var i = 0; i < add; i++) {
-            color += color.substring(0,1); //adds the first charecter until you have enough charecters   
+            color += color.substring(0,1); //adds the first charecter until you have enough charecters
         }
     }
     var red36 = color.substring(0, amount); //splits the string into 3 sections of equal length
     var green36 = color.substring(amount, amount*2);
     var blue36 = color.substring(amount*2, amount*3);
-    console.log(red36);
     if(red36 == '')
         red36 = '0';
     if(green36 =='')
@@ -125,7 +127,6 @@ function changeEverything(c) { //function to update everything
         if(blue.length < 2)
             blue = "0" + blue;
         var RGB = "#" + red + green + blue; //uses opposite
-        console.log(red);
     }
     else if(max == red_val(c) && min == green_val(c)) {//else
         var red = green_val(c).toString(16);
@@ -138,7 +139,6 @@ function changeEverything(c) { //function to update everything
         if(blue.length < 2)
             blue = "0" + blue;
         var RGB = "#" + red + green + blue;  //uses complementary
-        console.log(red);
     }
     else if(max == red_val(c) && min == blue_val(c)) {//all different combinations for complementary colors
         var red = blue_val(c).toString(16);
@@ -151,7 +151,6 @@ function changeEverything(c) { //function to update everything
         if(blue.length < 2)
             blue = "0" + blue;
         var RGB = "#" + red + green + blue;
-        console.log(red);
     }
     else if(max == green_val(c) && min == red_val(c)) {//else
         var red = green_val(c).toString(16);
@@ -164,7 +163,6 @@ function changeEverything(c) { //function to update everything
         if(blue.length < 2)
             blue = "0" + blue;
         var RGB = "#" + red + green + blue;
-        console.log(red);
     }
     else if(max == green_val(c) && min == blue_val(c)) {//else
         var red = (blue_val(c) + green_val(c) - red_val(c)).toString(16);
@@ -177,7 +175,6 @@ function changeEverything(c) { //function to update everything
         if(blue.length < 2)
             blue = "0" + blue;
         var RGB = "#" + red + green + blue;
-        console.log(red);
     }
     else if(max == blue_val(c) && min == red_val(c)) {//else
         var red = blue_val(c).toString(16);
@@ -190,7 +187,6 @@ function changeEverything(c) { //function to update everything
         if(blue.length < 2)
             blue = "0" + blue;
         var RGB = "#" + red + green + blue;
-        console.log(red);
     }
     else if(max == blue_val(c) && min == green_val(c)) {//else
         var red = (blue_val(c) + green_val(c) - red_val(c)).toString(16);
@@ -203,7 +199,6 @@ function changeEverything(c) { //function to update everything
         if(blue.length < 2)
             blue = "0" + blue;
         var RGB = "#" + red + green + blue;
-        console.log(red);
     }
     $("#RGB-text").css("color", RGB);
     var red = red_val(c).toString(16); //converts all parts of the RGB color to hexadecimal numbers
