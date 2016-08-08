@@ -69,12 +69,12 @@ $(document).ready(function() {
     }
     openTab(x);
     equalheight('.main-link, .pic-link');
-    setTimeout(function() {
-        equalheight('.main-link, .pic-link');
-    }, 10);
     $('#about-me').css('margin-bottom',$('#footer').height());
     $('#main-body').css('margin-bottom',$('#footer').height()+25);
     $('.navbar .choice').css('margin-top', $('#holder').height()-$('.navbar .choice').height()+2)
+    setTimeout(function() {
+        equalheight('.main-link, .pic-link');
+    }, 1000);
 });
 $(window).bind('load', equalheight('.main-link'));
 
