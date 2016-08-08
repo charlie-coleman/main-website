@@ -62,10 +62,15 @@ body {
     display: table;
     width: 96%;
 }
+    #test {
+        background: #bbb;
+        display: table;
+        box-shadow: 2px 2px 0px #eee inset, -2px -2px 0px #eee inset;
+    }
     #main-body .main-link {
-        margin: 0.25%;
-        padding: 1%;
         display: table-cell;
+        padding: 1%;
+        margin: 0.1%;
         float: left;
         -webkit-transform: translateZ(0);
         transform: translateZ(0);
@@ -186,7 +191,7 @@ body {
         width: 12vw;
     }
     #main-body .main-link {
-        width: 98%;
+        width: 97.9%;
     }
     #footer-title {
         font-size: 20;
@@ -210,7 +215,7 @@ body {
         width: 150;
     }
     #main-body .main-link {
-        width: 47.5%
+        width: 47.8%
     }
     #footer-title {
         font-size: 30;
