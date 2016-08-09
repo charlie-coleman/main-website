@@ -17,6 +17,7 @@ html, body {
     font-weight: 800;
     font-size: 30px;
     text-align: center;
+    padding: 0;
     width: 100%;
     text-transform: uppercase;
 }
@@ -27,11 +28,12 @@ html, body {
     -o-transition: background 0.2s ease-in-out, font-size 0.05s ease-in-out;
     transition: background 0.2s ease-in-out, font-size 0.05s ease-in-out;
     font-family: OpenSans;
-    font-weight: 300;
+    font-weight: 400;
     font-size: 24px;
     text-align: center;
     margin:0;
     padding: 0;
+    line-height: 1em;
     width: 100%;
 }
 #container {

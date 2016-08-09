@@ -242,7 +242,7 @@ function changeEverything(c) { //function to update everything
 function changeTextSize(text) {
     var textSize = parseInt(text.substring(0,text.length - 2)); //find the height of the current font
     var textWidth = $("#RGB-text").textWidth(); //finds the width of the current text at the current font size
-    var scale = ($(window).width()*0.8) / textWidth; //finds out what percentage the text needs to be thinner to fit on the screen
+    var scale = ($("#container2").width()*0.85) / textWidth; //finds out what percentage the text needs to be thinner to fit on the screen
     var newSize = scale * textSize; //finds the text height when the new font size is applied
     if(newSize > ($(window).height() * 0.7)) { //if the new size is taller than the screen
         newSize = $(window).height() * 0.7; //sets the font size to a size that is small enough to fit on screen
