@@ -1,13 +1,24 @@
 var preDefString = ["prettyandmysterious"], preDefBg = ["06060A"], preDefC = ["332949"], matchPreDef = false, matched = 0;
 $(function() {
     $(window).ready( function() { //Sets a text value on page load.
-        var welcomeMessages = new Array("Welcome to the jam", "HZ00HZ", "Totally not blue", "I think, therefore I am", "0o0", "charlie-coleman.com/experiments/1", "colors are fun!","charlie coleman", "zz0000", "00zz00", "0000zz", "00ZZZZ", "ZZZZ00", "ZZ00ZZ", "go ahead, type something", "you know you want to"); //all the possible messages
+        var welcomeMessages = ["Welcome to the jam", "HZ00HZ", "Totally not blue",
+                               "I think, therefore I am", "0o0", "charlie-coleman.com/experiments/1",
+                               "colors are fun!","charlie coleman", "zz0000", "00zz00", "0000zz",
+                               "00ZZZZ", "ZZZZ00", "ZZ00ZZ", "go ahead, type something", "you know you want to"]; //all the possible messages
         $("#RGB-text").val(welcomeMessages[Math.floor(Math.random() * welcomeMessages.length)]);
         changeTextSize($("#RGB-text").css("font-size"));
         var c = base36to16($("#RGB-text").val());
         changeEverything(c);
     });
-    $("#RGB-text").keyup(function(e) {
+    $('#RGB-text').keyup(function(e) {
+        if(e.keyCode == 27) { //clear the screen and update on ESC press
+            $("#RGB-text").val("");
+            changeTextSize($("#RGB-text").css("font-size"));
+            var c = base36to16($("#RGB-text").val());
+            changeEverything(c);
+        }
+    });
+    $("#RGB-text").on('input', function(e) {
         if(e.keyCode != 27) { //What happens when you type
             changeTextSize($("#RGB-text").css("font-size")); //change the text size to fit the screen
             var stringVal = $("#RGB-text").val(); //gets the text in the input location
@@ -23,9 +34,8 @@ $(function() {
                 }
             }
             matchPreDef = false;
-            console.log(stringVal);
-            //stringVal = stringVal.replace(/\s{1}/g, '');
-            //stringVal = stringVal.replace(/[^a-zA-Z 0-9]{1}/g, '');
+            stringVal = stringVal.replace(/\s{1}/g, '');
+            stringVal = stringVal.replace(/[^a-zA-Z 0-9]{1}/g, '');
             for(var i = 0; i < preDefString.length; i++) {
                 if(stringVal == preDefString[i]) {
                     matchPreDef = true;
@@ -232,7 +242,7 @@ function changeEverything(c) { //function to update everything
 function changeTextSize(text) {
     var textSize = parseInt(text.substring(0,text.length - 2)); //find the height of the current font
     var textWidth = $("#RGB-text").textWidth(); //finds the width of the current text at the current font size
-    var scale = ($(window).width()*0.9) / textWidth; //finds out what percentage the text needs to be thinner to fit on the screen
+    var scale = ($(window).width()*0.8) / textWidth; //finds out what percentage the text needs to be thinner to fit on the screen
     var newSize = scale * textSize; //finds the text height when the new font size is applied
     if(newSize > ($(window).height() * 0.7)) { //if the new size is taller than the screen
         newSize = $(window).height() * 0.7; //sets the font size to a size that is small enough to fit on screen

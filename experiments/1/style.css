@@ -1,15 +1,3 @@
-@font-face {
-    font-family: BebasNeue;
-    src:url(/fonts/BebasNeue.otf);
-}
-@font-face {
-    font-family: OpenSans;
-    src:url(/fonts/open-sans/OpenSans-Regular.ttf);
-}
-@font-face {
-    font-family: seasrn;
-    src:url(/fonts/SEASRN.ttf);
-}
 
 html, body {
     -webkit-transition: background 0.2s ease-in-out;
@@ -25,7 +13,8 @@ html, body {
     -moz-transition: background 0.2s ease-in-out, font-size 0.05s ease-in-out;
     -o-transition: background 0.2s ease-in-out, font-size 0.05s ease-in-out;
     transition: background 0.2s ease-in-out, font-size 0.05s ease-in-out;
-    font-family: BebasNeue;
+    font-family: OpenSans;
+    font-weight: 800;
     font-size: 30px;
     text-align: center;
     width: 100%;
@@ -37,9 +26,12 @@ html, body {
     -moz-transition: background 0.2s ease-in-out, font-size 0.05s ease-in-out;
     -o-transition: background 0.2s ease-in-out, font-size 0.05s ease-in-out;
     transition: background 0.2s ease-in-out, font-size 0.05s ease-in-out;
-    font-family: BebasNeue;
-    font-size: 30px;
+    font-family: OpenSans;
+    font-weight: 300;
+    font-size: 24px;
     text-align: center;
+    margin:0;
+    padding: 0;
     width: 100%;
 }
 #container {
