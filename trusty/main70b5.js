@@ -158,26 +158,25 @@ Game.Launch=function()
 	{
 		Game.ready=1;
 		l('javascriptError').innerHTML='<div style="padding:64px 128px;"><div class="title">Loading...</div></div>';
-	
-		
+
+
 		/*=====================================================================================
 		VARIABLES AND PRESETS
 		=======================================================================================*/
 		Game.T=0;
 		Game.fps=30;
-		
+
 		Game.version=1.036;
 		Game.beta=0;
 		l('versionNumber').innerHTML='v.'+Game.version+(Game.beta?' <span style="color:#ff0;">beta</span>':'');
-		//l('links').innerHTML=(Game.beta?'<a href="../" target="blank">Live version</a> | ':'<a href="beta" target="blank">Try the beta!</a> | ')+'<a href="http://orteil.dashnet.org/experiments/computer/" target="blank">Computer Clicker Classic</a>';
 		l('links').innerHTML='<a href="http://charlie-coleman.com/gray/" target="blank">Try Gray Clicker!</a>';
-		
+
 		//latency compensator stuff
 		Game.time=new Date().getTime();
 		Game.fpsMeasure=new Date().getTime();
 		Game.accumulatedDelay=0;
 		Game.catchupLogic=0;
-		
+
 		Game.computersEarned=0;//all computers earned during gameplay
 		Game.computers=0;//computers
 		Game.computersd=0;//computers display
@@ -196,21 +195,21 @@ Game.Launch=function()
 		Game.milkType=-1;//custom milk : 0=plain, 1=chocolate...
 		Game.backgroundType=-1;//custom background : 0=blue, 1=red...
 		Game.prestige=[];//cool stuff that carries over beyond resets
-		
+
 		Game.elderWrath=0;
 		Game.elderWrathD=0;
 		Game.pledges=0;
 		Game.pledgeT=0;
 		Game.researchT=0;
 		Game.nextResearch=0;
-		
+
 		Game.bg='';//background (Mr. Trustys and such)
 		Game.bgFade='';//fading to background
 		Game.bgR=0;//ratio (0 - not faded, 1 - fully faded)
 		Game.bgRd=0;//ratio displayed
-		
+
 		Game.startDate=parseInt(new Date().getTime());
-		
+
 		Game.prefs=[];
 		Game.DefaultPrefs=function()
 		{
@@ -223,7 +222,7 @@ Game.Launch=function()
 			Game.prefs.christmas=0;
 		}
 		Game.DefaultPrefs();
-		
+
 		/*=====================================================================================
 		UPDATE CHECKER (broken?)
 		=======================================================================================*/
@@ -243,7 +242,7 @@ Game.Launch=function()
 				l('alert').style.display='block';
 			}
 		}
-		
+
 		/*=====================================================================================
 		SAVE
 		=======================================================================================*/
@@ -257,7 +256,7 @@ Game.Launch=function()
 			if (save && save!='') Game.LoadSave(save);
 			Game.WriteSave();
 		}
-		
+
 		Game.WriteSave=function(exporting)//guess what we'e using to save the game?
 		{
 			var str='';
@@ -312,8 +311,8 @@ Game.Launch=function()
 			}
 			toCompress=CompressLargeBin(toCompress);
 			str+=toCompress;
-			
-			
+
+
 			if (exporting)
 			{
 				str=escape(utf8_to_b64(str)+'!END!');
@@ -333,7 +332,7 @@ Game.Launch=function()
 				else Game.Popup('Game saved');
 			}
 		}
-		
+
 		/*=====================================================================================
 		LOAD
 		=======================================================================================*/
@@ -342,7 +341,7 @@ Game.Launch=function()
 			var str='';
 			if (data) str=unescape(data);
 			else if (document.cookie.indexOf('CookieClickerGame')>=0) str=unescape(document.cookie.split('CookieClickerGame=')[1]);//get computer here
-			
+
 			if (str!='')
 			{
 				var version=0;
@@ -476,8 +475,8 @@ Game.Launch=function()
 								if (me.won && me.hide!=3) Game.AchievementsOwned++;
 							}
 						}
-						
-						
+
+
 						for (var i in Game.ObjectsById)
 						{
 							var me=Game.ObjectsById[i];
@@ -493,7 +492,7 @@ Game.Launch=function()
 						Game.startDate=parseInt(new Date().getTime());
 						Game.computers=parseInt(str[1]);
 						Game.computersEarned=parseInt(str[1]);
-						
+
 						for (var i in Game.ObjectsById)
 						{
 							var me=Game.ObjectsById[i];
@@ -505,7 +504,7 @@ Game.Launch=function()
 							var me=Game.UpgradesById[i];
 							me.unlocked=0;me.bought=0;
 						}
-						
+
 						var moni=0;
 						moni+=15*Math.pow(1.1,parseInt(str[2]));
 						moni+=100*Math.pow(1.1,parseInt(str[4]));
@@ -515,27 +514,27 @@ Game.Launch=function()
 						moni+=50000*Math.pow(1.1,parseInt(str[12]));
 						moni+=1000000*Math.pow(1.1,parseInt(str[14]));
 						if (parseInt(str[16])) moni+=123456789*Math.pow(1.1,parseInt(str[16]));
-						
+
 						alert('Imported old save from version '+version+'; recovered '+Beautify(Game.computers)+' computers, and converted buildings back to '+Beautify(moni)+' computers.');
-						
+
 						Game.computers+=moni;
 						Game.computersEarned+=moni;
 						*/
 						alert('Sorry, you can\'t import saves from the old version anymore.');
 						return;
 					}
-					
-						
+
+
 					Game.goldenComputer.reset();
-			
+
 					Game.prestige=[];
-					
+
 					Game.Upgrades['Elder Pledge'].basePrice=Math.pow(8,Math.min(Game.pledges+2,13));
-					
+
 					Game.RebuildUpgrades();
-					
+
 					Game.TickerAge=0;
-					
+
 					Game.elderWrathD=0;
 					Game.frenzy=0;
 					Game.frenzyPower=1;
@@ -547,7 +546,7 @@ Game.Launch=function()
 				}
 			}
 		}
-		
+
 		/*=====================================================================================
 		RESET
 		=======================================================================================*/
@@ -608,9 +607,9 @@ Game.Launch=function()
 				Game.upgradesToRebuild=1;
 				Game.startDate=parseInt(new Date().getTime());
 				Game.goldenComputer.reset();
-				
+
 				Game.Popup('Game reset');
-				
+
 				if (!bypass)
 				{
 					var prestige=0;
@@ -643,8 +642,8 @@ Game.Launch=function()
 				}
 			}
 		}
-		
-		
+
+
 		/*=====================================================================================
 		COMPUTER ECONOMICS
 		=======================================================================================*/
@@ -702,7 +701,7 @@ Game.Launch=function()
 			Game.lastClick=new Date().getTime();
 		}
 		l('bigComputer').onclick=Game.ClickComputer;
-		
+
 		Game.HowMuchPrestige=function(computers)
 		{
 			var prestige=computers/1000000000000;
@@ -740,10 +739,10 @@ Game.Launch=function()
 			mult+=Game.Has('Underworld ovens')*0.03;
 			mult+=Game.Has('Exotic nuts')*0.04;
 			mult+=Game.Has('Arcane sugar')*0.05;
-			
+
 			if (!Game.prestige.ready) Game.CalculatePrestige();
 			mult+=parseInt(Game.prestige['Heavenly chips'])*0.02;
-			
+
 			for (var i in Game.Objects)
 			{
 				var me=Game.Objects[i];
@@ -751,26 +750,26 @@ Game.Launch=function()
 				me.storedTotalCps=me.amount*me.storedCps;
 				Game.computersPs+=me.storedTotalCps;
 			}
-			
+
 			if (Game.Has('Kitten helpers')) mult*=(1+Game.milkProgress*0.05);
 			if (Game.Has('Kitten workers')) mult*=(1+Game.milkProgress*0.1);
 			if (Game.Has('Kitten engineers')) mult*=(1+Game.milkProgress*0.2);
 			if (Game.Has('Kitten overseers')) mult*=(1+Game.milkProgress*0.3);
-			
+
 			if (Game.frenzy>0) mult*=Game.frenzyPower;
-			
+
 			if (Game.Has('Elder Covenant')) mult*=0.95;
 			if (Game.Has('Mr. Trusty\'s wrath')) mult*=1.00;
 			Game.globalCpsMult=mult;
 			Game.computersPs*=Game.globalCpsMult;
-			
+
 			for (var i=0;i<Game.cpsAchievs.length/2;i++)
 			{
 				if (Game.computersPs>=Game.cpsAchievs[i*2+1]) Game.Win(Game.cpsAchievs[i*2]);
 			}
-			
+
 			Game.computedMouseCps=Game.mouseCps();
-			
+
 			Game.recalculateGains=0;
 		}
 		/*=====================================================================================
@@ -862,25 +861,25 @@ Game.Launch=function()
 			{
 				Game.goldenComputer.toDie=1;
 				Game.goldenClicks++;
-				
+
 				if (Game.goldenClicks>=1) Game.Win('Golden computer');
 				if (Game.goldenClicks>=7) Game.Win('Lucky computer');
 				if (Game.goldenClicks>=27) Game.Win('A stroke of luck');
 				if (Game.goldenClicks>=77) Game.Win('Fortune');
 				if (Game.goldenClicks>=777) Game.Win('Leprechaun');
 				if (Game.goldenClicks>=7777) Game.Win('Black cat\'s paw');
-				
+
 				if (Game.goldenClicks>=7) Game.Unlock('Lucky day');
 				if (Game.goldenClicks>=27) Game.Unlock('Serendipity');
 				if (Game.goldenClicks>=77) Game.Unlock('Get lucky');
-				
+
 				l('goldenComputer').style.display='none';
-				
+
 				var choice=Game.goldenComputer.choose();
-				
+
 				if (Game.goldenComputer.chain>0) choice='chain computer';
 				Game.goldenComputer.last=choice;
-				
+
 				if (choice!='chain computer') Game.goldenComputer.chain=0;
 				if (choice=='frenzy')
 				{
@@ -939,8 +938,8 @@ Game.Launch=function()
 			}
 		}
 		l('goldenComputer').onclick=Game.goldenComputer.click;
-		
-		
+
+
 		/*=====================================================================================
 		PARTICLES
 		=======================================================================================*/
@@ -1008,7 +1007,7 @@ Game.Launch=function()
 				me.l.style.oTransform='rotate('+r+'deg)';
 			}
 		}
-		
+
 		//rising numbers
 		Game.computerNumbers=[];
 		var str='';
@@ -1067,7 +1066,7 @@ Game.Launch=function()
 			me.l.style.left=Math.floor(Game.computerNumbers[i].x)+'px';
 			me.l.style.top=Math.floor(Game.computerNumbers[i].y)+'px';
 		}
-		
+
 		//generic particles
 		Game.particles=[];
 		Game.particlesY=0;
@@ -1144,8 +1143,8 @@ Game.Launch=function()
 		{
 			Game.particlesAdd(text);
 		}
-		
-		
+
+
 		Game.veil=1;
 		Game.veilOn=function()
 		{
@@ -1161,7 +1160,7 @@ Game.Launch=function()
 			l('backgroundLayer2').style.background='transparent';
 			Game.veil=0;
 		}
-		
+
 		/*=====================================================================================
 		MENUS
 		=======================================================================================*/
@@ -1169,7 +1168,7 @@ Game.Launch=function()
 		Game.addClass=function(what) {if (Game.cssClasses.indexOf(what)==-1) Game.cssClasses.push(what);Game.updateClasses();}
 		Game.removeClass=function(what) {var i=Game.cssClasses.indexOf(what);if(i!=-1) {Game.cssClasses.splice(i,1);}Game.updateClasses();}
 		Game.updateClasses=function() {var str='';for (var i in Game.cssClasses) {str+=Game.cssClasses[i]+' ';}l('game').className=str;}
-		
+
 		Game.WriteButton=function(prefName,button,on,off,callback)
 		{
 			return '<a class="option" id="'+button+'" onclick="Game.Toggle(\''+prefName+'\',\''+button+'\',\''+on+'\',\''+off+'\');'+(callback||'')+'">'+(Game.prefs[prefName]?on:off)+'</a>';
@@ -1219,7 +1218,7 @@ Game.Launch=function()
 			else if (time>=Game.fps && detail<5) str='1 second';
 			return str;
 		}
-		
+
 		Game.UpdateMenu=function()
 		{
 			var str='';
@@ -1263,8 +1262,8 @@ Game.Launch=function()
 				'<div class="listing">-More random sh*t</div>'+
 				'<div class="listing">-More music</div>'+
 				'<div class="listing">-Better image sprites</div>'+
-				
-				
+
+
 				'</div><div class="subsection update small">'+
 				'<div class="title">12/5/2013 - Log and Music</div>'+
 				'<div class="listing">-Sitting in silence? Try the Music button at the top, and hit the random song button for random tunes.</div>'+
@@ -1273,8 +1272,8 @@ Game.Launch=function()
 				'<div class="listing">-Fixed all of Nolan Dotts complaints(computers baked -> computers made)</div>'+
 				'<div class="listing">-TrustMan image changed to buff Mr. Trusty</div>'+
 				'<div class="listing">-Made the log!(the thing you are reading now)<label>(probably)</label></div>' +
-				
-				
+
+
 				'</div><div class="subsection update small">'+
 				'<div class="title">12/5/2013 - Log and Music</div>'+
 				'<div class="listing">-Fixed saves, should actually save now ☺</div>'+
@@ -1293,7 +1292,7 @@ Game.Launch=function()
 				var GoogleUpgrades='';
 				var upgradesTotal=0;
 				var upgradesOwned=0;
-				
+
 				var list=[];
 				for (var i in Game.Upgrades)//sort the upgrades
 				{
@@ -1336,7 +1335,7 @@ Game.Launch=function()
 				var shadowAchievements='';
 				var achievementsOwned=0;
 				var achievementsTotal=0;
-				
+
 				var list=[];
 				for (var i in Game.Achievements)//sort the achievements
 				{
@@ -1349,7 +1348,7 @@ Game.Launch=function()
 					else return 0;
 				}
 				list.sort(sortMap);
-				
+
 				for (var i in list)
 				{
 					var me=list[i];
@@ -1369,19 +1368,19 @@ Game.Launch=function()
 						achievementsOwned++;
 					}
 					else if (me.hide==0)
-					{//onclick="Game.Win(\''+me.name+'\');" 
+					{//onclick="Game.Win(\''+me.name+'\');"
 						achievements+='<div class="crate achievement" '+Game.getTooltip(
 						'<div style="min-width:200px;"><small>[Achievement]</small><div class="name">'+me.name+'</div><div class="description">'+me.desc+'</div></div>'
 						,0,0,'bottom-right')+' style="background-position:'+(-me.icon[0]*48+6)+'px '+(-me.icon[1]*48+6)+'px;"></div>';
 					}
 					else if (me.hide==1)
-					{//onclick="Game.Win(\''+me.name+'\');" 
+					{//onclick="Game.Win(\''+me.name+'\');"
 						achievements+='<div class="crate achievement" '+Game.getTooltip(
 						'<div style="min-width:200px;"><small>[Achievement]</small><div class="name">'+me.name+'</div><div class="description">???</div></div>'
 						,0,0,'bottom-right')+' style="background-position:'+(-0*48+6)+'px '+(-7*48+6)+'px;"></div>';
 					}
 					else if (me.hide==2)
-					{//onclick="Game.Win(\''+me.name+'\');" 
+					{//onclick="Game.Win(\''+me.name+'\');"
 						achievements+='<div class="crate achievement" '+Game.getTooltip(
 						'<div style="min-width:200px;"><small>[Achievement]</small><div class="name">???</div><div class="description">???</div></div>'
 						,0,0,'bottom-right')+' style="background-position:'+(-0*48+6)+'px '+(-7*48+6)+'px;"></div>';
@@ -1390,7 +1389,7 @@ Game.Launch=function()
 				var milkName='plain milk';
 				if (Game.milkProgress>=2.5) milkName='raspberry milk';
 				else if (Game.milkProgress>=1.5) milkName='chocolate milk';
-				
+
 				var researchStr=Game.sayTime(Game.researchT);
 				var pledgeStr=Game.sayTime(Game.pledgeT);
 				var wrathStr='';
@@ -1398,12 +1397,12 @@ Game.Launch=function()
 				else if (Game.elderWrath==2) wrathStr='displeased';
 				else if (Game.elderWrath==3) wrathStr='angered';
 				else if (Game.elderWrath==0 && Game.pledges>0) wrathStr='appeased';
-				
+
 				var date=new Date();
 				date.setTime(new Date().getTime()-Game.startDate);
 				date=Game.sayTime(date.getTime()/1000*Game.fps);
-				
-				
+
+
 				str+='<div class="section">Statistics</div>'+
 				'<div class="subsection">'+
 				'<div class="title">General</div>'+
@@ -1418,7 +1417,7 @@ Game.Launch=function()
 				'<div class="listing"><b>Hand-made computers :</b> '+Beautify(Game.handmadeComputers)+'</div>'+
 				'<div class="listing"><b>Golden computer clicks :</b> '+Beautify(Game.goldenClicks)+'</div>'+//' <span class="hidden">(<b>Missed golden computers :</b> '+Beautify(Game.missedGoldenClicks)+')</span></div>'+
 				'<br><div class="listing"><b>Running version :</b> '+Game.version+'</div>'+
-				
+
 				((researchStr!='' || wrathStr!='' || pledgeStr!='')?(
 				'</div><div class="subsection">'+
 				'<div class="title">Special</div>'+
@@ -1427,13 +1426,13 @@ Game.Launch=function()
 				(pledgeStr!=''?'<div class="listing"><b>Pledge :</b> '+pledgeStr+' remaining</div>':'')+
 				''
 				):'')+
-				
+
 				(Game.prestige['Heavenly chips']>0?(
 				'</div><div class="subsection">'+
 				'<div class="title">Prestige</div>'+
 				'<div class="listing"><small>(Note : each heavenly chip grants you +2% CpS multiplier. You can gain more chips by resetting with a lot of computers.)</small></div>'+
 				'<div class="listing"><div class="icon" style="background-position:'+(-19*48)+'px '+(-7*48)+'px;"></div> <span style="vertical-align:100%;"><span class="title" style="font-size:22px;">'+Game.prestige['Heavenly chips']+' heavenly chip'+(Game.prestige['Heavenly chips']==1?'':'s')+'</span> (+'+(Game.prestige['Heavenly chips']*2)+'% CpS)</span></div>'):'')+
-				
+
 				'</div><div class="subsection">'+
 				'<div class="title">Upgrades unlocked</div>'+
 				'<div class="listing"><b>Unlocked :</b> '+upgradesOwned+'/'+upgradesTotal+' ('+Math.round((upgradesOwned/upgradesTotal)*100)+'%)</div>'+
@@ -1469,9 +1468,9 @@ Game.Launch=function()
 			randomcsong = Math.floor((Math.random()*csongs.length))
 		}
 		l('logButton').onclick=function(){Game.ShowMenu('log');};
-		
+
 		var i = 0
-		
+
 		function PlayPause(audioFile,volume) {
 			var audie = document.getElementById("myAudio");
 			audie.load();
@@ -1538,7 +1537,7 @@ Game.Launch=function()
 			origin=(origin?origin:'middle');
 			return 'onMouseOut="Game.tooltip.hide();" onMouseOver="Game.tooltip.draw(this,\''+escape(text)+'\','+x+','+y+',\''+origin+'\');"';
 		}
-		
+
 		/*=====================================================================================
 		NEWS TICKER
 		=======================================================================================*/
@@ -1548,9 +1547,9 @@ Game.Launch=function()
 		Game.getNewTicker=function()
 		{
 			var list=[];
-			
+
 			if (Game.TickerN%2==0 || Game.computersEarned>=10100000000)
-			{				
+			{
 				if (Game.Objects['Mr. Trusty'].amount>0) list.push(choose([
 				'<q>Nice code.</q><sig>Mr. Trusty</sig>',
 				'<q>We\'re nice Mr. Trustys.</q><sig>Mr. Trusty</sig>',
@@ -1559,7 +1558,7 @@ Game.Launch=function()
 				'<q>Why don\'t you work more?</q><sig>Mr. Trusty</sig>',
 				'<q>Shut up Tom-ass</q><sig>Mr. Trusty</sig>'
 				]));
-				
+
 				if (Game.Objects['Mr. Trusty'].amount>=50) list.push(choose([
 				'<q>Absolutely disgusting code.</q><sig>Mr. Trusty</sig>',
 				'<q>You make me sick.</q><sig>Mr. Trusty</sig>',
@@ -1569,7 +1568,7 @@ Game.Launch=function()
 				'<q>The code\'ll be over soon.</q><sig>Mr. Trusty</sig>',
 				'<q>You could have fixed it.</q><sig>Mr. Trusty</sig>'
 				]));
-				
+
 				if (Game.HasAchiev('Just wrong')) list.push(choose([
 				'News : computer manufacturer downsizes, sells Mr. Trusty!',
 				'<q>It has used while(true), the filthy little thing.</q><sig>Mr. Trusty</sig>',
@@ -1577,7 +1576,7 @@ Game.Launch=function()
 				'<q>It thought I would go away because it was coding. How quaint.</q><sig>Mr. Trusty</sig>',
 				'<q>I can smell your bad code.</q><sig>Mr. Trusty</sig>'
 				]));
-				
+
 				if (Game.Objects['Mr. Trusty'].amount>=1 && Game.pledges>0 && Game.elderWrath==0) list.push(choose([
 				'<q>Always code</q><sig>Mr. Trusty</sig>',
 				'<q>Keep coding</q><sig>Mr. Trusty</sig>',
@@ -1588,7 +1587,7 @@ Game.Launch=function()
 				'<q>We are not happy with the code.</q><sig>Mr. Trusty</sig>',
 				'<q>Too late.</q><sig>Mr. Trusty</sig>'
 				]));
-				
+
 				if (Game.Objects['Farm'].amount>0) list.push(choose([
 				'News : Computer farms suspected of employing a student workforce!',
 				'News : computer farms release harmful silicon in our rivers, says scientist!',
@@ -1596,7 +1595,7 @@ Game.Launch=function()
 				'News : free-range farm computers popular with today\'s hip youth, says specialist.',
 				'News : farm computers deemed unfit for Apple fan boys, says nutritionist.'
 				]));
-				
+
 				if (Game.Objects['Factory'].amount>0) list.push(choose([
 				'News : computer factories linked to global warming!',
 				'News : computer factories involved in computer weather controversy!',
@@ -1604,7 +1603,7 @@ Game.Launch=function()
 				'News : computer factories on strike - workers demand to stop being paid in computer!',
 				'News : factory-made computer linked to success, says study.'
 				]));
-				
+
 				if (Game.Objects['Mine'].amount>0) list.push(choose([
 				'News : '+Math.floor(Math.random()*1000+2)+' computers broken in mine catastrophe!',
 				'News : '+Math.floor(Math.random()*1000+2)+' computers trapped in collapsed chocolate mine!',
@@ -1612,7 +1611,7 @@ Game.Launch=function()
 				'News : computer mine goes awry, floods village in chocolate!',
 				'News : depths of computer mines found to house "peculiar, Mr. Trusty-y beings"!'
 				]));
-				
+
 				if (Game.Objects['Shipment'].amount>0) list.push(choose([
 				'News : new computer planet found, becomes target of computer-trading spaceships!',
 				'News : massive computer planet found with 99.8% certified pure computer core!',
@@ -1620,7 +1619,7 @@ Game.Launch=function()
 				'News : computer-based organisms found on distant planet!',
 				'News : ancient computing artifacts found on distant planet; "terrifying implications", experts say.'
 				]));
-				
+
 				if (Game.Objects['Alchemy lab'].amount>0) list.push(choose([
 				'News : national gold reserves dwindle as more and more of the precious mineral is turned to computers!',
 				'News : computerized jewelry found fashionable, gold and diamonds "just a fad", says specialist.',
@@ -1628,7 +1627,7 @@ Game.Launch=function()
 				'News : defective alchemy lab shut down, found to convert computer to useless gold.',
 				'News : alchemy-made computers shunned by purists!'
 				]));
-				
+
 				if (Game.Objects['Portal'].amount>0) list.push(choose([
 				'News : nation worried as more and more unsettling creatures emerge from dimensional portals!',
 				'News : dimensional portals involved in city-engulfing disaster!',
@@ -1636,7 +1635,7 @@ Game.Launch=function()
 				'News Trustyportals suspected to cause fast aging and obsession with baking, says study.',
 				'News : "do not settle near portals," says specialist; "your children will become strange and corrupted inside."'
 				]));
-				
+
 				if (Game.Objects['Time machine'].amount>0) list.push(choose([
 				'News : time machines involved in history-rewriting scandal! Or are they?',
 				'News : time machines used in unlawful time tourism!',
@@ -1644,7 +1643,7 @@ Game.Launch=function()
 				'News : various historical figures inexplicably replaced with talking lumps computers!',
 				'News : "I have seen the future," says time machine operator, "and I do not wish to go there again."'
 				]));
-				
+
 				if (Game.Objects['TrustyMan'].amount>0) list.push(choose([
 				'News : Trustyman saves the day once again. He fixed all codes in no time at all.',
 				'News : "explain to me again why we need Trustyman to fix computers?" asks misguided local teacher.',
@@ -1652,17 +1651,17 @@ Game.Launch=function()
 				'News : researchers conclude that what the computer industry needs, first and foremost, is "more magnets".',
 				'News : "unravelling the fabric of reality just makes these computers so much faster", claims scientist.'
 				]));
-				
+
 				if (Game.HasAchiev('Base 10')) list.push('News : computer manufacturer completely forgoes common sense, lets OCD drive building decisions!');
 				if (Game.HasAchiev('From scratch')) list.push('News : follow the tear-jerking, riches-to-rags story about a local computer manufacturer who decided to give it all up!');
 				if (Game.HasAchiev('A world filled with computers')) list.push('News : known universe now jammed with computers! No vacancies!');
 				if (Game.HasAchiev('Serendipity')) list.push('News : local computer manufacturer becomes luckiest being alive!');
-				
+
 				if (Game.Has('Kitten helpers')) list.push('News : faint meowing heard around local computer facilities; suggests new ingredient being tested.');
 				if (Game.Has('Kitten workers')) list.push('News : crowds of meowing kittens with little hard hats reported near local computer facilities.');
 				if (Game.Has('Kitten engineers')) list.push('News : surroundings of local computer facilities now overrun with kittens in adorable little suits. Authorities advise to stay away from the premises.');
 				if (Game.Has('Kitten overseers')) list.push('News : locals report troups of bossy kittens meowing adorable orders at passerbys.');
-				
+
 				var animals=['newts','penguins','scorpions','axolotls','puffins','porpoises','blowfish','horses','crayfish','slugs','humpback whales','nurse sharks','giant squids','polar bears','fruit bats','frogs','sea squirts','velvet worms','mole rats','paramecia','nematodes','tardigrades','giraffes'];
 				if (Game.computersEarned>=10000) list.push(
 				'News : '+choose([
@@ -1717,7 +1716,7 @@ Game.Launch=function()
 					])
 				);
 			}
-			
+
 			if (list.length==0)
 			{
 				if (Game.computersEarned<5) list.push('You feel like making computers. But nobody wants to use your computers.');
@@ -1748,7 +1747,7 @@ Game.Launch=function()
 				else if (Game.computersEarned<10000000000) list.push('A local news station runs a 10-minute segment about your computers. Success!<br><span style="font-size:50%;">(you win a computer)</span>');
 				else if (Game.computersEarned<10100000000) list.push('it\'s time to stop playing');//only show this for 100 millions (it's funny for a moment)
 			}
-			
+
 			if (Game.elderWrath>0 && (Game.pledges==0 || Math.random()<0.5))
 			{
 				list=[];
@@ -1769,12 +1768,12 @@ Game.Launch=function()
 				if (Game.elderWrath==3) list.push(choose([
 					'News : large "digital highways" scar continent, stretch between various computer facilities!',
 					'News : wrinkled "digital tendrils" visible from space!',
-					'News : remains of "old computers" found frozen in the middle of growing digital structures!', 
+					'News : remains of "old computers" found frozen in the middle of growing digital structures!',
 					'News : all hope lost as writhing mass of data and code engulfs whole city!',
 					'News : nightmare continues as wrinkled acres of data expand at alarming speeds!'
 				]));
 			}
-			
+
 			Game.TickerAge=Game.fps*10;
 			Game.Ticker=choose(list);
 			Game.TickerN++;
@@ -1797,8 +1796,8 @@ Game.Launch=function()
 			l('commentsText').innerHTML=str;
 			//'<div style="font-size:70%;"><span onclick="Game.Earn(1000);">add 1,000</span> | <span onclick="Game.Earn(1000000);">add 1,000,000</span></div>';
 		}
-		
-		
+
+
 		/*=====================================================================================
 		BUILDINGS
 		=======================================================================================*/
@@ -1830,16 +1829,16 @@ Game.Launch=function()
 			this.background=background;
 			this.buyFunction=buyFunction;
 			this.drawFunction=drawFunction;
-			
+
 			this.special=null;//special is a function that should be triggered when the object's special is unlocked, or on load (if it's already unlocked). For example, creating a new dungeon.
 			this.onSpecial=0;//are we on this object's special screen (dungeons etc)?
 			this.specialUnlocked=0;
 			this.specialDrawFunction=null;
 			this.drawSpecialButton=null;
-			
+
 			this.amount=0;
 			this.bought=0;
-			
+
 			this.buy=function()
 			{
 				var price=this.basePrice*Math.pow(Game.priceIncrease,this.amount);
@@ -1876,7 +1875,7 @@ Game.Launch=function()
 					Game.BuildingsOwned--;
 				}
 			}
-			
+
 			this.setSpecial=function(what)//change whether we're on the special overlay for this object or not
 			{
 				if (what==1) this.onSpecial=1;
@@ -1905,7 +1904,7 @@ Game.Launch=function()
 					this.refresh();
 				}
 			}
-			
+
 			this.refresh=function()
 			{
 				this.price=this.basePrice*Math.pow(Game.priceIncrease,this.amount);
@@ -1914,19 +1913,19 @@ Game.Launch=function()
 				if (this.drawFunction && !this.onSpecial) this.drawFunction();
 				//else if (this.specialDrawFunction && this.onSpecial) this.specialDrawFunction();
 			}
-			
+
 			if (this.id!=0)//draw it
 			{
 				var str='<div class="row" id="row'+this.id+'"><div class="separatorBottom"></div><div class="content"><div id="rowBackground'+this.id+'" class="background" style="background:url(img/'+this.background+'.png) repeat-x;"><div class="backgroundLeft"></div><div class="backgroundRight"></div></div><div class="objects" id="rowObjects'+this.id+'"> </div></div><div class="special" id="rowSpecial'+this.id+'"></div><div class="specialButton" id="rowSpecialButton'+this.id+'"></div><div class="info" id="rowInfo'+this.id+'"><div class="infoContent" id="rowInfoContent'+this.id+'"></div><div><a onclick="Game.ObjectsById['+this.id+'].sell();">Sell 1</a></div></div></div>';
 				l('rows').innerHTML=l('rows').innerHTML+str;
 			}
-			
+
 			Game.Objects[this.name]=this;
 			Game.ObjectsById[this.id]=this;
 			Game.ObjectsN++;
 			return this;
 		}
-		
+
 		Game.NewDrawFunction=function(pic,xVariance,yVariance,w,shift,heightOffset)
 		{
 			//pic : either 0 (the default picture will be used), a filename (will be used as override), or a function to determine a filename
@@ -1944,7 +1943,7 @@ Game.Launch=function()
 				var str='';
 				var offX=0;
 				var offY=0;
-				
+
 				if (this.drawSpecialButton && this.specialUnlocked)
 				{
 					l('rowSpecialButton'+this.id).style.display='block';
@@ -1975,7 +1974,7 @@ Game.Launch=function()
 				l('rowBackground'+this.id).style.width=bgW+'px';
 			}
 		}
-		
+
 		Game.RebuildStore=function()//redraw the store from scratch
 		{
 			var str='';
@@ -1989,13 +1988,13 @@ Game.Launch=function()
 			l('products').innerHTML=str;
 			Game.storeToRebuild=0;
 		}
-		
+
 		Game.ComputeCps=function(base,add,mult,bonus)
 		{
 			if (!bonus) bonus=0;
 			return ((base+add)*(Math.pow(2,mult))+bonus);
 		}
-		
+
 		//define objects
 		new Game.Object('Cursor','cursor|cursors|clicked','Mr. Trusty takes control and autoclicks once every 10 seconds.','cursor','cursoricon','',15,function(){
 			var add=0;
@@ -2045,10 +2044,10 @@ Game.Launch=function()
 			if (this.amount>=120) Game.Unlock('Trillion fingers');
 			if (this.amount>=160) Game.Unlock('Quadrillion fingers');
 			if (this.amount>=200) Game.Unlock('Quintillion fingers');
-			
-			if (this.amount>=1) Game.Win('Click');if (this.amount>=2) Game.Win('Double-click');if (this.amount>=50) Game.Win('Mouse wheel');if (this.amount>=100) Game.Win('Of Mice and Men');if (this.amount>=200) Game.Win('The Digital');		
+
+			if (this.amount>=1) Game.Win('Click');if (this.amount>=2) Game.Win('Double-click');if (this.amount>=50) Game.Win('Mouse wheel');if (this.amount>=100) Game.Win('Of Mice and Men');if (this.amount>=200) Game.Win('The Digital');
 		});
-		
+
 		Game.SpecialGrandmaUnlock=15;
 		new Game.Object('Mr. Trusty','Mr. Trusty|Mr. Trustys|crafted','Mr. Trusty has mad computer making skillz.','trusty','grandmaIcon','grandmaBackground',100,function(){
 			var mult=0;
@@ -2091,7 +2090,7 @@ Game.Launch=function()
 				Game.pledgeT=0;
 			}
 		};
-		
+
 		new Game.Object('Farm','farm|farms|harvested','Grows keyboard plants from mouse seeds.','farm','farmIcon','farmBackground',500,function(){
 			return Game.ComputeCps(2,Game.Has('Cheap hoes')*0.5,Game.Has('Fertilizer')+Game.Has('Keyboard trees')+Game.Has('Genetically-modified keyboards'));
 		},Game.NewDrawFunction(0,16,16,64,2,32),function(){
@@ -2099,7 +2098,7 @@ Game.Launch=function()
 			if (this.amount>=Game.SpecialGrandmaUnlock && Game.Objects['Mr. Trusty'].amount>0) Game.Unlock('Farmer Mr. Trustys');
 			if (this.amount>=1) Game.Win('My first farm');if (this.amount>=50) Game.Win('Reap what you sow');if (this.amount>=100) Game.Win('Farm ill');
 		});
-		
+
 		new Game.Object('Factory','factory|factories|mass-produced','Produces large quantities of Joe\'s Juice to keep Mr. Trusty working.', 'factory', 'factoryIcon', 'factoryBackground', 3000, function(){
 			return Game.ComputeCps(10,Game.Has('Sturdier Propel bottles')*4,Game.Has('Joe Brett labor')+Game.Has('Sweatshop')+Game.Has('Radium reactors'));
 		},Game.NewDrawFunction(0,32,2,64,1,-22),function(){
@@ -2107,7 +2106,7 @@ Game.Launch=function()
 			if (this.amount>=Game.SpecialGrandmaUnlock && Game.Objects['Mr. Trusty'].amount>0) Game.Unlock('Worker Mr. Trustys');
 			if (this.amount>=1) Game.Win('Production chain');if (this.amount>=50) Game.Win('Industrial revolution');if (this.amount>=100) Game.Win('Global warming');
 		});
-		
+
 		new Game.Object('Mine','mine|mines|mined','Mr. Trusty\'s songs cause an avalanche of computers.','mine','mineIcon','mineBackground',10000,function(){
 			return Game.ComputeCps(40,Game.Has('Beautiful voice')*10,Game.Has('Mega-mic')+Game.Has('Ultra-mic')+Game.Has('Ultimadrill'));
 		},Game.NewDrawFunction(0,16,16,64,2,24),function(){
@@ -2115,7 +2114,7 @@ Game.Launch=function()
 			if (this.amount>=Game.SpecialGrandmaUnlock && Game.Objects['Mr. Trusty'].amount>0) Game.Unlock('Miner Mr. Trustys');
 			if (this.amount>=1) Game.Win('You know the drill');if (this.amount>=50) Game.Win('Excavation site');if (this.amount>=100) Game.Win('Hollow the planet');
 		});
-		
+
 		new Game.Object('Shipment','shipment|shipments|shipped','Brings in fresh mouses from the Mr. Trusty\'s home planet.','shipment','shipmentIcon','shipmentBackground',40000,function(){
 			return Game.ComputeCps(100,Game.Has('Vanilla nebulae')*30,Game.Has('Wormholes')+Game.Has('Frequent flyer')+Game.Has('Warp drive'));
 		},Game.NewDrawFunction(0,16,16,64),function(){
@@ -2123,7 +2122,7 @@ Game.Launch=function()
 			if (this.amount>=Game.SpecialGrandmaUnlock && Game.Objects['Mr. Trusty'].amount>0) Game.Unlock('Cosmic Mr. Trustys');
 			if (this.amount>=1) Game.Win('Expedition');if (this.amount>=50) Game.Win('Galactic highway');if (this.amount>=100) Game.Win('Far far away');
 		});
-		
+
 		new Game.Object('Alchemy lab','alchemy lab|alchemy labs|transmuted','Turns gold into computers!','alchemylab','alchemylabIcon','alchemylabBackground',200000,function(){
 			return Game.ComputeCps(400,Game.Has('Antimony')*100,Game.Has('Essence of computers')+Game.Has('True C++')+Game.Has('Ambrosia'));
 		},Game.NewDrawFunction(0,16,16,64,2,16),function(){
@@ -2131,7 +2130,7 @@ Game.Launch=function()
 			if (this.amount>=Game.SpecialGrandmaUnlock && Game.Objects['Mr. Trusty'].amount>0) Game.Unlock('Transmuted Mr. Trustys');
 			if (this.amount>=1) Game.Win('Transmutation');if (this.amount>=50) Game.Win('Transmogrification');if (this.amount>=100) Game.Win('Gold member');
 		});
-		
+
 		new Game.Object('Portal','portal|portals|retrieved','Opens a door to the Trustyverse.','portal','portalIcon','portalBackground',1666666,function(){
 			return Game.ComputeCps(6666,Game.Has('Ancient tablet')*1666,Game.Has('Insane oatling workers')+Game.Has('Soul bond')+Game.Has('Sanity dance'));
 		},Game.NewDrawFunction(0,32,32,64,2),function(){
@@ -2191,7 +2190,7 @@ Game.Launch=function()
 			if (type) this.type=type;
 			this.power=0;
 			if (power) this.power=power;
-			
+
 			this.buy=function()
 			{
 				var cancelPurchase=0;
@@ -2210,7 +2209,7 @@ Game.Launch=function()
 					}
 				}
 			}
-			
+
 			this.toggle=function()//cheating only
 			{
 				if (!this.bought)
@@ -2230,13 +2229,13 @@ Game.Launch=function()
 				}
 				Game.UpdateMenu();
 			}
-			
+
 			Game.Upgrades[this.name]=this;
 			Game.UpgradesById[this.id]=this;
 			Game.UpgradesN++;
 			return this;
 		}
-		
+
 		Game.Unlock=function(what)
 		{
 			if (typeof what==='string')
@@ -2271,12 +2270,12 @@ Game.Launch=function()
 			}
 			else {for (var i in what) {Game.Lock(what[i]);}}
 		}
-		
+
 		Game.Has=function(what)
 		{
 			return (Game.Upgrades[what]?Game.Upgrades[what].bought:0);
 		}
-		
+
 		Game.RebuildUpgrades=function()//recalculate the upgrades you can buy
 		{
 			Game.upgradesToRebuild=0;
@@ -2289,7 +2288,7 @@ Game.Launch=function()
 					if (me.unlocked) list.push(me);
 				}
 			}
-			
+
 			var sortMap=function(a,b)
 			{
 				if (a.basePrice>b.basePrice) return 1;
@@ -2297,7 +2296,7 @@ Game.Launch=function()
 				else return 0;
 			}
 			list.sort(sortMap);
-			
+
 			Game.UpgradesInStore=[];
 			for (var i in list)
 			{
@@ -2315,15 +2314,15 @@ Game.Launch=function()
 			}
 			l('upgrades').innerHTML=str;
 		}
-		
+
 		var tier1=10;
 		var tier2=100;
 		var tier3=1000;
 		var tier4=10000;
-		
+
 		var type='';
 		var power=0;
-		
+
 		//define upgrades
 		//WARNING : do NOT add new upgrades in between, this breaks the saves. Add them at the end !
 		var order=100;//this is used to set the order in which the items are listed
@@ -2334,51 +2333,51 @@ Game.Launch=function()
 		new Game.Upgrade('Million fingers','The mouse and cursors gain <b>+0.5</b> computers for each non-cursor object owned.<q>clickityclickity</q>',50000000,[1,6]);
 		new Game.Upgrade('Billion fingers','The mouse and cursors gain <b>+2</b> computers for each non-cursor object owned.<q>clickityclickityclickity</q>',500000000,[2,6]);
 		new Game.Upgrade('Trillion fingers','The mouse and cursors gain <b>+10</b> computers for each non-cursor object owned.<q>clickityclickityclickityclickity</q>',5000000000,[3,6]);
-		
+
 		order=200;
 		new Game.Upgrade('Forwards from Mr. Trusty','Mr. Trusty\'s gain <b>+0.3</b> base CpS.<q>RE:RE:thought you\'d get a kick out of this ;))</q>',Game.Objects['Mr. Trusty'].basePrice*tier1,[1,0]);
 		new Game.Upgrade('Steel-plated mice','Mr. Trusty\'s are <b>twice</b> as efficient.',Game.Objects['Mr. Trusty'].basePrice*tier2,[1,0]);
 		new Game.Upgrade('Lubricated dentures','Mr. Trustys are <b>twice</b> as efficient.<q>Squish</q>',Game.Objects['Mr. Trusty'].basePrice*tier3,[1,1]);
-		
+
 		order=300;
 		new Game.Upgrade('Cheap hoes','Farms gain <b>+0.5</b> base CpS.',Game.Objects['Farm'].basePrice*tier1,[2,0]);
 		new Game.Upgrade('Fertilizer','Farms are <b>twice</b> as efficient.<q>It\'s chocolate, I swear.</q>',Game.Objects['Farm'].basePrice*tier2,[2,0]);
 		new Game.Upgrade('Keyboard trees','Farms are <b>twice</b> as efficient.<q>A relative of the breadfruit.</q>',Game.Objects['Farm'].basePrice*tier3,[2,1]);
-		
+
 		order=400;
 		new Game.Upgrade('Sturdier Propel bottles','Factories gain <b>+4</b> base CpS.',Game.Objects['Factory'].basePrice*tier1,[4,0]);
 		new Game.Upgrade('Joe Brett labor','Factories are <b>twice</b> as efficient.<q>Cheaper, healthier workforce - and so much more receptive to whipping!</q>',Game.Objects['Factory'].basePrice*tier2,[4,0]);
 		new Game.Upgrade('Sweatshop','Factories are <b>twice</b> as efficient.<q>Slackers will be terminated.</q>',Game.Objects['Factory'].basePrice*tier3,[4,1]);
-		
+
 		order=500;
 		new Game.Upgrade('Beautiful voice','Mines gain <b>+10</b> base CpS.<q>Old Susan was a funny old man.</q>',Game.Objects['Mine'].basePrice*tier1,[3,0]);
 		new Game.Upgrade('Mega-mic','Mines are <b>twice</b> as efficient.',Game.Objects['Mine'].basePrice*tier2,[3,0]);
 		new Game.Upgrade('Ultra-mic','Mines are <b>twice</b> as efficient.',Game.Objects['Mine'].basePrice*tier3,[3,1]);
-		
+
 		order=600;
 		new Game.Upgrade('Vanilla nebulae','Shipments gain <b>+30</b> base CpS.',Game.Objects['Shipment'].basePrice*tier1,[5,0]);
 		new Game.Upgrade('Wormholes','Shipments are <b>twice</b> as efficient.<q>By using these as shortcuts, your ships can travel much faster.</q>',Game.Objects['Shipment'].basePrice*tier2,[5,0]);
 		new Game.Upgrade('Frequent flyer','Shipments are <b>twice</b> as efficient.<q>Come back soon!</q>',Game.Objects['Shipment'].basePrice*tier3,[5,1]);
-		
+
 		order=700;
 		new Game.Upgrade('Antimony','Alchemy labs gain <b>+100</b> base CpS.<q>Actually worth a lot of mony.</q>',Game.Objects['Alchemy lab'].basePrice*tier1,[6,0]);
 		new Game.Upgrade('Essence of computers','Alchemy labs are <b>twice</b> as efficient.<q>Extracted through the 5 ancient steps of alchemical baking.</q>',Game.Objects['Alchemy lab'].basePrice*tier2,[6,0]);
 		new Game.Upgrade('True C++','Alchemy labs are <b>twice</b> as efficient.<q>The purest form of code.</q>',Game.Objects['Alchemy lab'].basePrice*tier3,[6,1]);
-		
+
 		order=800;
 		new Game.Upgrade('Ancient tablet','Portals gain <b>+1,666</b> base CpS.<q>A strange slab of peanut brittle, holding an ancient Trusty skill. Neat!</q>',Game.Objects['Portal'].basePrice*tier1,[7,0]);
 		new Game.Upgrade('Insane oatling workers','Portals are <b>twice</b> as efficient.<q>ARISE, MY MINIONS!</q>',Game.Objects['Portal'].basePrice*tier2,[7,0]);
 		new Game.Upgrade('Soul bond','Portals are <b>twice</b> as efficient.<q>So I just sign up and get a computer? Sure, whatever!</q>',Game.Objects['Portal'].basePrice*tier3,[7,1]);
-		
+
 		order=900;
 		new Game.Upgrade('Flux capacitors','Time machines gain <b>+9,876</b> base CpS.<q>Bake to the future.</q>',1234567890,[8,0]);
 		new Game.Upgrade('Time paradox resolver','Time machines are <b>twice</b> as efficient.<q>No more screwing with Mr. Trusty!</q>',9876543210,[8,0]);
 		new Game.Upgrade('Quantum conundrum','Time machines are <b>twice</b> as efficient.<q>It\'s full of stars!</q>',98765456789,[8,1]);
-		
+
 		order=20000;
 		new Game.Upgrade('Kitten helpers','You gain <b>more CpS</b> the more milk you have.<q>meow may I help you</q>',9000000,[1,7]);
 		new Game.Upgrade('Kitten workers','You gain <b>more CpS</b> the more milk you have.<q>meow meow meow meow</q>',9000000000,[2,7]);
-		
+
 		order=10000;
 		type='computer';power=5;
 		new Game.Upgrade('Microsoft support','Computer production multiplier <b>+5%</b>.<q>Open Windows. Fresh air will help.</q>',99999999,[0,3]);
@@ -2392,10 +2391,10 @@ Game.Launch=function()
 		power=10;new Game.Upgrade('iTunes','Computer production multiplier <b>+10%</b>.<q>Relaxation tunes.</q>',99999999999,[1,4]);
 		new Game.Upgrade('Folders','Computer production multiplier <b>+10%</b>.<q>Keeping everything organized.</q>',99999999999,[2,4]);
 		type='';power=0;
-		
+
 		order=100;
 		new Game.Upgrade('Quadrillion fingers','The mouse and cursors gain <b>+20</b> computers for each non-cursor object owned.<q>clickityclickityclickityclickityclick</q>',50000000000,[3,6]);
-		
+
 		order=200;new Game.Upgrade('Joe\'s Juice','Mr. Trusty is <b>twice</b> as efficient.<q>Gets me going.</q>',Game.Objects['Mr. Trusty'].basePrice*tier4,[1,2]);
 		order=300;new Game.Upgrade('Genetically-modified keyboards','Farms are <b>twice</b> as efficient.<q>All-natural mutations.</q>',Game.Objects['Farm'].basePrice*tier4,[2,2]);
 		order=400;new Game.Upgrade('Radium reactors','Factories are <b>twice</b> as efficient.<q>Gives your computers a healthy glow.</q>',Game.Objects['Factory'].basePrice*tier4,[4,2]);
@@ -2404,21 +2403,21 @@ Game.Launch=function()
 		order=700;new Game.Upgrade('Ambrosia','Alchemy labs are <b>twice</b> as efficient.',Game.Objects['Alchemy lab'].basePrice*tier4,[6,2]);
 		order=800;new Game.Upgrade('Sanity dance','Portals are <b>twice</b> as efficient.<q>We can change if we want to.<br>We can leave our brains behind.</q>',Game.Objects['Portal'].basePrice*tier4,[7,2]);
 		order=900;new Game.Upgrade('Causality enforcer','Time machines are <b>twice</b> as efficient.<q>What happened, happened.</q>',1234567890000,[8,2]);
-		
+
 		order=5000;
 		new Game.Upgrade('Lucky day','Golden computers appear <b>twice as often</b> and last <b>twice as long</b>.',777777777,[10,1]);
 		new Game.Upgrade('Serendipity','Golden computers appear <b>twice as often</b> and last <b>twice as long</b>.',77777777777,[10,1]);
-		
+
 		order=20000;
 		new Game.Upgrade('Kitten engineers','You gain <b>more CpS</b> the more milk you have.<q>meow meow meow meow, sir</q>',9000000000000,[3,7]);
-		
+
 		order=10000;
 		type='computer';power=15;
 		new Game.Upgrade('Microsoft Word','Computer production multiplier <b>+15%</b>.',999999999999,[3,4]);
 		new Game.Upgrade('Microsoft Excel','Computer production multiplier <b>+15%</b>.',999999999999,[4,4]);
 		new Game.Upgrade('Microsoft PowerPoint','Computer production multiplier <b>+15%</b>.<q>They have their uses.</q>',9999999999999,[5,4]);
 		type='';power=0;
-		
+
 		order=250;
 		new Game.Upgrade('Farmer Mr. Trustys','Mr. Trusty\'s are <b>twice</b> as efficient.',Game.Objects['Farm'].basePrice*tier2,[1,0],function(){Game.Objects['Mr. Trusty'].drawFunction();});
 		new Game.Upgrade('Worker Mr. Trustys','Mr. Trusty\'s are <b>twice</b> as efficient.',Game.Objects['Factory'].basePrice*tier2,[1,0],function(){Game.Objects['Mr. Trusty'].drawFunction();});
@@ -2428,7 +2427,7 @@ Game.Launch=function()
 		new Game.Upgrade('Altered Mr. Trustys','Mr. Trusty\'s are <b>twice</b> as efficient.',Game.Objects['Portal'].basePrice*tier2,[1,0],function(){Game.Objects['Mr. Trusty'].drawFunction();});
 		new Game.Upgrade('Super Mr. Trustys','Mr. Trusty\'s are <b>twice</b> as efficient.',Game.Objects['Super Computer'].basePrice*tier2,[1,0],function(){Game.Objects['Mr. Trusty'].drawFunction();});
 		new Game.Upgrade('Mr. Trusty\'s Grandpa','Mr. Trusty\'s are <b>twice</b> as efficient.',Game.Objects['Time machine'].basePrice*tier2,[1,0],function(){Game.Objects['Mr. Trusty'].drawFunction();});
-		
+
 		order=15000;
 		Game.baseResearchTime=Game.fps*60*30;
 		Game.SetResearch=function(what,time)
@@ -2440,7 +2439,7 @@ Game.Launch=function()
 				Game.Popup('Research has begun.');
 			}
 		}
-		
+
 		new Game.Upgrade('Opera house/Computer lab','Mr. Trusty\'s computer lab and leisure club.<br>Mr. Trusty as <b>4 times</b> as efficient.<br><b>Regularly unlocks new upgrades</b>.',100000000000,[11,9],function(){Game.SetResearch('Specialized chocolate chips');});
 		new Game.Upgrade('Specialized chocolate chips','[Research]<br>Computer production multiplier <b>+1%</b>.<q>Computer-designed chocolate chips. Computer chips, if you will.</q>',10000000000,[0,9],function(){Game.SetResearch('Designer cocoa beans');});
 		new Game.Upgrade('Designer cocoa beans','[Research]<br>Computer production multiplier <b>+2%</b>.<q>Now more aerodynamic than ever!</q>',20000000000,[1,9],function(){Game.SetResearch('Ritual rolling pins');});
@@ -2461,29 +2460,29 @@ Game.Launch=function()
 			Game.Unlock('Elder Covenant');
 		});
 		Game.Upgrades['Elder Pledge'].hide=3;
-		
+
 		order=150;
 		new Game.Upgrade('Plastic mouse','Clicking gains <b>+1% of your CpS</b>.',50000,[11,0]);
 		new Game.Upgrade('Iron mouse','Clicking gains <b>+1% of your CpS</b>.',5000000,[11,0]);
 		new Game.Upgrade('Titanium mouse','Clicking gains <b>+1% of your CpS</b>.',500000000,[11,1]);
 		new Game.Upgrade('Adamantium mouse','Clicking gains <b>+1% of your CpS</b>.',50000000000,[11,2]);
-		
+
 		order=40000;
 		new Game.Upgrade('Ultrascience','Research takes only <b>5 seconds</b>.',7,[9,2]);//debug purposes only
 		Game.Upgrades['Ultrascience'].hide=3;
-		
+
 		order=10000;
 		type='computer';power=15;
 		new Game.Upgrade('Eclipse','Computer production multiplier <b>+15%</b>.<q>Making all this possible.</q>',9999999999999,[0,4]);
 		type='';power=0;
-		
+
 		order=100;
 		new Game.Upgrade('Quintillion fingers','The mouse and cursors gain <b>+100</b> computers for each non-cursor object owned.<q>man, just go click click click click click, it\'s real easy, man.</q>',50000000000000,[3,6]);
-		
+
 		order=40000;
 		new Game.Upgrade('Gold hoard','Golden computers appear <b>really often</b>.',7,[10,1]);//debug purposes only
 		Game.Upgrades['Gold hoard'].hide=3;
-		
+
 		order=15000;
 		new Game.Upgrade('Elder Covenant','[Switch]<br>Puts a permanent end to the elders\' wrath, at the price of 5% of your CpS.',6666666666666,[8,9],function()
 		{
@@ -2501,24 +2500,24 @@ Game.Launch=function()
 			Game.Unlock('Elder Covenant');
 		});
 		Game.Upgrades['Revoke Elder Covenant'].hide=3;
-		
+
 		order=5000;
 		new Game.Upgrade('Get lucky','Golden computer effects last <b>twice as long</b>.<q>You\'ve been up all night, haven\'t you?</q>',77777777777777,[10,1]);
-		
+
 		order=15000;
 		new Game.Upgrade('Sacrificial keyboards','Elder pledge last <b>twice</b> as long.',2888888888888,[2,9]);
-		
+
 		order=10000;
 		type='computer';power=15;
 		new Game.Upgrade('Python','Computer production multiplier <b>+15%</b>.<q>If it ain\'t dutch, it ain\'t much.</q>',99999999999999,[7,4]);
 		new Game.Upgrade('C++','Computer production multiplier <b>+15%</b>.',99999999999999,[8,4]);
 		new Game.Upgrade('Java','Computer production multiplier <b>+15%</b>.<q>Powers all.</q>',99999999999999,[6,4]);
 		type='';power=0;
-		
+
 		order=40000;
 		new Game.Upgrade('Neuromancy','Can toggle upgrades on and off at will in the stats menu.',7,[4,9]);//debug purposes only
 		Game.Upgrades['Neuromancy'].hide=3;
-		
+
 		order=10000;
 		type='computer';power=15;
 		new Game.Upgrade('Photoshop','Computer production multiplier <b>+15%</b>.<q>Essential.</q>',99999999999999,[9,4]);
@@ -2530,8 +2529,8 @@ Game.Launch=function()
 		type='Google';power=20;
 		new Game.Upgrade('G','Computer production multiplier <b>+20%</b>.',199999999999999,[7,3]);
 		type='';power=0;
-		
-		
+
+
 		order=1000;
 		new Game.Upgrade('Gold plated mouse','Trustyman gains <b>+99,999</b> base CpS.',Game.Objects['TrustyMan'].basePrice*tier1,[13,0]);
 		new Game.Upgrade('#include','Trustyman is <b>twice</b> as efficient.',Game.Objects['TrustyMan'].basePrice*tier2,[13,0]);
@@ -2549,7 +2548,7 @@ Game.Launch=function()
 		new Game.Upgrade('l','Computer production multiplier <b>+20%</b>.',199999999999999,[11,3]);
 		new Game.Upgrade('e','Computer production multiplier <b>+20%</b>.<q>120% completion</q>',199999999999999,[12,3]);
 		type='';power=0;
-		
+
 		order=20000;
 		new Game.Upgrade('Kitten overseers','You gain <b>more CpS</b> the more milk you have.<q>my purrpose is to serve you, sir</q>',900000000000000,[8,7]);
 
@@ -2565,15 +2564,15 @@ Game.Launch=function()
 		new Game.Upgrade('Chocolate milk','Unlocks <b>chocolate milk</b>, available in the menu.',120000000000,[5,8]);
 		new Game.Upgrade('Raspberry milk','Unlocks <b>raspberry milk</b>, available in the menu.',120000000000,[6,8]);
 		new Game.Upgrade('Ain\'t got milk','Unlocks <b>no milk please</b>, available in the menu.',120000000000,[0,8]);
-		
+
 		new Game.Upgrade('Blue background','Unlocks the <b>blue background</b>, available in the menu.',120000000000,[0,9]);
 		new Game.Upgrade('Red background','Unlocks the <b>red background</b>, available in the menu.',120000000000,[1,9]);
 		new Game.Upgrade('White background','Unlocks the <b>white background</b>, available in the menu.',120000000000,[2,9]);
 		new Game.Upgrade('Black background','Unlocks the <b>black background</b>, available in the menu.',120000000000,[3,9]);
 		new Game.Upgrade('Mr. Trusty\'s wrath','Computer production multiplier <b>+100%</b>.', 1234567890987654321,[0,0]);
 		*/
-		
-		
+
+
 		/*=====================================================================================
 		ACHIEVEMENTS
 		=======================================================================================*/
@@ -2592,13 +2591,13 @@ Game.Launch=function()
 			this.hide=hide||0;//hide levels : 0=show, 1=hide description, 2=hide, 3=secret (doesn't count toward achievement total)
 			this.order=this.id;
 			if (order) this.order=order+this.id*0.001;
-			
+
 			Game.Achievements[this.name]=this;
 			Game.AchievementsById[this.id]=this;
 			Game.AchievementsN++;
 			return this;
 		}
-		
+
 		Game.Win=function(what)
 		{
 			if (typeof what==='string')
@@ -2616,15 +2615,15 @@ Game.Launch=function()
 			}
 			else {for (var i in what) {Game.Win(what[i]);}}
 		}
-		
+
 		Game.HasAchiev=function(what)
 		{
 			return (Game.Achievements[what]?Game.Achievements[what].won:0);
 		}
-		
+
 		//define achievements
 		//WARNING : do NOT add new achievements in between, this breaks the saves. Add them at the end !
-		
+
 		var order=100;//this is used to set the order in which the items are listed
 		//new Game.Achievement('name','description',[0,0]);
 		Game.moneyAchievs=[
@@ -2651,7 +2650,7 @@ Game.Launch=function()
 			if (i==15) pic=[11,5];
 			new Game.Achievement(Game.moneyAchievs[i*2],'Make <b>'+Beautify(Game.moneyAchievs[i*2+1])+'</b> computer'+(Game.moneyAchievs[i*2+1]==1?'':'s')+'.',pic,2);
 		}
-		
+
 		order=200;
 		Game.cpsAchievs=[
 		'Casual computing',				1,
@@ -2670,12 +2669,12 @@ Game.Launch=function()
 			var pic=[i,5];
 			new Game.Achievement(Game.cpsAchievs[i*2],'Bake <b>'+Beautify(Game.cpsAchievs[i*2+1])+'</b> computer'+(Game.cpsAchievs[i*2+1]==1?'':'s')+' per second.',pic,2);
 		}
-		
+
 		order=30000;
 		new Game.Achievement('Sacrifice','Reset your game with <b>1 million</b> computers baked.<q>Easy come, easy go.</q>',[11,6],2);
 		new Game.Achievement('Oblivion','Reset your game with <b>1 billion</b> computers baked.<q>Back to square one.</q>',[11,6],2);
 		new Game.Achievement('From scratch','Reset your game with <b>1 trillion</b> computer baked.<q>It\'s been fun.</q>',[11,6],2);
-		
+
 		order=31000;
 		new Game.Achievement('Neverclick','Make <b>1 million</b> computers by only having clicked <b>15 times</b>.',[12,0],3);
 		order=1000;
@@ -2683,130 +2682,130 @@ Game.Launch=function()
 		new Game.Achievement('Clickathlon','Make <b>100,000</b> computers from clicking.',[11,1]);
 		new Game.Achievement('Clickolympics','Make <b>10,000,000</b> computers from clicking.',[11,1]);
 		new Game.Achievement('Clickorama','Make <b>1,000,000,000</b> computers from clicking.',[11,2]);
-		
+
 		order=1050;
 		new Game.Achievement('Click','Have <b>1</b> cursor.',[0,0]);
 		new Game.Achievement('Double-click','Have <b>2</b> cursors.',[0,6]);
 		new Game.Achievement('Mouse wheel','Have <b>50</b> cursors.',[1,6]);
 		new Game.Achievement('Of Mice and Men','Have <b>100</b> cursors.',[2,6]);
 		new Game.Achievement('The Digital','Have <b>200</b> cursors.',[3,6]);
-		
+
 		order=1100;
 		new Game.Achievement('Just wrong','Sell Mr. Trusty.<q>I thought you loved me.</q>',[1,0],2);
 		new Game.Achievement('Mr. Trusty\'s praise','Have <b>1</b> Mr. Trusty.',[1,0]);
 		new Game.Achievement('Sloppy codes','Have <b>50</b> Mr. Trustys.',[1,1]);
 		new Game.Achievement('Mr. Trusty\'s room','Have <b>100</b> Mr. Trustys.',[1,2]);
 		new Game.Achievement('Mr. Trusty\'s skill','Have <b>1000</b> Mr. Trustys.',[14,0]);
-		
+
 		order=1200;
 		new Game.Achievement('My first farm','Have <b>1</b> farm.',[2,0]);
 		new Game.Achievement('Reap what you sow','Have <b>50</b> farms.',[2,1]);
 		new Game.Achievement('Farm ill','Have <b>100</b> farms.',[2,2]);
-		
+
 		order=1300;
 		new Game.Achievement('Production chain','Have <b>1</b> factory.',[4,0]);
 		new Game.Achievement('Industrial revolution','Have <b>50</b> factories.',[4,1]);
 		new Game.Achievement('Global warming','Have <b>100</b> factories.',[4,2]);
-		
+
 		order=1400;
 		new Game.Achievement('You know the drill','Have <b>1</b> mine.',[3,0]);
 		new Game.Achievement('Excavation site','Have <b>50</b> mines.',[3,1]);
 		new Game.Achievement('Hollow the planet','Have <b>100</b> mines.',[3,2]);
-		
+
 		order=1500;
 		new Game.Achievement('Expedition','Have <b>1</b> shipment.',[5,0]);
 		new Game.Achievement('Galactic highway','Have <b>50</b> shipments.',[5,1]);
 		new Game.Achievement('Far far away','Have <b>100</b> shipments.',[5,2]);
-		
+
 		order=1600;
 		new Game.Achievement('Transmutation','Have <b>1</b> alchemy lab.',[6,0]);
 		new Game.Achievement('Transmogrification','Have <b>50</b> alchemy labs.',[6,1]);
 		new Game.Achievement('Gold member','Have <b>100</b> alchemy labs.',[6,2]);
-		
+
 		order=1700;
 		new Game.Achievement('A whole new world','Have <b>1</b> portal.',[7,0]);
 		new Game.Achievement('Now you\'re thinking','Have <b>50</b> portals.',[7,1]);
 		new Game.Achievement('Dimensional shift','Have <b>100</b> portals.',[7,2]);
-		
+
 		order=1800;
 		new Game.Achievement('Time warp','Have <b>1</b> time machine.',[8,0]);
 		new Game.Achievement('Alternate timeline','Have <b>50</b> time machines.',[8,1]);
 		new Game.Achievement('Rewriting history','Have <b>100</b> time machines.',[8,2]);
-		
+
 		order=7000;
 		new Game.Achievement('One with everything','Have <b>at least 1</b> of every building.',[4,6],2);
 		new Game.Achievement('Mathematician','Have at least <b>1 time machine, 2 portals, 4 alchemy labs, 8 shipments</b> and so on (128 max).',[7,6],2);
 		new Game.Achievement('Base 10','Have at least <b>10 time machines, 20 portals, 30 alchemy labs, 40 shipments</b> and so on.',[8,6],2);
-		
+
 		order=10000;
 		new Game.Achievement('Golden computer','Click a <b>golden computers</b>.',[10,1],1);
 		new Game.Achievement('Lucky computer','Click <b>7 golden computers</b>.',[10,1],1);
 		new Game.Achievement('A stroke of luck','Click <b>27 golden computers</b>.',[10,1],1);
-		
+
 		order=30200;
 		new Game.Achievement('Cheated computers work awful','Hack in some computers.',[10,6],3);
 		order=30001;
 		new Game.Achievement('Uncanny clicker','Click really, really fast.<q>Well I\'ll be!</q>',[12,0],2);
-		
+
 		order=5000;
 		new Game.Achievement('Builder','Own <b>100</b> buildings.',[4,6],1);
 		new Game.Achievement('Architect','Own <b>400</b> buildings.',[5,6],1);
 		order=6000;
 		new Game.Achievement('Enhancer','Purchase <b>20</b> upgrades.',[9,0],1);
 		new Game.Achievement('Augmenter','Purchase <b>50</b> upgrades.',[9,1],1);
-		
+
 		order=11000;
 		new Game.Achievement('Dunk-tank','Dunk Mr. Trusty.<q>You did it!</q>',[4,7],2);
-		
+
 		order=10000;
 		new Game.Achievement('Fortune','Click <b>77 golden computerss</b>.<q>You should really go to bed.</q>',[10,1],1);
 		order=31000;
 		new Game.Achievement('True Neverclick','Make <b>1 million</b> computers with <b>no</b> computer clicks.<q>This kinda defeats the whole purpose, doesn\'t it?</q>',[12,0],3);
-		
+
 		order=20000;
 		new Game.Achievement('Elder nap','Appease Mr. Trusty at least <b>once</b>.<q>we<br>are<br>eternal</q>',[8,9],2);
 		new Game.Achievement('Elder slumber','Appease Mr. Trusty at least <b>5 times</b>.<q>our mind<br>outlives<br>the universe</q>',[8,9],2);
-		
+
 		order=1100;
 		new Game.Achievement('Elder','Own every Mr. Trusty type.',[1,0],2);
-		
+
 		order=20000;
 		new Game.Achievement('Elder calm','Declare a covenant with the grandmatriarchs.<q>we<br>have<br>fed</q>',[8,9],2);
-		
+
 		order=5000;
 		new Game.Achievement('Engineer','Own <b>800</b> buildings.',[6,6],1);
-		
+
 		order=10000;
 		new Game.Achievement('Leprechaun','Click <b>777 golden computers</b>.',[10,1],1);
 		new Game.Achievement('Black cat\'s paw','Click <b>7777 golden computers</b>.',[10,1],3);
-		
+
 		order=30000;
 		new Game.Achievement('Nihilism','Reset your game with <b>1 quadrillion</b> computers made.<q>There are many things<br>that need to be erased</q>',[11,6],2);
 		//new Game.Achievement('Galactus\' Reprimand','Reset your game with <b>1 quintillion</b> coo- okay no I'm yanking your chain
-		
+
 		order=1900;
 		new Game.Achievement('<iostream>','Have <b>1</b> Trustyman.',[13,0]);
 		new Game.Achievement('<iomanip>','Have <b>50</b> Trustymen.',[13,1]);
 		new Game.Achievement('using namespace std;','Have <b>100</b> Trustymen.',[13,2]);
-		
+
 		order=2000;
 		new Game.Achievement('String args[]','Have <b>1</b> Super Computer.',[12,1]);
 		new Game.Achievement('System.out','Have <b>50</b> Super Computers.',[13,1]);
 		new Game.Achievement('System.in','Have <b>100</b> Super Computers.',[13,2]);
-		
+
 		order=6000;
 		new Game.Achievement('Upgrader','Purchase <b>100</b> upgrades.',[9,2],1);
-		
+
 		order=7000;
 		new Game.Achievement('Centennial','Have at least <b>100 of everything</b>.',[9,6],2);
-		
-		
+
+
 		Game.RuinTheFun=function()
 		{
 			for (var i in Game.Upgrades)
 			{
 				Game.Unlock(Game.Upgrades[i].name);
-				
+
 				Game.Upgrades[i].bought++;
 				if (Game.Upgrades[i].buyFunction) Game.Upgrades[i].buyFunction();
 			}
@@ -2815,16 +2814,16 @@ Game.Launch=function()
 				Game.Win(Game.Achievements[i].name);
 			}
 			Game.Earn(999999999999999999);
-			
-				
+
+
 			Game.upgradesToRebuild=1;
 			Game.recalculateGains=1;
 
 		}
 		Game.Music=function(volume) {
 			play("img/doomsday.mp3", volume); }
-	
-	
+
+
 		/*=====================================================================================
 		GRANDMAPOCALYPSE
 		=======================================================================================*//** BEGIN EDIT **/
@@ -2859,7 +2858,7 @@ Game.Launch=function()
 			}
 			Game.elderWrathD+=((Game.elderWrath+1)-Game.elderWrathD)*0.001;//slowly fade to the target wrath state
 		}
-		
+
 		Game.DrawGrandmapocalypse=function()
 		{
 			Game.defaultBg='bgBlue';
@@ -2929,26 +2928,26 @@ Game.Launch=function()
 				l('backgroundLayer2').style.backgroundPosition=Math.floor(x)+'px '+Math.floor(y)+'px';*/
 			}
 		};
-		
-		
+
+
 		/*=====================================================================================
 		DUNGEONS (unfinished)
 		=======================================================================================*/
-		
+
 		LaunchDungeons();
-		
+
 		/*=====================================================================================
 		INITIALIZATION END; GAME READY TO LAUNCH
 		=======================================================================================*/
-		
+
 		Game.LoadSave();
-		
+
 		Game.ready=1;
 		l('javascriptError').innerHTML='';
 		l('javascriptError').style.display='none';
 		Game.Loop();
 	}
-	
+
 	/*=====================================================================================
 	LOGIC
 	=======================================================================================*/
@@ -2965,7 +2964,7 @@ Game.Launch=function()
 		Game.milkH=Math.min(1,Game.milkProgress)*0.35;
 		Game.milkHd+=(Game.milkH-Game.milkHd)*0.02;
 		var audie = document.getElementById("myAudio");
-		
+
 		if (Game.autoclickerDetected>0) Game.autoclickerDetected--;
 		//handle research
 		if (Game.researchT>0)
@@ -2979,13 +2978,13 @@ Game.Launch=function()
 			Game.nextResearch=0;
 			Game.researchT=-1;
 		}
-		
+
 		//handle computers
 		if (Game.recalculateGains) Game.CalculateGains();;
 		Game.Earn(Game.computersPs/Game.fps);//add computers per second
 		//var cps=Game.computersPs+Game.computers*0.01;//exponential computers
 		//Game.Earn(cps/Game.fps);//add computers per second
-		
+
 		for (var i in Game.Objects)
 		{
 			var me=Game.Objects[i];
@@ -3005,10 +3004,10 @@ Game.Launch=function()
 		if (Game.T%(Game.fps*5)==0 && Game.ObjectsById.length>0)//check some achievements and upgrades
 		{
 			//if (Game.Has('Arcane sugar') && !Game.Has('Elder Pact')) Game.Unlock('Elder Pact');//temporary fix for something stupid I've done
-			
+
 			//if (Game.Objects['Factory'].amount>=50 && Game.Objects['Factory'].specialUnlocked==0) {Game.Objects['Factory'].unlockSpecial();Game.Popup('You have unlocked the factory dungeons!');}
 			if (isNaN(Game.computers)) {Game.computers=0;Game.computersEarned=0;Game.recalculateGains=1;}
-			
+
 			if (Game.Objects['Mr. Trusty'].amount>=50)Game.Unlock('Mr. Trusty\'s wrath');
 			if (Game.computersEarned>=9999999) Game.Unlock(['Microsoft support','Increased WiFi Connection','Apple Support','Internet Explorer']);
 			if (Game.computersEarned>=99999999) Game.Unlock(['Video Research','Google Chrome','FireFox']);
@@ -3027,7 +3026,7 @@ Game.Launch=function()
 				if (Game.Has('NetClassroom')) Game.Unlock('G');
 			}
 			if (Game.computersEarned>=9999999999999) Game.Unlock(['Red o','Yellow o','g','l','e']);
-		
+
 			for (var i=0;i<Game.moneyAchievs.length/2;i++)
 			{
 				if (Game.computersEarned>=Game.moneyAchievs[i*2+1]) Game.Win(Game.moneyAchievs[i*2]);
@@ -3056,7 +3055,7 @@ Game.Launch=function()
 			if (Game.handmadeComputers>=10000000) {Game.Win('Clickolympics');Game.Unlock('Titanium mouse');}
 			if (Game.handmadeComputers>=1000000000) {Game.Win('Clickorama');Game.Unlock('Adamantium mouse');}
 			if (Game.computersEarned<Game.computers) Game.Win('Cheated computers work awful');
-			
+
 			if (buildingsOwned>=100) Game.Win('Builder');
 			if (buildingsOwned>=400) Game.Win('Architect');
 			if (buildingsOwned>=800) Game.Win('Engineer');
@@ -3069,40 +3068,40 @@ Game.Launch=function()
 			if (Game.pledges>0) Game.Win('Elder nap');
 			if (Game.pledges>=5) Game.Win('Elder slumber');
 			if (Game.pledges>=10) Game.Unlock('Sacrificial keyboards');
-			
+
 			if (!Game.HasAchiev('Dunk-tank') && l('bigComputer').getBoundingClientRect().bottom>l('milk').getBoundingClientRect().top+16 && Game.milkProgress>0.1) Game.Win('Dunk-tank');
 		}
-		
+
 		Game.computersd+=(Game.computers-Game.computersd)*0.3;
-		
+
 		if (Game.storeToRebuild) Game.RebuildStore();
 		if (Game.upgradesToRebuild) Game.RebuildUpgrades();
-		
+
 		if (Game.T%(Game.fps)==0) document.title=Beautify(Game.computers)+' '+(Game.computers==1?'computer':'computers')+' - Trusty Clicker';
-		
+
 		Game.TickerAge--;
 		if (Game.TickerAge<=0 || Game.Ticker=='') Game.getNewTicker();
-		
+
 		var veilLimit=0;//10;
 		if (Game.veil==1 && Game.computersEarned>=veilLimit) Game.veilOff();
 		else if (Game.veil==0 && Game.computersEarned<veilLimit) Game.veilOn();
-		
+
 		Game.goldenComputer.update();
-		
+
 		if (Game.T%(Game.fps*60)==0 && Game.T>Game.fps*10 && Game.prefs.autosave) Game.WriteSave();
 		if (Game.T%(Game.fps*60*30)==0 && Game.T>Game.fps*10 && Game.prefs.autoupdate) Game.CheckUpdates();
-		
+
 		Game.T++;
 		start++;
 	}
-	
+
 	/*=====================================================================================
 	DRAW
 	=======================================================================================*/
 	Game.Draw=function()
 	{
 		if (Math.floor(Game.T%Game.fps/4)==0) Game.DrawGrandmapocalypse();
-		
+
 		//handle milk and milk accessories
 		if (Game.prefs.milk)
 		{
@@ -3127,7 +3126,7 @@ Game.Launch=function()
 			m1.style.opacity=m1o;
 			m2.style.opacity=m2o;
 		}
-		
+
 		if (Game.prefs.particles)
 		{
 			//shine
@@ -3138,7 +3137,7 @@ Game.Launch=function()
 			me.style.webkitTransform='rotate('+r+'deg)';
 			me.style.msTransform='rotate('+r+'deg)';
 			me.style.oTransform='rotate('+r+'deg)';
-			
+
 			//cursors
 			var r=((-Game.T*0.05)%360);
 			var me=l('computerCursors');
@@ -3148,10 +3147,10 @@ Game.Launch=function()
 			me.style.msTransform='rotate('+r+'deg)';
 			me.style.oTransform='rotate('+r+'deg)';
 		}
-		
-		
+
+
 		//handle cursors
-		
+
 		if (Game.prefs.particles)
 		{
 			var amount=Game.Objects['Cursor'].amount;
@@ -3173,7 +3172,7 @@ Game.Launch=function()
 				else w=0;
 				w*=-4;
 				//w+=Math.pow(Math.sin(((Game.T*0.05+(i/amount)*Game.fps)%Game.fps)/Game.fps*Math.PI*3),2)*15+5;
-				
+
 				var x=(Math.sin(a*Math.PI*2)*(140+n*16+w))-16;
 				var y=(Math.cos(a*Math.PI*2)*(140+n*16+w))-16;
 				var r=Math.floor(-(a)*360);
@@ -3194,11 +3193,11 @@ Game.Launch=function()
 			}
 			if (Game.elderWrathD>=1 && Game.elderWrathD<1.5) l('computerShower').style.opacity=1-((Game.elderWrathD-1)/0.5);
 		}
-		
+
 		var unit=(Math.round(Game.computersd)==1?' computer':' computers');
 		if (Math.round(Game.computersd).toString().length>11) unit='<br>computers';
 		l('computers').innerHTML=Beautify(Math.round(Game.computersd))+unit+'<div style="font-size:50%;">per second : '+Beautify(Game.computersPs,1)+'</div>';//display computer amount
-		
+
 		/*
 		var el=l('bigComputer');
 		var s=Math.pow(Math.min(1,Game.computers/100000),0.5)*1+0.5;
@@ -3208,34 +3207,34 @@ Game.Launch=function()
 		el.style.msTransform='scale('+s+')';
 		el.style.oTransform='scale('+s+')';
 		*/
-		
+
 		Game.TickerDraw();
-		
+
 		for (var i in Game.Objects)
 		{
 			var me=Game.Objects[i];
-			
+
 			//make products full-opacity if we can buy them
 			if (Game.computers>=me.price) l('product'+me.id).className='product enabled'; else l('product'+me.id).className='product disabled';
-			
+
 			//update object info
 			if (l('rowInfo'+me.id) && Game.T%5==0) l('rowInfoContent'+me.id).innerHTML='&bull; '+me.amount+' '+(me.amount==1?me.single:me.plural)+'<br>&bull; producing '+Beautify(me.storedTotalCps,1)+' '+(me.storedTotalCps==1?'computer':'computers')+' per second<br>&bull; total : '+Beautify(me.totalComputers)+' '+(Math.floor(me.totalComputers)==1?'computer':'computers')+' '+me.actionName;
 		}
-		
+
 		//make upgrades full-opacity if we can buy them
 		for (var i in Game.UpgradesInStore)
 		{
 			var me=Game.UpgradesInStore[i];
 			if (Game.computers>=me.basePrice) l('upgrade'+i).className='crate upgrade enabled'; else l('upgrade'+i).className='crate upgrade disabled';
 		}
-		
+
 		if (Math.floor(Game.T%Game.fps/2)==0) Game.UpdateMenu();
-		
+
 		Game.computerParticlesUpdate();
 		Game.computerNumbersUpdate();
 		Game.particlesUpdate();
 	}
-	
+
 	/*=====================================================================================
 	MAIN LOOP
 	=======================================================================================*/
@@ -3256,7 +3255,7 @@ Game.Launch=function()
 		}
 		Game.catchupLogic=0;
 		Game.Draw();
-		
+
 		setTimeout(Game.Loop,1000/Game.fps);
 	}
 }

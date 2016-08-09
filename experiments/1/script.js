@@ -12,15 +12,20 @@ $(function() {
             changeTextSize($("#RGB-text").css("font-size")); //change the text size to fit the screen
             var stringVal = $("#RGB-text").val(); //gets the text in the input location
             //" , < . > / ? ` ~
-            var  symbols = ["!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "-", "_", "=", "+", "[", "{", "]", "}", "\\",]+
-                           ["|", ";", ":", "\'", "\"", ",", "<", ".", ">", "/", "?", "`", "~"]; //All accepted symbols currently
-            var replaced = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "a", "b", "c", "d", "e", "f", "g", "h",  "i",]+
-                           ["j", "k", "l",  "m",  "n", "o", "p", "q", "r", "s", "t", "y", "v"]; //What they will be replaced with
-            for(var i = 0; i < symbols.length; i++) //replace all those symbols if they are found
-                stringVal = stringVal.replace(symbols[i], replaced[i]);
+            var  symbols = ["!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "-", "_", "=", "+", "[", "{", "]", "}", "\\",];
+            symbols = symbols.concat(["|", ";", ":", "\'", "\"", ",", "<", ".", ">", "/", "?", "`", "~"]); //All accepted symbols currently
+            var replaced = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "a", "b", "c", "d", "e", "f", "g", "h",  "i",];
+            replaced = replaced.concat(["j", "k", "l",  "m",  "n", "o", "p", "q", "r", "s", "t", "y", "v"]); //What they will be replaced with
+            for(var i = 0; i < symbols.length; i++) {//replace all those symbols if they are found
+                var hold_count = (stringVal.split(symbols[i])).length-1;
+                for(var j = 0; j < hold_count; j++) {
+                    stringVal = stringVal.replace(symbols[i], replaced[i]);
+                }
+            }
             matchPreDef = false;
-            stringVal = stringVal.replace(/\s+/g, '');
-            stringVal = stringVal.replace(/[^a-zA-Z 0-9]+/g, '');
+            console.log(stringVal);
+            //stringVal = stringVal.replace(/\s{1}/g, '');
+            //stringVal = stringVal.replace(/[^a-zA-Z 0-9]{1}/g, '');
             for(var i = 0; i < preDefString.length; i++) {
                 if(stringVal == preDefString[i]) {
                     matchPreDef = true;
