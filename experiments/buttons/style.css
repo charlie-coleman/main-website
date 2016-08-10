@@ -27,3 +27,13 @@ html {
 .title {
     display:block;
 }
+.trail { /* className for the trail elements */
+    display: block;
+    position: absolute;
+    height: 6px;
+    width: 6px;
+    border-radius: 3px;
+    border-bottom: 1px solid transparent;
+    -webkit-transition: background-color ease-in-out 1s;
+    transition: background-color ease-in-out 0.25s;
+}
