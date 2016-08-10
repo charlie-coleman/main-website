@@ -21,6 +21,9 @@ var buttons = [];
 var audio_elements = [];
 var preload = "auto";
 $(document).ready(function() {
+    $('*').dblclick(function(e) {
+        e.preventDefault();
+    });
     for (var i = 0; i < soundFiles.length; i++) {
         buttons[i] = $("<input>", {type:"button", class: "btn", value:soundNames[i], id:i.toString()});
         $("#buttons").append(buttons[i]);
