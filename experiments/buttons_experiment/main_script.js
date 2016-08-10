@@ -1,12 +1,12 @@
-var soundFiles = ["airhorn.wav", "iliketurtles.wav", "whatisgoingon.wav", "bekfest.wav",
-                  "damnson.wav", "imagiraffe.wav", "itsatrap.wav", "leeroyjenkins.wav",
-                  "profamity.wav", "shiasuprise.wav", "smallloan.wav", "surprisemotherfucker.wav",
-                  "triple.wav", "weedeveryday.wav", "xfiles.wav", "sniper.wav",
-                  "china.wav", "fuckherrightinthepussy.wav", "hitmarker.wav", "getthecamera.wav",
-                  "fatality.wav", "timallengrunt.wav", "ballsofsteel.wav", "awfuck.wav",
-                  "icantbelieve.wav", "fuckrichard.wav", "itsonlygame.wav", "whyyouhavetobemad.wav",
-                  "loudestorgasm.wav", "iknowwords.wav", "thatsaten.wav", "smacking.wav",
-                  "really.wav","onthespectrum.wav"];
+var soundFiles = ["airhorn", "iliketurtles", "whatisgoingon", "bekfest",
+                  "damnson", "imagiraffe", "itsatrap", "leeroyjenkins",
+                  "profamity", "shiasuprise", "smallloan", "surprisemotherfucker",
+                  "triple", "weedeveryday", "xfiles", "sniper",
+                  "china", "fuckherrightinthepussy", "hitmarker", "getthecamera",
+                  "fatality", "timallengrunt", "ballsofsteel", "awfuck",
+                  "icantbelieve", "fuckrichard", "itsonlygame", "whyyouhavetobemad",
+                  "loudestorgasm", "iknowwords", "thatsaten", "smacking",
+                  "really","onthespectrum"];
 var soundNames = ["Airhorn", "I like turtles", "What is going on here?", "BEKFEST",
                   "Damn son, where\'d you find this?", "I\'m a giraffe", "It\'s a trap!", "Leeroy Jenkins",
                   "Watch yo profamity", "Just do it!", "Small loan", "Suprise, motherfucker",
@@ -16,7 +16,8 @@ var soundNames = ["Airhorn", "I like turtles", "What is going on here?", "BEKFES
                   "I Can\'t Believe", "What the fuck.", "It\'s only game", "Why you have to be mad?",
                   "Loudest Orgasm", "I Know Words","That\'s A Ten", "Cover All 9000 Tastebuds",
                   "Really!", "Thanks Mr. On-the-Spectrum!"];
-var start_filepath = "http://charlie-coleman.com/experiments/buttons/soundfiles/";
+var start_filepath = "soundfiles/";
+var extension = '.mp3';
 var buttons = [];
 var audio_elements = [];
 var preload = "auto";
@@ -24,17 +25,22 @@ $(document).ready(function() {
     for (var i = 0; i < soundFiles.length; i++) {
         buttons[i] = $("<input>", {type:"button", class: "btn", value:soundNames[i], id:i.toString()});
         $("#buttons").append(buttons[i]);
-        audio_elements[i] = new Audio(start_filepath+soundFiles[i]);
-        audio_elements[i].preload = preload;
-        audio_elements[i].load();
+        audio_elements[i] = new Audio5js({
+            swf_path: './audio5js.swf',
+            throw_errors: true,
+            format_time: true,
+            ready: function (player) {
+                this.load(start_filepath+soundFiles[i]+extension);
+            }
+        });
     }
     buttons_arr = $('.btn');
     $('.btn').click(function(e) {
         num = parseInt(e.currentTarget.id);
         var hold_audio = audio_elements[num];
-        if (!hold_audio.paused) {
+        if (hold_audio.playing) {
             hold_audio.pause();
-            hold_audio.currentTime = 0;
+            hold_audio.seek(0);
             hold_audio.play();
         }
         else {
