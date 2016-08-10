@@ -3,7 +3,6 @@ html {
 }
 #head {
     font-family: "Comic Sans", cursive;
-    font-size: 200%;
     text-align: center;
 }
 #buttons {
@@ -22,7 +21,10 @@ html {
     max-width: 100px;
     max-height: 100px;
     min-height: 100px;
-    font-family: cursive;
+    font-family: "Papyrus", cursive;
+    font-size: 16;
+    line-height: 1em;
+    font-weight: bold;
 }
 .title {
     display:block;
@@ -36,4 +38,8 @@ html {
     border-bottom: 1px solid transparent;
     -webkit-transition: background-color ease-in-out 1s;
     transition: background-color ease-in-out 0.25s;
+}
+#head_image {
+    width: 40vw;
+    height: 15vw;
 }
