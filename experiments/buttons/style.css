@@ -1,28 +1,23 @@
 html {
-    background-color: #0000FF;
-    overflow: hidden;
     font-family: cursive;
 }
 #head {
-    color: #FFFF00;
-    font-family: cursive;
+    font-family: "Comic Sans", cursive;
     font-size: 200%;
     text-align: center;
 }
 #buttons {
-    height: 100%;
-    width: 100%;
-    margin: 0 0 0 0;
+    margin: 0 0 100 0;
     padding: 0 0 0 0;
     clear:both;
-    overflow: hidden;
     font-family: cursive;
 }
-.butt {
+.btn {
     vertical-align: top;
     display: inline-block;
     text-align: center;
-    margin: 1% 1% 1% 1%;
+    margin: 2 2 2 2;
+    white-space: normal;
     width: 23%;
     max-width: 100px;
     max-height: 100px;
@@ -31,35 +26,4 @@ html {
 }
 .title {
     display:block;
-}
-#toggleHolder {
-    text-align: center;
-    margin: 0 0 0 0;
-    padding: 0 0 0 0;
-}
-#toggle {
-    position: absolute;
-    font-family: cursive;
-    color: #FFFFFF;
-    margin: 0 0 10 0;
-    padding: 0 0 0 0;
-    bottom: 0;
-    height: 100;
-    width: 100;
-    background-color: #000000;
-}
-#toggleSlider {
-    position: absolute;
-    font-family: cursive;
-    color: #FFFFFF;
-    margin: 0 0 10 0;
-    padding: 0 0 0 0;
-    width: 150;
-    height: 100;
-    bottom: 0;
-    background-color: #000000;
-}
-#sliderReset {
-    position: absolute;
-    bottom: 10;
 }
