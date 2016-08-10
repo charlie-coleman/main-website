@@ -26,6 +26,7 @@ $(document).ready(function() {
         $("#buttons").append(buttons[i]);
         audio_elements[i] = new Audio(start_filepath+soundFiles[i]);
         audio_elements[i].preload = preload;
+        audio_elements[i].load();
     }
     buttons_arr = $('.btn');
     $('.btn').click(function(e) {
