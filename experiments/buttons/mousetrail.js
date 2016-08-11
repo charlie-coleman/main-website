@@ -1,5 +1,5 @@
 var colour="random"; // in addition to "random" can be set to any valid colour eg "#f0f" or "red"
-var sparkles=50;
+var sparkles=150;
 
 /****************************
 *  Tinkerbell Magic Sparkle *
@@ -50,7 +50,7 @@ window.onload=function() { if (document.getElementById) {
 
 function sparkle() {
   var c;
-  if (Math.abs(x-ox)>1 || Math.abs(y-oy)>1) {
+  if (Math.abs(x-ox)>=0 || Math.abs(y-oy)>=0) {
     ox=x;
     oy=y;
     for (c=0; c<sparkles; c++) if (!starv[c]) {
@@ -59,7 +59,7 @@ function sparkle() {
       star[c].style.clip="rect(0px, 5px, 5px, 0px)";
       star[c].childNodes[0].style.backgroundColor=star[c].childNodes[1].style.backgroundColor=(colour=="random")?newColour():colour;
       star[c].style.visibility="visible";
-      starv[c]=50;
+      starv[c]=150;
       break;
     }
   }
@@ -67,14 +67,14 @@ function sparkle() {
     if (starv[c]) update_star(c);
     if (tinyv[c]) update_tiny(c);
   }
-  setTimeout("sparkle()", 15);
+  setTimeout("sparkle()", 5);
 }
 
 function update_star(i) {
-  if (--starv[i]==25) star[i].style.clip="rect(1px, 4px, 4px, 1px)";
+  if (--starv[i]==0) star[i].style.clip="rect(1px, 4px, 4px, 1px)";
   if (starv[i]) {
-    stary[i]+=1+Math.random()*3;
-    starx[i]+=(i%5-2)/5;
+    stary[i]+=Math.random();
+    starx[i]+=(i%15-12)/15+0.4;
     if (stary[i]<shigh+sdown) {
       star[i].style.top=stary[i]+"px";
       star[i].style.left=starx[i]+"px";
@@ -103,7 +103,7 @@ function update_tiny(i) {
     tiny[i].style.height="1px";
   }
   if (tinyv[i]) {
-    tinyy[i]+=1+Math.random()*3;
+    tinyy[i]+=Math.random();
     tinyx[i]+=(i%5-2)/5;
     if (tinyy[i]<shigh+sdown) {
       tiny[i].style.top=tinyy[i]+"px";
