@@ -1,17 +1,19 @@
-SCP({
-    selector: '#spotify-widget',
-    username: 'lushlollipop',
-    api_key: '757af7bb63a50e97ce6752f48756951c',
-    width: '100%',
-    height: '10%'
-});
-setInterval(function() {
-    $('#spotify-widget').empty();
-    SCP({
-        selector: '#spotify-widget',
-        username: 'lushlollipop',
-        api_key: '757af7bb63a50e97ce6752f48756951c',
-        width: '100%',
-        height: '10%'
+window.onload = function() {
+    LastFMStatus.init({
+        username: "lushlollipop",
+        apikey: '757af7bb63a50e97ce6752f48756951c'
     });
-}, 10000);
+}
+$(document).ready(function() {
+    setInterval(function() {
+        LastFMStatus.init({
+            username: 'lushlollipop',
+            apikey: '757af7bb63a50e97ce6752f48756951c'
+        });
+    }, 1000);
+    setInterval(function() {
+        var loc = document.getElementById('calendar').src;
+        console.log(loc);
+        document.getElementById('calendar').src = loc;
+    }, 60000);
+});

@@ -1,0 +1,21 @@
+html {
+    /*overflow: hidden;*/
+}
+html, body, #lfm, #calendar  {
+    padding: 0;
+    margin: 0;
+}
+#holder {
+    height: 12%;
+    display: table;
+    width: 100%;
+}
+#lfm {
+    display: table-cell;
+    vertical-align: middle;
+    width: 100%;
+    font-family: OpenSans;
+    font-size: 24;
+    color: black;
+    text-align: center;
+}
