@@ -24,7 +24,7 @@
 .resp-sharing-button__icon {
   display: inline-block;
 }
-.resp-sharing-button__icon svg {
+.resp-sharing-button__icon svg, .resp-sharing-button__icon img {
   width: 1em;
   height: 1em;
   margin-bottom: -0.1em;

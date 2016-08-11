@@ -15,14 +15,15 @@ html {
     vertical-align: top;
     display: inline-block;
     text-align: center;
-    margin: 2 2 2 2;
+    padding: 0;
+    margin: 2;
     white-space: normal;
     width: 23%;
     max-width: 100px;
     max-height: 100px;
     min-height: 100px;
     font-family: "Papyrus", cursive;
-    font-size: 16;
+    font-size: 14;
     line-height: 1em;
     font-weight: bold;
 }
@@ -32,10 +33,9 @@ html {
 .trail { /* className for the trail elements */
     display: block;
     position: absolute;
-    height: 6px;
-    width: 6px;
-    border-radius: 3px;
-    border-bottom: 1px solid transparent;
+    pointer-events: none;
+    height: 48px;
+    width: 48px;
     -webkit-transition: background-color ease-in-out 1s;
     transition: background-color ease-in-out 0.25s;
 }
