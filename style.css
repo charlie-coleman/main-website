@@ -80,8 +80,8 @@ body {
         -moz-osx-font-smoothing: grayscale;
         overflow: hidden;
         transition-duration: 0.75s;
-        -webkit-transition-property: all;
-        transition-property: all;
+        -webkit-transition-property: background-color, color;
+        transition-property: background-color, color;
         background-color: #EEE;
     }
         .main-link:hover, .main-link:focus, .main-link:active {
