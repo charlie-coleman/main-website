@@ -39,6 +39,7 @@ var LastFMStatus = {
 			this.trackInfo = data;
 		} else {
 			var track = data.recenttracks.track[0];
+            var img = track.image
 			var trackInfo = {
 				song    : track.name,
 				artist  : track.artist["#text"],

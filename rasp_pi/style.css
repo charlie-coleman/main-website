@@ -6,7 +6,7 @@ html, body, #lfm, #calendar  {
     margin: 0;
 }
 #holder {
-    height: 12%;
+    height: 100%;
     display: table;
     width: 100%;
 }

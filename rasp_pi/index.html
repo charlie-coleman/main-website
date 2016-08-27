@@ -5,18 +5,15 @@
         <link rel="stylesheet" type="text/css" href="/fonts/opensans.css">
         <link rel="icon" href="/resources/favicon.ico">
         <script src="/resources/jquery.js"></script>
+        <script src='./lastfmmd5.js'></script>
+        <script src='./lastfmapi.js'></script>
         <script src='./last_fm.js'></script>
         <script src="script.js"></script>
     </head>
-    <? php
-        header("X-Frame-Options: GOFORIT");
-    ?>
+    <?php header("X-Frame-Options: GOFORIT"); ?>
 
     <div id="holder">
         <div id='lfm'>Loading...</div>
-    </div>
-    <div id="iframe_holder">
-        <iframe class='calendar' display='block' id='calendar1' src='https://calendar.google.com/calendar/embed?src=coleman.charlie97%40gmail.com&ctz=America/Chicago&'></iframe>
-        <iframe class='calendar' display='none' id='calendar2' src='https://calendar.google.com/calendar/embed?src=coleman.charlie97%40gmail.com&ctz=America/Chicago&'></iframe>
+        <img src=''>
     </div>
 </html>
