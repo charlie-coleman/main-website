@@ -6,7 +6,8 @@ var soundFiles = ["airhorn", "iliketurtles", "whatisgoingon", "bekfest",
                   "fatality", "timallengrunt", "ballsofsteel", "awfuck",
                   "icantbelieve", "fuckrichard", "itsonlygame", "whyyouhavetobemad",
                   "loudestorgasm", "iknowwords", "thatsaten", "smacking",
-                  "really","onthespectrum"];
+                  "really", "onthespectrum", "aysat", "jcijb",
+                  "hughmungus", "wot", "jimboonieonly", "bork"];
 var soundNames = ["Airhorn", "I like turtles", "What is going on here?", "BEKFEST",
                   "Damn son, where\'d you find this?", "I\'m a giraffe", "It\'s a trap!", "Leeroy Jenkins",
                   "Watch yo profamity", "Just do it!", "Small loan", "Suprise, motherfucker",
@@ -15,7 +16,8 @@ var soundNames = ["Airhorn", "I like turtles", "What is going on here?", "BEKFES
                   "Fatality", "Tim Allen", "Balls of Steel", "Aw Fuck",
                   "I Can\'t Believe", "What the fuck.", "It\'s only game", "Why you have to be mad?",
                   "Loudest Orgasm", "I Know Words","That\'s A Ten", "Cover All 9000 Tastebuds",
-                  "Really!", "Thanks Mr. On-the-Spectrum!"];
+                  "Really!", "Thanks Mr. On-the-Spectrum!", "Are you sure?", "Jesus Christ",
+                  "Hugh. Mungus.", "Wot?", "It\'s free!", "bork"];
 var start_filepath = "soundfiles/";
 var extension = '.mp3';
 var randColor = function() {
@@ -37,11 +39,11 @@ var audio_elements = [];
 var preload = "auto";
 var repeat = true;
 $(document).ready(function() {
-    var html_colors = randColor();
+    /*var html_colors = randColor();
     $('html').css({
         'background-color': html_colors[0],
         'color': html_colors[1]
-    });
+    });*/
     for (var i = 0; i < soundFiles.length; i++) {
         buttons[i] = $("<input>", {type:"button", class: "btn", value:soundNames[i], id:i.toString()});
         var colors = randColor();
