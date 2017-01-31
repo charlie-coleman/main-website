@@ -13,7 +13,7 @@ body {
     margin: 0;
 }
 #inputs {
-    width: 23vh;
+    width: 26vh;
     position: absolute;
     background-color: #222;
     top: 0;
@@ -21,13 +21,13 @@ body {
     opacity: 0.07;
     color: #BBB;
     font-family: OpenSans;
-    font-size: 2vh;
+    font-size: 1.8vh;
     padding: 0;
     margin: 0;
     transition: opacity .5s ease-in-out;
     -moz-transition: opacity .5s ease-in-out;
     -webkit-transition: opacity .5s ease-in-out;
-    padding-bottom: 3vh;
+    padding-bottom: 0.5vh;
 }
 #inputs:hover {
     opacity: 1!important;
@@ -37,18 +37,22 @@ body {
 }
 .inp {
     width: 100%;
-    font-size: 1.7vh;
+    font-size: 1.4vh;
 }
 .rule {
     margin: 0 0 0 10%;
-    width: 90%;
+    width: 85%;
+}
+#rules {
+    overflow-y: scroll;
+    max-height: 16vh;
 }
 #rules .inp {
     float: right;
     width: 90%!important;
 }
 .check {
-    height: 1vh;
+    height: 0.8vh;
     float: right;
 }
 .button {
@@ -58,18 +62,18 @@ body {
 .button, .examp_button, .dl_button {
     margin-top: 5;
     width: 100%;
-    font-size: 2vh;
+    font-size: 1.4vh;
     font-weight: bold;
     font-family: OpenSans;
 }
 .check {
     float: right;
-    height: 1.8vh;
+    height: 1.6vh;
 }
 #dl {
     color: #EEE;
     cursor: pointer;
-    font-size: 1.8vh;
+    font-size: 1.6vh;
     text-decoration: underline;
 }
 a {
@@ -78,7 +82,29 @@ a {
 #mess {
     font-size: 1vh;
 }
-#mess a{
+#mess a {
     text-decoration: underline;
     color: #EEE;
+}
+
+::-webkit-scrollbar              {
+    width: 2px;
+}
+::-webkit-scrollbar-button       {
+    
+}
+::-webkit-scrollbar-track        {
+    background-color: inherit;
+}
+::-webkit-scrollbar-track-piece  {
+    
+}
+::-webkit-scrollbar-thumb        {
+    background-color: #AAA;
+}
+::-webkit-scrollbar-corner       {
+    
+}
+::-webkit-resizer                {
+    
 }
