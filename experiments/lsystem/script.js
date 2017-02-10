@@ -8,10 +8,15 @@ var curve = null;
 var canvas = null;
 var ctx = null;
 var bg_color = '#222';
+var standard_width = $(window).width()/1920;
+if (standard_width < 1) {
+    standard_width = 1;
+}
 var start_color = '#BBB';
 var examp_constants = ['FAB', 'AB', 'FAB', 'AB', 'F', 'FA'];
-var examp_axiom = ['FA', 'A', 'FA', 'A', 'F', 'A'];
+var examp_axiom = ['A', 'A', 'FA', 'A', 'F', 'A'];
 var examp_size = [4, 4, 4, 4, 4, 4];
+var examp_width = [standard_width, standard_width, standard_width, standard_width, standard_width, standard_width];
 var examp_start_angle = [0, -60, 0, 0, -90, -90];
 var examp_angle = [90, 60, 90, 60, 25.7, 25];
 var examp_rules = [['F', '-BF+AFA+FB-', '+AF-BFB-FA+'],
@@ -24,6 +29,7 @@ var examp_draw_end = [false, true, false, true, false, false];
 var examp_level = [4, 5, 10, 5, 4, 5];
 var curve_chosen = false;
 var speed = 10;
+var width = standard_width;
 var start_angle = 0;
 var draw_end = false;
 var rainbow = true;
@@ -65,6 +71,7 @@ function create() {
         $('#draw_speed').val(speed);
         $('#size').val(size);
         $('#start_angle').val(start_angle);
+        $('#width').val(standard_width);
         $('#angle').val(angle);
         $('#level').val(level);
         $('#constants').val(constants);
@@ -89,6 +96,8 @@ function create() {
     mid_x = canvas.width/2;
     mid_y = canvas.height/2;
     ctx.strokeStyle = start_color;
+    ctx.lineWidth = width;
+    ctx.lineCap = 'square';
     ctx.translate(0.5, 0.5);
     $('#restart').click(restart);
     $('.examp_button').each(function(i, val) {
@@ -100,6 +109,7 @@ function create() {
             ctx.strokeStyle = start_color;
             ctx.translate(0.5, 0.5);
             size = parseInt(examp_size[i]);
+            width = parseInt(examp_width[i]);
             start_angle = parseFloat(examp_start_angle[i]);
             angle = parseFloat(examp_angle[i]);
             level = parseInt(examp_level[i]);
@@ -204,12 +214,13 @@ function restart() {
     if(inputs[0] != '' && inputs[1] != '') {
         speed = parseInt(inputs[0]);
         size = inputs[1];
-        start_angle = parseFloat(inputs[2]);
-        angle = parseFloat(inputs[3]);
-        level = parseInt(inputs[4]);
-        constants = inputs[5];
-        axiom = inputs[6];
-        rules = inputs.slice(7);
+        width = inputs[2];
+        start_angle = parseFloat(inputs[3]);
+        angle = parseFloat(inputs[4]);
+        level = parseInt(inputs[5]);
+        constants = inputs[6];
+        axiom = inputs[7];
+        rules = inputs.slice(8);
         draw_end = !$('#draw_end').prop('checked');
         rainbow = $('#rainbow').prop('checked');
         if (curve_chosen && (curve.size != size || curve.angle != angle || curve.level != level || !arraysEqual(curve.rules, rules) || curve.start_angle != start_angle || curve.orig_axiom != axiom)) {
@@ -229,6 +240,8 @@ function restart() {
             curve.curr_angle = start_angle;
             curve.rainbow = rainbow;
         }
+        ctx.lineWidth = width;
+        ctx.lineCap = 'square';
         start = performance.now();
         $('#restart').text('Calculating...');
         curve_chosen = true;

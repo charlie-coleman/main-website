@@ -6,7 +6,7 @@ $.ajax({
     success: function (data) {
         $(data).find("a").attr("href", function (i, val) {
             if( val.match(/\.(jpe?g|png|gif)$/) ) { 
-                $("#img-gal").append( "<div class='img' id="+count+"><img src='"+ folder+val + "' style='height:inherit;'></div>");
+                $("#img-gal").append( "<div class='img' id="+count+"><img src='"+folder+val + "'></div>");
                 count ++;
             } 
         });

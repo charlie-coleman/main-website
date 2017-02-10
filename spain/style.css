@@ -1,8 +1,11 @@
-html, body {
-    background-size: cover;
-    background-position: center;
+body {
+    opacity: 1;
+    background-color: rgba(0,0,0,0);
+}
+html {
+    background-size:cover;
+    background-position:center;
     background-attachment: fixed;
-    color: #111;
 }
 
 a {

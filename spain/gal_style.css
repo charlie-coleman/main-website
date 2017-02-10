@@ -1,6 +1,10 @@
 html, body {
     background: #333;
 }
+img {
+    max-width: 90vw;
+    max-height: 75vh;
+}
 #title {
     display: block;
     color: #EEE;
@@ -13,15 +17,26 @@ html, body {
     text-align: center;
     
 }
+@media all and (min-width: 600px) {
+    #title {
+        font-size: 7vh;
+    }
+}
+@media all and (max-width: 599px) {
+    #title {
+        font-size: 7vw;
+    }
+}
 #img-gal {
     height: 80%;
     width: 100%;
+    display: flex;
+    justify-content:center;
+    align-items:center;
     text-align: center;
     margin: auto;
 }
 .img {
-    height: 100%;
-    width: 100%;
     margin: auto;
 }
 #prev, #main, #next {
