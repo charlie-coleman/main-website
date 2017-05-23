@@ -1,10 +1,10 @@
 @font-face {
     font-family: OpenSansExtraBold;
-    src:url(/fonts/open-sans/OpenSans-ExtraBold.ttf);
+    src:url(/resources/fonts/open-sans/OpenSans-ExtraBold.ttf);
 }
 @font-face {
     font-family: OpenSans;
-    src:url(/fonts/open-sans/OpenSans-Regular.ttf);
+    src:url(/resources/fonts/open-sans/OpenSans-Regular.ttf);
 }
 body {
     margin: 0;

@@ -1,30 +1,30 @@
 @font-face {
     font-family: BebasNeue;
-    src: url(/fonts/BebasNeue.otf);
+    src: url(./fonts/BebasNeue.otf);
 }
 @font-face {
     font-family: GoodDog;
-    src: url(/fonts/GoodDog.otf);
+    src: url(./fonts/GoodDog.otf);
 }
 @font-face {
     font-family: Exo;
-    src: url(/fonts/Exo-Regular.otf);
+    src: url(./fonts/Exo-Regular.otf);
 }
 @font-face {
     font-family: Seaside;
-    src: url(/fonts/SEASRN.ttf);
+    src: url(./fonts/SEASRN.ttf);
 }
 @font-face {
     font-family: Titillium;
-    src: url(/fonts/Titillium-Regular.otf);
+    src: url(./fonts/Titillium-Regular.otf);
 }
 @font-face {
     font-family: Lobster;
-    src: url(/fonts/Lobster-Regular.ttf);
+    src: url(./fonts/Lobster-Regular.ttf);
 }
 html {
     position: relative;
-    background: #002e6d;
+    background: var(--mono8);
 }
 #hide {
     visibility: hidden;   
@@ -35,16 +35,16 @@ html {
     text-indent: 12px;
     width:79%;
     border: 0px;
-    background: #04449C;
-    color: #fff;
+    background: var(--mono4);
+    color: var(--mono1);
 }
 #addTextButton {
     border-radius: 2px;
     height: 20px;
     width:18%;
     border: 0px;
-    background: #4C8EE8;
-    color: #fff;
+    background: var(--mono3);
+    color: var(--mono9);
 }
 #addHolder {
     padding-top:10px;
@@ -53,7 +53,7 @@ html {
     border-radius: 10px;
     display: block;
     margin: 0 auto;
-    background: #fff;   
+    background: var(--mono1);   
 }
 #addHold2 {
     width:52%;

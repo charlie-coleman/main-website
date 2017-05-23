@@ -1,8 +1,4 @@
-@font-face {
-    font-family: BebasNeue;
-    src:url(/fonts/BebasNeue.otf);
-}
-#canvas {
+\#canvas {
     display: block;
 	border: 1px solid blue;
     margin-top: 50;
@@ -18,6 +14,6 @@
     color: #HZ0000;
 }
 #radiusLabel, #gravityLabel {
-    font-family: BebasNeue;
+    font-family: OpenSans, cursive;
     margin-left: 10%;
 }

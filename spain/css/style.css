@@ -1,0 +1,28 @@
+html {
+    background-color: var(--mono6);
+}
+body {
+    margin: 0;
+    padding: 0;
+    background-color: rgba(255,255,255,0);
+}
+
+#large-carousel {
+    width: 100%;
+    margin: 0 auto;
+    margin-top: 5%;
+    max-height: 75%;
+}
+#small-carousel {
+    width: 90%;
+    margin: 0 auto;
+    height: 20%;
+}
+#large-carousel img {
+    width: 100%;
+    height: auto;
+    max-height:100%;
+    margin: auto;
+}
+.img {
+}

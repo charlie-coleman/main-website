@@ -3,23 +3,23 @@
     src:url(/fonts/open-sans/OpenSans-Regular.ttf);
 }
 body {
-    background-color: #FFF;
+    background-color: var(--mono1);
     padding: 0;
     margin: 0;
 }
 #lsystem_canvas {
-    background-color: #222;
+    background-color: var(--mono9);
     padding: 0;
     margin: 0;
 }
 #inputs {
     width: 26vh;
     position: absolute;
-    background-color: #222;
+    background-color: var(--mono9);
     top: 0;
     left: 0;
     opacity: 0.07;
-    color: #BBB;
+    color: var(--mono3);
     font-family: OpenSans;
     font-size: 1.8vh;
     padding: 0;
@@ -71,7 +71,7 @@ body {
     height: 1.6vh;
 }
 #dl {
-    color: #EEE;
+    color: var(--mono2);
     cursor: pointer;
     font-size: 1.6vh;
     text-decoration: underline;
@@ -84,7 +84,7 @@ a {
 }
 #mess a {
     text-decoration: underline;
-    color: #EEE;
+    color: var(--mono2);
 }
 
 ::-webkit-scrollbar              {
@@ -100,7 +100,7 @@ a {
     
 }
 ::-webkit-scrollbar-thumb        {
-    background-color: #AAA;
+    background-color: var(--mono4);
 }
 ::-webkit-scrollbar-corner       {
     

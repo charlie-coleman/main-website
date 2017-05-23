@@ -1,4 +1,0 @@
-Application name	Raspberry Pi
-API key	757af7bb63a50e97ce6752f48756951c
-Shared secret	cf8fb06f4c2161a54d9b023eba8e2bf8
-Registered to	lushlollipop
