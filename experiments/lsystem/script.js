@@ -26,46 +26,39 @@ var examp_rules = [['F', '-BF+AFA+FB-', '+AF-BFB-FA+'],
                    ['F[+F]F[-F]F'],
                    ['FF', 'F-[[A]+A]+F[+FA]-A']];
 var examp_draw_end = [false, true, false, true, false, false];
-var examp_level = [4, 5, 10, 5, 4, 5];
+var examp_level = [6, 6, 13, 5, 6, 6];
 var curve_chosen = false;
-var speed = 10;
+var speed = 25;
 var width = standard_width;
 var start_angle = 0;
 var draw_end = false;
 var rainbow = true;
-var center = false;
-function zoom(i, x, y) {
+var center = true;
+var centered = false;
+var count = 0;
+var start;
+
+
+$(document).ready(function() {
+    create();
+    setInterval(update, 0);
+});
+$(window).resize(function() {
     canvas.width = $(window).width();
     canvas.height = $(window).height();
-    scale += i;
-    if (scale < 1)
-        scale = 1;
-    if (scale > 10)
-        scale = 10;
-    ctx.lineWidth = 1/scale;
-    ctx.translate(-x*(scale), -y*(scale));
-    ctx.scale(scale, scale);
-    ctx.translate(x/scale, y/scale);
+    ctx.fillStyle = bg_color;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.strokeStyle = start_color;
     ctx.translate(0.5, 0.5);
-    curve.i = 0;
-    curve.color_i = 0;
-    curve.x = parseInt(mid_x);
-    curve.y = parseInt(mid_y);
-    curve.curr_angle = start_angle;
-}
+    if(curve_chosen) {
+        curve.x = parseInt(mid_x);
+        curve.y = parseInt(mid_y);
+        curve.reset();
+        centered = false;
+    }
+});
 
-function arraysEqual(a, b) {
-  if (a === b) return true;
-  if (a == null || b == null) return false;
-  if (a.length != b.length) return false;
-  for (var i = 0; i < a.length; ++i) {
-    if (a[i] !== b[i]) return false;
-  }
-  return true;
-}
 
-var start;
 function create() {
     function update_inputs() {
         $('#draw_speed').val(speed);
@@ -77,6 +70,7 @@ function create() {
         $('#constants').val(constants);
         $('#axiom').val(axiom);
         $('#rainbow').prop('checked', rainbow);
+        $('#center').prop('checked', center);
         constants = $('#constants').val()
         $('#draw_end').prop('checked', !draw_end);
         $('.rule').remove();
@@ -159,26 +153,43 @@ function create() {
             mid_y = parseInt(e.y);
         }
     }
-    /*$('#lsystem_canvas').on('mousewheel', function(e) {
-        zoom(e.deltaY, e.pageX, e.pageY);
-    });*/
 }
-var centered = false;
-var count = 0;
+
+function arraysEqual(a, b) {
+  if (a === b) return true;
+  if (a == null || b == null) return false;
+  if (a.length != b.length) return false;
+  for (var i = 0; i < a.length; ++i) {
+    if (a[i] !== b[i]) return false;
+  }
+  return true;
+}
+
 function update() {
     if(curve_chosen && !curve.created)
         var temp_speed = 500;
+    else if (curve_chosen && center && !centered)
+        var temp_speed = 10000;
     else
         var temp_speed = speed;
     for (var i = 0; i < temp_speed; i ++) {
         if(curve_chosen && curve.created && $('#restart').text() == 'Calculating...') {
-            var dif = performance.now() - start;
-            $('#restart').text('Drawing...')
-            count = 0;
+            if (center && !centered) {
+                $('#restart').text('Centering...');
+            }
+            else {
+                $('#restart').text('Drawing...');
+            }
+        }
+        else if (curve_chosen && curve.created && centered && $('#restart').text() == 'Centering...') {
+            $('#restart').text('Drawing...');
         }
         else if (curve_chosen && curve.created && (curve.i <= curve.axiom.length)) {
             curve.draw(ctx);
             ctx.stroke();
+            if( center && !centered ) {
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+            }
             curve.i += 1;
         }
         else if(curve_chosen && !curve.created) {
@@ -187,13 +198,18 @@ function update() {
         }
         else {
             $('#restart').text('Restart');
-            if (center && !centered && curve_chosen) {
+            if (curve_chosen && !centered ) {
                 hold_x = (curve.max_x + curve.min_x)/2-canvas.width/2;
                 hold_y = (curve.max_y + curve.min_y)/2-canvas.height/2;
-                mid_x -= hold_x;
-                mid_y -= hold_y;
-                centered = true;
-                restart();
+                var percent_error = Math.abs((curve.max_x + curve.min_x)/2 - hold_x - canvas.width/2)/(canvas.width/2);
+                percent_error += Math.abs((curve.max_y + curve.min_y)/2 - hold_y - canvas.height/2)/(canvas.height/2);
+                percent_error /= 2.0;
+                if (center && !centered && curve_chosen && (percent_error <= 0.1)) {
+                    mid_x -= hold_x;
+                    mid_y -= hold_y;
+                    centered = true;
+                    restart();
+                }
             }
             break;
         }
@@ -234,7 +250,8 @@ function restart() {
         else {
             curve.reset();
             curve.size = size;
-            curve.angle = angle
+            curve.start_angle = start_angle;
+            curve.angle = angle;
             curve.x = parseInt(mid_x);
             curve.y = parseInt(mid_y);
             curve.curr_angle = start_angle;
@@ -247,22 +264,3 @@ function restart() {
         curve_chosen = true;
     }
 }
-$(document).ready(function() {
-    create();
-    setInterval(update, 0);
-});
-$(window).resize(function() {
-    canvas.width = $(window).width();
-    canvas.height = $(window).height();
-    ctx.fillStyle = bg_color;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.strokeStyle = start_color;
-    ctx.translate(0.5, 0.5);
-    if(curve_chosen) {
-        curve.x = parseInt(mid_x);
-        curve.y = parseInt(mid_y);
-        curve.reset();
-        centered = false;
-    }
-});
-var scale = 1

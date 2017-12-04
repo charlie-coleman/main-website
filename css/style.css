@@ -59,9 +59,11 @@ html {
 
 #title-div {
     display: inline-block;
-    width: 100%;
+    width: 98%;
     border-bottom-style: solid;
     color: var(--mono10);
+    background-color: var(--mono1);
+    padding: 0.1% 1% 0% 1%;
     border-bottom: 1px solid currentColor;
 }
 #title-div h1, h2 {
@@ -127,23 +129,23 @@ html {
 }
 
 
-@media (min-width: 600px) {
+@media (orientation: landscape) , (min-width: 900px) {
     #title-div h1 {
-        font-size: 5.5vh;
+        font-size: 36;
     }
     #title-div h2 {
-        font-size: 4.5vh;
+        font-size: 32;
     }
     .link {
-        width: 70%;
+        width: 80%;
         margin: 1%;
-        padding: 2%;
+        padding: 1%;
     }
     .link .title {
-        font-size: 3.5vh;
+        font-size: 26;
     }
     .link .desc {
-        font-size: 2.8vh;
+        font-size: 20;
     }
     .link:hover {
         background-color: var(--mono5);
@@ -151,10 +153,10 @@ html {
         box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.75);
     }
     #link-list ul {
-        font-size: 2.5vh;
+        font-size: 18;
     }
 }
-@media (max-width: 600px) {
+@media (orientation: portrait) , (max-width: 900px){
     #title-div h1 {
         font-size: 4.5vw;
     }
@@ -195,9 +197,11 @@ html {
 }
 .link .title {
     border-bottom: 1px solid currentColor;
-    padding-bottom: 4;
+    padding-bottom: 0;
 }
 .link .desc {
+    padding: 0;
+    margin: 0;
 }
 
 #link-div {

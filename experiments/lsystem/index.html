@@ -2,35 +2,35 @@
     <head>
         <title>L-System Generator</title>
         <link rel="stylesheet" type="text/css" href="/resources/css/palette.css">
-        <link rel="stylesheet" type="text/css" href="./style.css">
+        <link rel="stylesheet" type="text/css" href="./style.min.css">
+        <link rel="stylesheet" type="text/css" href="/resources/fonts/opensans.css">
         <link rel="stylesheet" type="text/css" href="/resources/css/sharebuttons.css">
-        <link rel="icon" href="/resources/favicon.ico">
+        <link rel="icon" href="./resources/favicon.ico">
         <script src="/resources/js/jquery.js"></script>
-        <script src="LSystemConstruct.js"></script>
-        <script src="script.js"></script>
-        <script src="jquery-mousewheel.min.js"></script>
+        <script src="LSystemConstruct.min.js"></script>
+        <script src="script.min.js"></script>
     </head>
     <div id="inputs">
         <div class='label'>Draw Speed:</div>
-        <input class='inp' id="draw_speed">
+        <input class='inp' type="number" id="draw_speed">
         <div class='label'>Line Length:</div>
-        <input class='inp' id="size">
+        <input class='inp' type="number" id="size">
         <div class='label'>Line Width:</div>
-        <input class='inp' id='width'>
+        <input class='inp' type="number" id='width'>
         <div class='label'>Start Angle:</div>
-        <input class='inp' id="start_angle">
+        <input class='inp' type="number" id="start_angle">
         <div class='label'>Angle:</div>
-        <input class='inp' id="angle">
+        <input class='inp' type="number" id="angle">
         <div class='label'>Level:</div>
-        <input class='inp' id="level">
+        <input class='inp' type="number" id="level">
         <div class='label'>Constants:</div>
         <input class='inp' id="constants">
         <div class='label'>Axiom:</div>
         <input class='inp' id='axiom'>
         <div id='rules'>Rules:</div>
-        <div class='label'>Only draw F?:<input type='checkbox' class='check' id='draw_end'></div>
-        <div class='label'>Rainbow Mode?:<input type='checkbox' class='check' id='rainbow'></div>
-        <div class='label'>Center the Image?:<input type='checkbox' class='check' id='center'></div>
+        <div class='label'>Only draw F?:</div><input type='checkbox' class='check' id='draw_end'>
+        <div class='label'>Rainbow Mode?:</div><input type='checkbox' class='check' id='rainbow'>
+        <div class='label'>Center the Image?:</div><input type='checkbox' class='check' id='center'>
         <button class='button' id="restart">Restart</button>
         <div class='label'>Examples:</div>
         <button class='examp_button' id="example1">Hilbert Curve</button>

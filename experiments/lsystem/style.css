@@ -1,7 +1,3 @@
-@font-face {
-    font-family: OpenSans;
-    src:url(/fonts/open-sans/OpenSans-Regular.ttf);
-}
 body {
     background-color: var(--mono1);
     padding: 0;
@@ -33,7 +29,8 @@ body {
     opacity: 1!important;
 }
 .label {
-    width: 100%;
+    width: 90%;
+    float: left;
 }
 .inp {
     width: 100%;
