@@ -1,4 +1,4 @@
-var debugrmNE = true;
+var debugrmNE = false;
 petrick = function (minterms, dontcares, dim, variables, out) {
     var intTerms = minterms.concat(dontcares);
     var binTerms = new Array(intTerms.length);
@@ -12,7 +12,7 @@ petrick = function (minterms, dontcares, dim, variables, out) {
         reductions.push(reduc);
         reduc = reduceGroupedTerms(reduc, dim);
     }
-    var essentials = findEssentialImplicants(minterms, reductions);
+    var essentials = findEssentialImplicants(minterms, dontcares, reductions);
     var genString = essentialstoGenString(essentials, variables, out);
     var VHDLString = essentialsToVHDLString(essentials, variables, out);
     var verilogString = essentialsToVerilogString(essentials, variables, out);
@@ -74,7 +74,7 @@ differenceCount = function(a, b) {
     return count;
 }
 
-findEssentialImplicants = function(iT, rGT) {
+findEssentialImplicants = function(iT, dc, rGT) {
     var intTerms = iT;
     var essentials = new Array();
     for (var i = rGT.length - 1; i >= 0; i--) {
@@ -91,7 +91,7 @@ findEssentialImplicants = function(iT, rGT) {
             }
         }
     }
-    essentials = removeNonEssentials(essentials);
+    essentials = removeNonEssentials(essentials, dc);
     return essentials;
 }
 
@@ -114,12 +114,15 @@ termCoverage = function(term) {
     }
 }
 
-removeNonEssentials = function(essentials) {
+removeNonEssentials = function(essentials, dontcares) {
     if(debugrmNE) console.log('essentials:', essentials);
     var totalCoverage = [];
     var reducedEssentials = [];
     for (var i = 0; i < essentials.length; i++) {
         totalCoverage = totalCoverage.concat(termCoverage(essentials[i]));
+    }
+    for (var i = 0; i < dontcares.length; i++) {
+        totalCoverage = totalCoverage.filter(function(n) {return n != dontcares[i];});
     }
     for (var i = essentials.length-1; i >= 0; i--) {
         var currCov = termCoverage(essentials[i]);

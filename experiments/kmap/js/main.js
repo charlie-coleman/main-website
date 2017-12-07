@@ -90,7 +90,7 @@ mapRestart = function() {
 }
 
 solBack = function() {
-    var minterms = strinpHTML($("#minterms").val()).split(',');
+    var minterms = stripHTML($("#minterms").val()).split(',');
     var dontcares = stripHTML($("#dontcares").val()).split(',');
     
     $("#map").css({"display":"block"});
