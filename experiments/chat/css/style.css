@@ -1,0 +1,119 @@
+html {
+    box-sizing: border-box;
+    font-family: OpenSans;
+    background-color: var(--mono5);
+}
+
+*,
+*:before,
+*:after {
+    box-sizing: inherit;
+}
+
+/*Chat styling*/
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.userSettings{
+    margin-bottom: 20px;
+}
+
+.chat {
+    width: 30vw;
+    min-width: 300px;
+    height: 100vh;
+    min-height: 500px;
+}
+
+.chat #chatOutput {
+    overflow-y: hidden;
+    height: 75%;
+    width: 100%;
+    max-width: 100%;
+    border: 1px solid #777;
+    font-size: 11pt;
+    background: var(--mono1);
+}
+
+.chat #chatOutput p{
+    margin:0;
+    padding:5px;
+    border-bottom: 1px solid #bbb;
+    word-break: keep-all;
+}
+.chat #chatOutput p:nth-child(even) {
+    background: var(--mono1);
+}
+.chat #chatOutput p:nth-child(odd) {
+    background: var(--mono2);
+}
+
+.chat #chatInput {
+    width: 75%;
+    display:inline;
+    margin:0px;
+    padding:0px;
+}
+
+.chat #chatSend {
+    width: 22%;
+    display:inline;
+    margin:0px;
+    padding:0px;
+}
+
+time {
+    font-weight: bold;
+    color: #000050;
+}
+
+username {
+    font-weight: bold;
+    color: #000050;
+}
+/* The Modal (background) */
+#loginModal {
+    display: block;
+}
+#myModal {
+    display: none;
+}
+.modal {
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    text-align: center;
+}
+
+/* Modal Content/Box */
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    width: 60%;
+    border: 1px solid #888;
+}
+
+/* The Close Button */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}

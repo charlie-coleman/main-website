@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Experimental Chat</title>
+    <link rel="stylesheet" href="/resources/css/palette.css" />
+    <link rel="stylesheet" href="/resources/fonts/opensans.css" />
+    <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" />
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 style="margin:0;padding:0;">Experimental Chat <button onclick="location.href='http://charlie-coleman.com/experiments/chat';">Leave this chat</button></h1> 
+            <h6 style="margin:0;padding:0;">Send people this link so they can join your chat: <br><input type="text" readonly="true" id="chatlink" style="width:100%;"></input></h6>
+        </header>
+        <main>
+            <div class="chat">
+                <div id="chatOutput">
+                </div>
+                <form onsubmit="return false">
+                    <input id="chatInput" type="text" placeholder="Input Text here" maxlength="128">
+                    <button type="submit" id="chatSend">Send</button>
+                </form>
+            </div>
+            <div id="loginModal" class="modal">
+                <!-- Modal content -->
+                <div class="modal-content">
+                    <h3 style="padding:0;margin:0;">Login</h3>
+                    <form onsubmit="return false">
+                        <input id="userName" type="text" placeholder="Enter a username" maxlength="32"><br>
+                        <input id="chat-id" type="text" placeholder="Enter a chat ID" maxlength="32"><br>
+                        <button type="button" id="createSubmit">Create Chat</button>
+                        <button type="submit" id="joinSubmit">Join Chat</button>
+                    </form>
+                </div>
+            </div>
+            <div id="myModal" class="modal">
+                <!-- Modal content -->
+                <div class="modal-content">
+                    <span id="closePWEntry" class="close">&times;</span>
+                    <form onsubmit="return false">
+                        <input id="unClear" type="text" placeholder="Enter the admin username"><br>
+                        <input id="userPW" type="password" placeholder="Enter the admin password"><br>
+                        <button type="submit" id="pwSubmit">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="/resources/js/jquery.js"></script>
+    <script src="code/main.js"></script>
+</body>
+</html>
