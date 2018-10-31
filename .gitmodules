@@ -1,0 +1,6 @@
+[submodule "schedule"]
+	path=schedule/
+	url=https://github.com/charlie-coleman/schedule-maker.git
+[submodule "school"]
+	path=school/
+	url=https://github.com/charlie-coleman/school.git
