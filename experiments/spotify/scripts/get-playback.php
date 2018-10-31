@@ -1,29 +1,34 @@
-require 'vendor/autoload.php'
-
-$session = new SpotifyWebAPI\Session(
-	'a7e836a285be4037b36b30d3b032c5cd',
-	'f601bfd71e074fa986ab92d6410d81fd',
-	'https://charlie-coleman.com/experiments/spotify/callback'
-);
+<?php
+require '../vendor/autoload.php';
+require './_connect.php';
 
 $api = new SpotifyWebAPI\SpotifyWebAPI();
+$id = $_GET["usr"];
 
-if (isset($_GET['code'])) {
-	$session->requestAccessToken($_GET['code']);
-	$api->setAccessToken($session-getAccessToken());
-
-	print_r($api->me());
-} else {
-	$options = [
-		'scope' => [
-			'user-read-email',
-		],
-	];
-
-	header('Location: ' . $session->getAuthorizeUrl($options));
-	die();
+$db = new mysqli($db_host, $db_user, $db_password, $db_name);
+if($db->connect_errno) {
+	echo "Failed to connect to MySQL: (" . $db->connect_errno . ") " . $db->connect_error;
 }
 
-$currPlay = $api->getMyCurrentTrack();
+$query="SELECT * FROM tokens WHERE userID='" . $id . "' ORDER BY id DESC LIMIT 1";
 
-echo $currPlay
+if($db->real_query($query)) {
+	$res = $db->use_result();
+	$row = $res->fetch_assoc();
+	$accessToken = $row["access"];
+	$refreshToken = $row["refresh"];
+}
+else {
+	echo "An error occurred";
+	echo $db->errno;
+}
+$db->close();
+
+$api = new SpotifyWebAPI\SpotifyWebAPI();
+$api->setAccessToken($accessToken);
+
+$track = $api->getMyCurrentTrack()->item;
+$output = array($track->album->images[0]->url, $track->name, $track->artists[0]->name);
+
+echo json_encode($output);
+?>
