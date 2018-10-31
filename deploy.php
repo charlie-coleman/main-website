@@ -10,12 +10,8 @@
 	// The commands
 	$commands = array(
 		'whoami',
-		'cd ./school/ && git reset --hard HEAD',
-		'cd ./school/ && git pull origin master 2>&1',
-		'cd ./school/ && git status',
-		'cd ./school/ && git submodule sync',
-		'cd ./school/ && git submodule update',
-		'cd ./school/ && git submodule status',
+		'git pull origin master',
+		'git pull --recurse-submodules',
 	);
 	// Run the commands for output
 	$output = '';
