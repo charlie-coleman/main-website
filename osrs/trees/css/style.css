@@ -1,0 +1,20 @@
+tr {
+    text-align: center;
+}
+tr:nth-child(even) {
+    background-color: #ddd;
+}
+
+#tree-table {
+    border-collapse: collapse;
+}
+
+#tree-table td, th {
+    border: 1px solid #ddd;
+    text-align: center;
+    padding: 8px;
+}
+
+.tree-select {
+    width: 100%;
+}

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Tree GP/XP Calculator</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="description" content="A tool for calculating the GP/XP of daily tree runs" />
+        <link rel="stylesheet" href="css/style.css" />
+        <script src="js/jquery-3.3.1.min.js"></script>
+        <script src="js/xp.js"></script>
+        <script src="js/trees.js"></script>
+        <script src="js/main.js"></script>
+    </head>
+    <body>
+        <dir id="player-info">
+            <dir id="current">
+                <span class="input-label">Current level: </span>
+                <input class="lvl-entry" id="curr-lvl" type="number" value="1" min="1" max="126" />
+                <span class="input-label">Current XP: </span>
+                <input class="xp-entry" id="curr-xp" type="number" value="0" min="0" max="200000000" />
+            </dir>
+            <dir id="goal">
+                <span class="input-label">Goal Level: </span>
+                <input class="lvl-entry" id="goal-lvl" type="number" value="2" min="1" max="126" />
+                <span class="input-label">Goal XP: </span>
+                <input class="xp-entry" id="goal-xp" type="number" value="83" min="0" max="200000000" />
+            </dir>
+        </dir>
+        <table width="100%" id="tree-table">
+            <tr>
+                <th>Enabled</th>
+                <th>Type</th>
+                <th>Level</th>
+                <th>Tree</th>
+                <th>Amount/Day</th>
+                <th>Cost</th>
+                <th>Protect?</th>
+                <th>Protection</th>
+                <th>Protection Cost</th>
+                <th>Total Price</th>
+                <th>Total XP</th>
+                <th>GP/XP</th>
+            </tr>
+            <tr class="tree-row">
+                <td><input class="tree-enable" id="fruit-en" type="checkbox" /></td>
+                <td><span class="tree-attr">Fruit</span></td>
+                <td><span class="tree-attr" id="fruit-lvl"></span></td>
+                <td><select class="tree-select" id="fruit-select"></select></td>
+                <td><span class="tree-attr" id="fruit-amt"></span></td>
+                <td><span class="tree-attr" id="fruit-cost"></span></td>
+                <td><input class="tree-enable" id="fruit-protect" type="checkbox" /></td>
+                <td><span class="tree-attr" id="fruit-protection"></span></td>
+                <td><span class="tree-attr" id="fruit-protect-cost"></span></td>
+                <td><span class="tree-attr" id="fruit-tot-price"></span></td>
+                <td><span class="tree-attr" id="fruit-tot-xp"></span></td>
+                <td><span class="tree-attr" id="fruit-gp-xp"></span></td>
+            </tr>
+            <tr class="tree-row">
+                <td><input class="tree-enable" id="reg-en" type="checkbox" /></td>
+                <td><span class="tree-attr">Regular</span></td>
+                <td><span class="tree-attr" id="reg-lvl"></span></td>
+                <td><select class="tree-select" id="reg-select"></select></td>
+                <td><span class="tree-attr" id="reg-amt"></span></td>
+                <td><span class="tree-attr" id="reg-cost"></span></td>
+                <td><input class="tree-enable" id="reg-protect" type="checkbox" /></td>
+                <td><span class="tree-attr" id="reg-protection"></span></td>
+                <td><span class="tree-attr" id="reg-protect-cost"></span></td>
+                <td><span class="tree-attr" id="reg-tot-price"></span></td>
+                <td><span class="tree-attr" id="reg-tot-xp"></span></td>
+                <td><span class="tree-attr" id="reg-gp-xp"></span></td>
+            </tr>
+            <tr class="tree-row">
+                <td><input class="tree-enable" id="calq-en" type="checkbox" /></td>
+                <td><span class="tree-attr">Special</span></td>
+                <td><span class="tree-attr" id="calq-lvl"></span></td>
+                <td><span class="tree-attr" id="calq-name"></span></td>
+                <td><span class="tree-attr" id="calq-amt"></span></td>
+                <td><span class="tree-attr" id="calq-cost"></span></td>
+                <td><input class="tree-enable" id="reg-protect" type="checkbox" /></td>
+                <td><span class="tree-attr" id="calq-protection"></span></td>
+                <td><span class="tree-attr" id="calq-protect-cost"></span></td>
+                <td><span class="tree-attr" id="calq-tot-price"></span></td>
+                <td><span class="tree-attr" id="calq-tot-xp"></span></td>
+                <td><span class="tree-attr" id="calq-gp-xp"></span></td>
+            </tr>
+            <tr class="tree-row">
+                <td><input class="tree-enable" id="spirit-en" type="checkbox" /></td>
+                <td><span class="tree-attr">Special</span></td>
+                <td><span class="tree-attr" id="spirit-lvl"></span></td>
+                <td><span class="tree-attr" id="spirit-name"></span></td>
+                <td><span class="tree-attr" id="spirit-amt"></span></td>
+                <td><span class="tree-attr" id="spirit-cost"></span></td>
+                <td><input class="tree-enable" id="spirit-protect" type="checkbox" /></td>
+                <td><span class="tree-attr" id="spirit-protection"></span></td>
+                <td><span class="tree-attr" id="spirit-protect-cost"></span></td>
+                <td><span class="tree-attr" id="spirit-tot-price"></span></td>
+                <td><span class="tree-attr" id="spirit-tot-xp"></span></td>
+                <td><span class="tree-attr" id="spirit-gp-xp"></span></td>
+            </tr>
+            <tr class="tree-row">
+                <td><input class="tree-enable" id="red-en" type="checkbox" /></td>
+                <td><span class="tree-attr">Special</span></td>
+                <td><span class="tree-attr" id="red-lvl"></span></td>
+                <td><span class="tree-attr" id="red-name"></span></td>
+                <td><span class="tree-attr" id="red-amt"></span></td>
+                <td><span class="tree-attr" id="red-cost"></span></td>
+                <td><input class="tree-enable" id="red-protect" type="checkbox" /></td>
+                <td><span class="tree-attr" id="red-protection"></span></td>
+                <td><span class="tree-attr" id="red-protect-cost"></span></td>
+                <td><span class="tree-attr" id="red-tot-price"></span></td>
+                <td><span class="tree-attr" id="red-tot-xp"></span></td>
+                <td><span class="tree-attr" id="red-gp-xp"></span></td>
+            </tr>
+        </table>
+    </body>
+</html>
