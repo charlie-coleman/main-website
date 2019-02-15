@@ -96,31 +96,26 @@ $(document).ready(function() {
     $("#fruit-en").change(function() {
         values.fruit.enabled = $("#fruit-en").prop("checked");
         populateFruit();
-        toggleRow("fruit", values.fruit.enabled);
         updateStats();
     });
     $("#reg-en").change(function() {
         values.reg.enabled = $("#reg-en").prop("checked");
         populateReg();
-        toggleRow("reg", values.reg.enabled);
         updateStats();
     });
     $("#calq-en").change(function() {
         values.calq.enabled = $("#calq-en").prop("checked");
         populateSpecials();
-        toggleRow("calq", values.calquat.enabled);
         updateStats();
     });
     $("#spirit-en").change(function() {
         values.spirit.enabled = $("#spirit-en").prop("checked");
         populateSpecials();
-        toggleRow("spirit", values.spirit.enabled);
         updateStats();
     });
     $("#red-en").change(function() {
         values.redwood.enabled = $("#red-en").prop("checked");
         populateSpecials();
-        toggleRow("red", values.redwood.enabled);
         updateStats();
     });
     
@@ -417,9 +412,6 @@ function updateGoal() {
 function toggleRow(id, en) {
     if(en) $("#" + id + "-row").removeClass("disable");
     else $("#" + id + "-row").addClass("disable");
-    
-    $("#" + id + "-select").attr("disabled", !en);
-    $("#" + id + "-protect").attr("disabled", !en);
 }
 
 function commaify(n) {
