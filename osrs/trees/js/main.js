@@ -268,16 +268,16 @@ function levelCutoffs() {
     values.reg.perday = (currLvl >= 65) ? 6 : 5;
     values.fruit.perday = (currLvl >= 85) ? 6 : 5;
     
-    values.calq.enabled = (currLvl >= 72);
-    $("#calq-en").attr("disabled", !values.calq.enabled)
+    values.calq.enabled = (currLvl >= 72) & values.calq.enabled;
+    $("#calq-en").attr("disabled", (currLvl < 72))
     toggleRow(3, values.calq.enabled);
     
-    values.spirit.enabled = (currLvl >= 83);
-    $("#spirit-en").attr("disabled", !values.spirit.enabled);
+    values.spirit.enabled = (currLvl >= 83) & values.spirit.enabled;
+    $("#spirit-en").attr("disabled", (currLvl < 83));
     toggleRow(4, values.spirit.enabled);
     
-    values.red.enabled = (currLvl >= 90);
-    $("#red-en").attr("disabled", !values.red.enabled);
+    values.red.enabled = (currLvl >= 90) & values.red.enabled;
+    $("#red-en").attr("disabled", (currLvl < 90));
     toggleRow(5, values.red.enabled);
     
     values.spirit.perday = (currLvl >= 99) ? 2.5 : (currLvl >= 91) ? 1 : 0.5;
