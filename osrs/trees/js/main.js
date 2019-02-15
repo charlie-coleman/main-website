@@ -152,6 +152,7 @@ $(document).ready(function() {
     
     initializeForm();
     getAllPrices();
+    levelCutoffs();
 });
 
 function getAllPrices() {
@@ -268,12 +269,15 @@ function levelCutoffs() {
     values.fruit.perday = (currLvl >= 85) ? 6 : 5;
     
     values.calq.enabled = (currLvl >= 72);
+    $("#calq-en").attr("disabled", !values.calq.enabled)
     toggleRow(3, values.calq.enabled);
     
     values.spirit.enabled = (currLvl >= 83);
+    $("#spirit-en").attr("disabled", !values.spirit.enabled);
     toggleRow(4, values.spirit.enabled);
     
     values.red.enabled = (currLvl >= 90);
+    $("#red-en").attr("disabled", !values.red.enabled);
     toggleRow(5, values.red.enabled);
     
     values.spirit.perday = (currLvl >= 99) ? 2.5 : (currLvl >= 91) ? 1 : 0.5;
