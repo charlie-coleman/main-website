@@ -1,7 +1,7 @@
 const calqAmt = 1;
 const redAmt = 1;
 var fruitAmt = 5, regAmt = 5, spiritAmt = 1;
-var currXp, goalXp, currLvl, goalLvl, gpPerXP, gpPerDay, xpPerDay;
+var currXp = 0, goalXp = 83, currLvl = 1, goalLvl = 2, gpPerXP, gpPerDay, xpPerDay;
 
 var prices = {
     fruit: [
@@ -32,61 +32,118 @@ var values = {
         protect: true,
         gp: 0,
         xp: 0,
-        gpxp: 0
+        gpxp: 0,
+        perday: 5
     },
     reg: {
         enabled: true,
         protect: true,
         gp: 0,
         xp: 0,
-        gpxp: 0
+        gpxp: 0,
+        perday: 5
     },
     calquat: {
         enabled: true,
         protect: true,
         gp: 0,
         xp: 0,
-        gpxp: 0
+        gpxp: 0,
+        perday: 1
     },
     spirit: {
         enabled: true,
         protect: true,
         gp: 0,
         xp: 0,
-        gpxp: 0
+        gpxp: 0,
+        perday: 1
     },
     redwood: {
         enabled: true,
         protect: true,
         gp: 0,
         xp: 0,
-        gpxp: 0
+        gpxp: 0,
+        perday: 0.25
     }
 }
 
 $(document).ready(function() {
     getAllPrices(initializeForm);
     
-    $("#curr-lvl").on('input', function() { onCurrLvlChange(); });
-    $("#goal-lvl").on('input', function() { onGoalLvlChange(); });
+    $("#curr-lvl").on('input', function() {
+        onCurrLvlChange();
+        updateStats();
+    });
+    $("#goal-lvl").on('input', function() {
+        onGoalLvlChange();
+        updateStats();
+    });
     
-    $("#curr-xp").on('input', function() { onCurrXpChange(); });
-    $("#goal-xp").on('input', function() { onGoalXpChange(); });
+    $("#curr-xp").on('input', function() {
+        onCurrXpChange();
+        updateStats();
+    });
+    $("#goal-xp").on('input', function() {
+        onGoalXpChange();
+        updateStats();
+    });
     
-    $("#fruit-select").change(function() { populateFruit(); });
-    $("#reg-select").change(function() { populateReg(); });
+    $("#fruit-select").change(function() { populateFruit(); updateStats(); });
+    $("#reg-select").change(function() { populateReg(); updateStats(); });
     
-    $("#fruit-en").change(function() { values.fruit.enabled = $("#fruit-en").prop("checked"); populateFruit(); });
-    $("#reg-en").change(function() { values.reg.enabled = $("#reg-en").prop("checked"); populateReg(); });
-    $("#calq-en").change(function() { values.calq.enabled = $("#calq-en").prop("checked"); });
-    $("#spirit-en").change(function() { values.spirit.enabled = $("#spirit-en").prop("checked"); });
-    $("#red-en").change(function() { values.redwood.enabled = $("#redwood-en").prop("checked"); });
+    $("#fruit-en").change(function() {
+        values.fruit.enabled = $("#fruit-en").prop("checked");
+        populateFruit();
+        updateStats();
+    });
+    $("#reg-en").change(function() {
+        values.reg.enabled = $("#reg-en").prop("checked");
+        populateReg();
+        updateStats();
+    });
+    $("#calq-en").change(function() {
+        values.calq.enabled = $("#calq-en").prop("checked");
+        populateSpecials();
+        updateStats();
+    });
+    $("#spirit-en").change(function() {
+        values.spirit.enabled = $("#spirit-en").prop("checked");
+        populateSpecials();
+        updateStats();
+    });
+    $("#red-en").change(function() {
+        values.redwood.enabled = $("#red-en").prop("checked");
+        populateSpecials();
+        updateStats();
+    });
     
-    $("#fruit-protect").change(function() { values.fruit.protect = $("#fruit-protect").prop("checked"); populateFruit(); });
-    $("#reg-protect").change(function() { values.reg.protect = $("#reg-protect").prop("checked"); populateReg(); });
-    $("#calq-protect").change(function() { values.calq.protect = $("#calq-protect").prop("checked"); });
-    $("#spirit-protect").change(function() { values.spirit.protect = $("#spirit-protect").prop("checked"); });
-    $("#red-protect").change(function() { values.redwood.protect = $("#redwood-protect").prop("checked"); });
+    $("#fruit-protect").change(function() { 
+        values.fruit.protect = $("#fruit-protect").prop("checked");
+        populateFruit();
+        updateStats();
+    });
+    $("#reg-protect").change(function() {
+        values.reg.protect = $("#reg-protect").prop("checked");
+        populateReg();
+        updateStats();
+    });
+    $("#calq-protect").change(function() {
+        values.calq.protect = $("#calq-protect").prop("checked");
+        populateSpecials();
+        updateStats();
+    });
+    $("#spirit-protect").change(function() {
+        values.spirit.protect = $("#spirit-protect").prop("checked");
+        populateSpecials();
+        updateStats();
+    });
+    $("#red-protect").change(function() {
+        values.redwood.protect = $("#red-protect").prop("checked");
+        populateSpecials();
+        updateStats();
+    });
 });
 
 function getAllPrices(callback) {
@@ -144,7 +201,6 @@ function initializeForm() {
     $.each(trees.fruit, function(i, obj) {
         fruitSel.append($("<option></option>").attr("value", i).text(obj.name));
     });
-    $("#fruit-amt").text(5);
     
     var regSel = $("#reg-select");
     regSel.empty();
@@ -158,16 +214,18 @@ function initializeForm() {
     populateFruit();
     populateReg();
     populateSpecials();
+    updateStats();
 }
 
 function populateFruit() {
     var i = $("#fruit-select").val();
     var cost = prices.fruit[i][0];
     var protCost = prices.fruit[i][1]*parseInt(trees.fruit[i].protection.amount, 10);
-    values.fruit.gp = cost + protCost;
+    values.fruit.gp = values.fruit.protect ? cost + protCost : cost;
     
     $("#fruit-en").prop("checked", values.fruit.enabled);
     $("#fruit-lvl").text(trees.fruit[i].level);
+    $("#fruit-amt").text(values.fruit.perday);
     $("#fruit-cost").text(commaify(cost));
     $("#fruit-protect").prop("checked", values.fruit.protect);
     $("#fruit-protection").text(trees.fruit[i].protection.name + " x" + trees.fruit[i].protection.amount);
@@ -189,6 +247,7 @@ function populateReg() {
     
     $("#reg-en").prop("checked", values.reg.enabled);
     $("#reg-lvl").text(trees.reg[i].level);
+    $("#reg-amt").text(values.reg.perday);
     $("#reg-cost").text(commaify(cost));
     $("#reg-protect").prop("checked", values.reg.protect);
     $("#reg-protection").text(trees.reg[i].protection.name + " x" + trees.reg[i].protection.amount);
@@ -205,7 +264,7 @@ function populateReg() {
 function populateSpecials() {
     var cost = prices.calquat[0];
     var protCost = prices.calquat[1]*parseInt(trees.calquat.protection.amount, 10);
-    values.calquat.gp = cost + protCost;
+    values.calquat.gp = values.calquat.protect ? cost + protCost : cost;
     
     $("#calq-en").prop("checked", values.calquat.enabled);
     $("#calq-lvl").text(trees.calquat.level);
@@ -225,7 +284,7 @@ function populateSpecials() {
     
     cost = prices.spirit[0];
     protCost = prices.spirit[1];
-    values.spirit.gp = cost + protCost;
+    values.spirit.gp = values.spirit.protect ? cost + protCost : cost;
     
     $("#spirit-en").prop("checked", values.spirit.enabled);
     $("#spirit-lvl").text(trees.spirit.level);
@@ -246,7 +305,7 @@ function populateSpecials() {
     
     cost = prices.redwood[0];
     protCost = prices.redwood[1];
-    values.redwood.gp = cost + protCost;
+    values.redwood.gp = values.redwood.protect ? cost + protCost : cost;
     
     $("#red-en").prop("checked", values.redwood.enabled);
     $("#red-lvl").text(trees.redwood.level);
@@ -265,6 +324,35 @@ function populateSpecials() {
     $("#red-gp-xp").text(values.redwood.gpxp.toFixed(3));
 }
 
+function updateStats() {
+    gpPerDay = 0;
+    $.each(values, function(i, obj) {
+        gpPerDay += obj.enabled ? obj.gp * obj.perday : 0;
+    });
+    $("#gpday").text(commaify(gpPerDay));
+    xpPerDay = 0;
+    $.each(values, function(i, obj) {
+        xpPerDay += obj.enabled ? obj.xp * obj.perday : 0;
+    });
+    $("#xpday").text(commaify(xpPerDay));
+    gpPerXP = gpPerDay/xpPerDay;
+    $("#gpxp").text(gpPerXP.toFixed(3));
+    var daysToGoal = Math.ceil((goalXp - currXp) / xpPerDay);
+    $("#days").text(commaify(daysToGoal));
+    var totCost = gpPerDay * daysToGoal;
+    $("#cost").text(commaify(totCost));
+}
+
+function levelCutoffs() {
+    if (currLvl > 65) values.reg.perday = 6;
+    if (currLvl > 85) values.fruit.perday = 6;
+    
+    populateFruit();
+    populateReg();
+    populateSpecials();
+    updateStats();
+}
+
 function xpFromLevel(level) {
     return xp[level];
 }
@@ -276,26 +364,41 @@ function levelFromXP(xpIn) {
 
 function onCurrXpChange() {
     currXp = parseInt($("#curr-xp").val(), 10);
-    $("#goal-xp").attr("min", currXp+1);
     if(!isNaN(currXp)) $("#curr-lvl").val(levelFromXP(currXp));
-    $("#goal-lvl").attr("min", currLvl);
+    updateGoal();
+    levelCutoffs();
+}
+function onCurrLvlChange() {
+    currLvl = parseInt($("#curr-lvl").val(), 10);
+    currXp = parseInt(xpFromLevel(currLvl));
+    if(!isNaN(currLvl)) $("#curr-xp").val(currXp);
+    updateGoal();
+    levelCutoffs();
 }
 
 function onGoalXpChange() {
     goalXp = parseInt($("#goal-xp").val(), 10);
     if(!isNaN(goalXp)) $("#goal-lvl").val(levelFromXP(goalXp));
 }
-
-function onCurrLvlChange() {
-    currLvl = parseInt($("#curr-lvl").val(), 10);
-    $("#goal-lvl").attr("min", currLvl);
-    if(!isNaN(currLvl)) $("#curr-xp").val(xpFromLevel(currLvl));
-    $("#goal-xp").attr("min", currXp+1);
-}
-
 function onGoalLvlChange() {
     goalLvl = parseInt($("#goal-lvl").val(), 10);
-    if(!isNaN(goalLvl)) $("#goal-xp").val(xpFromLevel(goalLvl));
+    goalXp = xpFromLevel(goalLvl);
+    if(!isNaN(goalLvl)) $("#goal-xp").val(goalXp);
+}
+
+function updateGoal() {
+    $("#goal-lvl").attr("min", currLvl);
+    $("#goal-xp").attr("min", currXp+1);
+    
+    var newGoalXP = (goalXp <= currXp) ? currXp+1 : goalXp;
+    console.log(newGoalXP);
+    $("#goal-xp").val(newGoalXP);
+    $("#goal-lvl").val(levelFromXP(newGoalXP));
+}
+
+function toggleRow(id, en) {
+    if(en) $("#" + id + "-row").removeClass("disable");
+    else $("#" + id + "-row").addClass("disable");
 }
 
 function commaify(n) {

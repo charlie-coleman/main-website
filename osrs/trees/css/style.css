@@ -5,8 +5,8 @@ tr:nth-child(even) {
     background-color: #a3e8e5;
 }
 tr.disable {
-    color: #333;
-    background-color: #ddd;
+    color: #AAA;
+    background-color: #EEE;
 }
 
 #tree-table {

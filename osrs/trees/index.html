@@ -41,7 +41,7 @@
                 <th>Total XP</th>
                 <th>GP/XP</th>
             </tr>
-            <tr class="tree-row">
+            <tr class="tree-row" id="fruit-row">
                 <td><input class="tree-enable" id="fruit-en" type="checkbox" /></td>
                 <td><span class="tree-attr">Fruit</span></td>
                 <td><span class="tree-attr" id="fruit-lvl"></span></td>
@@ -55,7 +55,7 @@
                 <td><span class="tree-attr" id="fruit-tot-xp"></span></td>
                 <td><span class="tree-attr" id="fruit-gp-xp"></span></td>
             </tr>
-            <tr class="tree-row">
+            <tr class="tree-row" id="reg-row">
                 <td><input class="tree-enable" id="reg-en" type="checkbox" /></td>
                 <td><span class="tree-attr">Regular</span></td>
                 <td><span class="tree-attr" id="reg-lvl"></span></td>
@@ -69,7 +69,7 @@
                 <td><span class="tree-attr" id="reg-tot-xp"></span></td>
                 <td><span class="tree-attr" id="reg-gp-xp"></span></td>
             </tr>
-            <tr class="tree-row">
+            <tr class="tree-row" id="calquat-row">
                 <td><input class="tree-enable" id="calq-en" type="checkbox" /></td>
                 <td><span class="tree-attr">Special</span></td>
                 <td><span class="tree-attr" id="calq-lvl"></span></td>
@@ -83,7 +83,7 @@
                 <td><span class="tree-attr" id="calq-tot-xp"></span></td>
                 <td><span class="tree-attr" id="calq-gp-xp"></span></td>
             </tr>
-            <tr class="tree-row">
+            <tr class="tree-row" id="spirit-row">
                 <td><input class="tree-enable" id="spirit-en" type="checkbox" /></td>
                 <td><span class="tree-attr">Special</span></td>
                 <td><span class="tree-attr" id="spirit-lvl"></span></td>
@@ -97,7 +97,7 @@
                 <td><span class="tree-attr" id="spirit-tot-xp"></span></td>
                 <td><span class="tree-attr" id="spirit-gp-xp"></span></td>
             </tr>
-            <tr class="tree-row">
+            <tr class="tree-row" id="red-row">
                 <td><input class="tree-enable" id="red-en" type="checkbox" /></td>
                 <td><span class="tree-attr">Special</span></td>
                 <td><span class="tree-attr" id="red-lvl"></span></td>
@@ -112,5 +112,27 @@
                 <td><span class="tree-attr" id="red-gp-xp"></span></td>
             </tr>
         </table>
+        <div id="stats">
+            <div class="stat-display">
+                <span class="stat-label" id="gpday-label">GP/Day: </span>
+                <span class="stat" id="gpday"></span>
+            </div>
+            <div class="stat-display">
+                <span class="stat-label" id="xpday-label">XP/Day: </span>
+                <span class="stat" id="xpday"></span>
+            </div>
+            <div class="stat-display">
+                <span class="stat-label" id="gpxp-label">Overall GP/XP: </span>
+                <span class="stat" id="gpxp"></span>
+            </div>
+            <div class="stat-display">
+                <span class="stat-label" id="days-label">Days to Goal: </span>
+                <span class="stat" id="days"></span>
+            </div>
+            <div class="stat-display">
+                <span class="stat-label" id="cost-label">Total Cost: </span>
+                <span class="stat" id="cost"></span>
+            </div>
+        </div>
     </body>
 </html>
