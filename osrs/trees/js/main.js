@@ -1,6 +1,5 @@
 const calqAmt = 1;
 const redAmt = 1;
-var fruitAmt = 5, regAmt = 5, spiritAmt = 1;
 var currXp = 0, goalXp = 83, currLvl = 1, goalLvl = 2, gpPerXP, gpPerDay, xpPerDay;
 
 var prices = {
@@ -21,9 +20,19 @@ var prices = {
         [0, 0],
         [0, 0],
     ],
-    calquat: [0, 0],
-    spirit: [0, 0],
-    redwood: [0, 0]
+    hard: [
+        [0, 0],
+        [0, 0],
+    ],
+    calq: [
+        [0, 0],
+    ],
+    spirit: [
+        [0, 0],
+    ],
+    red: [
+        [0, 0],
+    ],
 };
 
 var values = {
@@ -43,7 +52,15 @@ var values = {
         gpxp: 0,
         perday: 5
     },
-    calquat: {
+    hard: {
+        enabled: true,
+        protect: true,
+        gp: 0,
+        xp: 0,
+        gpxp: 0,
+        perday: 1
+    },
+    calq: {
         enabled: true,
         protect: true,
         gp: 0,
@@ -59,7 +76,7 @@ var values = {
         gpxp: 0,
         perday: 1
     },
-    redwood: {
+    red: {
         enabled: true,
         protect: true,
         gp: 0,
@@ -70,7 +87,7 @@ var values = {
 }
 
 $(document).ready(function() {
-    getAllPrices(initializeForm);
+    // getAllPrices(initializeForm);
     
     $("#curr-lvl").on('input', function() {
         onCurrLvlChange();
@@ -90,245 +107,141 @@ $(document).ready(function() {
         updateStats();
     });
     
-    $("#fruit-select").change(function() { populateFruit(); updateStats(); });
-    $("#reg-select").change(function() { populateReg(); updateStats(); });
+    $.each(trees, function(i, obj) {
+        $("#tree-table").append("<tr class='tree-row' id='" + obj.id + "-row' ></tr>")
+        
+        var nameHTML;
+        if(obj.options.length > 1) {
+            nameHTML = `<td><select class="tree-select" id="${obj.id}-select"></select></td>`;
+        } else {
+            nameHTML = `<td><span class="tree-select" id="${obj.id}-select"></span></td>`;
+        }
+        
+        $("#"+obj.id+"-row").html(`
+                <td><input class="tree-enable" id="${obj.id}-en" type="checkbox" /></td>
+                <td><span class="tree-attr" id="${obj.id}-type"></span></td>
+                <td><span class="tree-attr" id="${obj.id}-lvl"></span></td>
+                ${nameHTML}
+                <td><span class="tree-attr" id="${obj.id}-amt"></span></td>
+                <td><span class="tree-attr" id="${obj.id}-cost"></span></td>
+                <td><input class="tree-enable" id="${obj.id}-protect" type="checkbox" /></td>
+                <td><span class="tree-attr" id="${obj.id}-protection"></span></td>
+                <td><span class="tree-attr" id="${obj.id}-protect-cost"></span></td>
+                <td><span class="tree-attr" id="${obj.id}-tot-cost"></span></td>
+                <td><span class="tree-attr" id="${obj.id}-tot-xp"></span></td>
+                <td><span class="tree-attr" id="${obj.id}-gp-xp"></span></td>`);
     
-    $("#fruit-en").change(function() {
-        values.fruit.enabled = $("#fruit-en").prop("checked");
-        populateFruit();
-        toggleRow("fruit", values.fruit.enabled);
-        updateStats();
-    });
-    $("#reg-en").change(function() {
-        values.reg.enabled = $("#reg-en").prop("checked");
-        populateReg();
-        toggleRow("reg", values.reg.enabled);
-        updateStats();
-    });
-    $("#calq-en").change(function() {
-        values.calq.enabled = $("#calq-en").prop("checked");
-        populateSpecials();
-        toggleRow("calq", values.calquat.enabled);
-        updateStats();
-    });
-    $("#spirit-en").change(function() {
-        values.spirit.enabled = $("#spirit-en").prop("checked");
-        populateSpecials();
-        toggleRow("spirit", values.spirit.enabled);
-        updateStats();
-    });
-    $("#red-en").change(function() {
-        values.redwood.enabled = $("#red-en").prop("checked");
-        populateSpecials();
-        toggleRow("red", values.redwood.enabled);
-        updateStats();
+        $("#"+obj.id+"-en").change(function() {
+            values[obj.id].enabled = $("#"+obj.id+"-en").prop("checked");
+            populateRow(i);
+            toggleRow(i, values[obj.id].enabled);
+            updateStats();
+        });
+        
+        
+    
+        $("#"+obj.id+"-select").change(function() { populateRow(i); updateStats(); });
+    
+        $("#"+ obj.id +"-protect").change(function() { 
+            values[obj.id].protect = $("#"+obj.id+"-protect").prop("checked");
+            populateRow(i);
+            updateStats();
+        });
     });
     
-    $("#fruit-protect").change(function() { 
-        values.fruit.protect = $("#fruit-protect").prop("checked");
-        populateFruit();
-        updateStats();
-    });
-    $("#reg-protect").change(function() {
-        values.reg.protect = $("#reg-protect").prop("checked");
-        populateReg();
-        updateStats();
-    });
-    $("#calq-protect").change(function() {
-        values.calq.protect = $("#calq-protect").prop("checked");
-        populateSpecials();
-        updateStats();
-    });
-    $("#spirit-protect").change(function() {
-        values.spirit.protect = $("#spirit-protect").prop("checked");
-        populateSpecials();
-        updateStats();
-    });
-    $("#red-protect").change(function() {
-        values.redwood.protect = $("#red-protect").prop("checked");
-        populateSpecials();
-        updateStats();
-    });
+    
+    initializeForm();
+    getAllPrices();
 });
 
-function getAllPrices(callback) {
-    $.each(trees.fruit, function(i, obj) {
-        getPrice(obj["item-id"]).done(function(data) {
-            prices.fruit[i][0] = data[data.length-1].buyingPrice;
-            callback();
-        });
-        getPrice(obj.protection["item-id"]).done(function(data) {
-            prices.fruit[i][1] = data[data.length-1].buyingPrice;
-            callback();
-        });
-    });
-    $.each(trees.reg, function(i, obj) {
-        getPrice(obj["item-id"]).done(function(data) {
-            prices.reg[i][0] = data[data.length-1].buyingPrice;
-            callback();
-        });
-        getPrice(obj.protection["item-id"]).done(function(data) {
-            prices.reg[i][1] = data[data.length-1].buyingPrice;
-            callback();
-        });
-    });
+function getAllPrices() {
     
-    getPrice(trees.calquat["item-id"]).done(function(data) {
-        prices.calquat[0] = data[data.length-1].buyingPrice;
-        callback();
-    });
-    getPrice(trees.calquat.protection["item-id"]).done(function(data) {
-        prices.calquat[1] = data[data.length-1].buyingPrice;
-        callback();
-    });
-    
-    $.each(trees.spirit.protection, function(i, obj) {
-        if(obj["item-id"] !== "untradeable") 
-            getPrice(obj["item-id"]).done(function(data) {
-                prices.spirit[1] += (data[data.length-1].buyingPrice*parseInt(obj.amount,10));
-                callback();
-            });
-    });
-    
-    getPrice(trees.redwood["item-id"]).done(function(data) {
-        prices.redwood[0] = data[data.length-1].buyingPrice;
-        callback();
-    });
-    getPrice(trees.redwood.protection["item-id"]).done(function(data) {
-        prices.redwood[1] = data[data.length-1].buyingPrice;
-        callback();
+    $.each(trees, function(i, obj) {
+        $.each(obj.options, function(j, obj2) {
+            if(obj2["item-id"] !== "untradeable")    
+                getPrice(obj2["item-id"]).done(function(data) {
+                    prices[obj.id][j][0] = data[data.length-1].buyingPrice;
+                    populateRow(i);
+                    updateStats();
+                });
+            if(obj2.protection.length === undefined) {
+                getPrice(obj2.protection["item-id"]).done(function(data) {
+                    prices[obj.id][j][1] = data[data.length - 1].buyingPrice;
+                    populateRow(i);
+                    updateStats();
+                });
+            } else {
+                $.each(obj2.protection, function(k, obj3) {
+                    if (obj3["item-id"] !== "untradeable")
+                        getPrice(obj3["item-id"]).done(function(data) {
+                            prices[obj.id][j][1] += (data[data.length-1].buyingPrice * parseInt(obj3.amount, 10));
+                            populateRow(i);
+                            updateStats();
+                        });
+                });
+            }
+        });
     });
 }
 
 function initializeForm() {
-    var fruitSel = $("#fruit-select");
-    fruitSel.empty();
-    $.each(trees.fruit, function(i, obj) {
-        fruitSel.append($("<option></option>").attr("value", i).text(obj.name));
-    });
     
-    var regSel = $("#reg-select");
-    regSel.empty();
-    $.each(trees.reg, function(i, obj) {
-        regSel.append($("<option></option>").attr("value", i).text(obj.name));
+    $.each(trees, function(i, obj) {
+        var select = $(`#${obj.id}-select`);
+        if (obj.options.length > 1) {
+            select.empty();
+            $.each(trees[i].options, function(j, obj2) {
+                select.append($("<option></option>").attr("value", j).text(obj2.name));
+            });
+        }
+        else {
+            select.text(obj.options[0].name);
+        }
+        populateRow(i);
     });
-    $("#reg-amt").text(5);
-    
-    $("#spirit-amt").text(1/2);
 
-    populateFruit();
-    populateReg();
-    populateSpecials();
     levelCutoffs();
     updateStats();
 }
 
-function populateFruit() {
-    var i = $("#fruit-select").val();
-    var cost = prices.fruit[i][0];
-    var protCost = prices.fruit[i][1]*parseInt(trees.fruit[i].protection.amount, 10);
-    values.fruit.gp = values.fruit.protect ? cost + protCost : cost;
+function populateRow(rowNum) {
+    var id = trees[rowNum].id;
+    var i = 0;
+    if (trees[rowNum].options.length > 1) i = $("#" + id + "-select").val();
+    var cost = prices[id][i][0];
     
-    $("#fruit-en").prop("checked", values.fruit.enabled);
-    $("#fruit-lvl").text(trees.fruit[i].level);
-    $("#fruit-amt").text(values.fruit.perday);
-    $("#fruit-cost").text(commaify(cost));
-    $("#fruit-protect").prop("checked", values.fruit.protect);
-    $("#fruit-protection").text(trees.fruit[i].protection.name + " x" + trees.fruit[i].protection.amount);
-    $("#fruit-protect-cost").text(commaify(protCost));
-    $("#fruit-tot-cost").text(commaify(values.fruit.gp));
+    var protString = "";
+    var protCost = 0;
+    values[id].gp = values[id].protect ? cost + protCost : cost;
+    if (trees[rowNum].options[i].protection.length !== undefined) {
+        $.each(trees[rowNum].options[i].protection, function(j, obj) {
+            protString += `${trees[rowNum].options[i].protection[j].name} x${trees[rowNum].options[i].protection[j].amount} <br />`;
+            protCost = prices[id][i][1];
+        });
+    }
+    else {
+        protString = `${trees[rowNum].options[i].protection.name} x${trees[rowNum].options[i].protection.amount}`;
+        protCost = prices[id][i][1]*parseInt(trees[rowNum].options[i].protection.amount, 10);
+    }
+    values[id].gp = values[id].protect ? cost + protCost : cost;
     
-    values.fruit.xp = parseFloat(trees.fruit[i].plant, 10) + parseFloat(trees.fruit[i].check, 10) + 6*parseFloat(trees.fruit[i].harvest, 10);
-    values.fruit.gpxp = values.fruit.gp / values.fruit.xp;
+    $("#"+id+"-en").prop("checked", values[id].enabled);
+    $("#"+id+"-type").text(trees[rowNum]["row-name"]);
+    $("#"+id+"-lvl").text(trees[rowNum].options[i].level);
+    $("#"+id+"-amt").text(values[id].perday);
+    $("#"+id+"-cost").text(commaify(cost));
+    $("#"+id+"-protect").prop("checked", values[id].protect);
+    $("#"+id+"-protection").html(protString);
+    $("#"+id+"-protect-cost").text(commaify(protCost));
+    $("#"+id+"-tot-cost").text(commaify(values[id].gp));
     
-    $("#fruit-tot-xp").text(commaify(values.fruit.xp));
-    $("#fruit-gp-xp").text(values.fruit.gpxp.toFixed(3));
-}
-
-function populateReg() {
-    var i = $("#reg-select").val();
-    var cost = prices.reg[i][0];
-    var protCost = prices.reg[i][1]*parseInt(trees.reg[i].protection.amount, 10);
-    values.reg.gp = values.reg.protect ? cost + protCost : cost;
+    values[id].xp = parseFloat(trees[rowNum].options[i].plant, 10) + parseFloat(trees[rowNum].options[i].check, 10);
+    values[id].xp += (trees[rowNum].options[i].harvest === undefined) ? 0 : 6*trees[rowNum].options[i].harvest;
+    values[id].gpxp = values[id].gp / values[id].xp;
     
-    $("#reg-en").prop("checked", values.reg.enabled);
-    $("#reg-lvl").text(trees.reg[i].level);
-    $("#reg-amt").text(values.reg.perday);
-    $("#reg-cost").text(commaify(cost));
-    $("#reg-protect").prop("checked", values.reg.protect);
-    $("#reg-protection").text(trees.reg[i].protection.name + " x" + trees.reg[i].protection.amount);
-    $("#reg-protect-cost").text(commaify(protCost));
-    $("#reg-tot-cost").text(commaify(values.reg.gp));
+    $("#"+id+"-tot-xp").text(commaify(values[id].xp));
+    $("#"+id+"-gp-xp").text(values[id].gpxp.toFixed(3));
     
-    values.reg.xp = parseFloat(trees.reg[i].plant, 10) + parseFloat(trees.reg[i].check, 10);
-    values.reg.gpxp = values.reg.gp/values.reg.xp;
-    
-    $("#reg-tot-xp").text(commaify(values.reg.xp));
-    $("#reg-gp-xp").text(values.reg.gpxp.toFixed(3));
-}
-
-function populateSpecials() {
-    var cost = prices.calquat[0];
-    var protCost = prices.calquat[1]*parseInt(trees.calquat.protection.amount, 10);
-    values.calquat.gp = values.calquat.protect ? cost + protCost : cost;
-    
-    $("#calq-en").prop("checked", values.calquat.enabled);
-    $("#calq-lvl").text(trees.calquat.level);
-    $("#calq-name").text(trees.calquat.name);
-    $("#calq-cost").text(commaify(cost));
-    $("#calq-protect").prop("checked", values.calquat.protect);
-    $("#calq-protection").text(trees.calquat.protection.name + " x" + trees.calquat.protection.amount);
-    $("#calq-protect-cost").text(commaify(protCost));
-    $("#calq-tot-cost").text(commaify(values.calquat.gp));
-    $("#calq-amt").text(values.calquat.perday);
-    
-    values.calquat.xp = parseFloat(trees.calquat.plant, 10) + parseFloat(trees.calquat.check) + 6*parseFloat(trees.calquat.harvest, 10);
-    values.calquat.gpxp = values.calquat.gp / values.calquat.xp;
-    
-    $("#calq-tot-xp").text(commaify(values.calquat.xp));
-    $("#calq-gp-xp").text(values.calquat.gpxp.toFixed(3));
-    
-    cost = prices.spirit[0];
-    protCost = prices.spirit[1];
-    values.spirit.gp = values.spirit.protect ? cost + protCost : cost;
-    
-    $("#spirit-en").prop("checked", values.spirit.enabled);
-    $("#spirit-lvl").text(trees.spirit.level);
-    $("#spirit-amt").text(values.spirit.perday);
-    $("#spirit-name").text(trees.spirit.name);
-    $("#spirit-cost").text(commaify(cost));
-    $("#spirit-protect").prop("checked", values.spirit.protect);
-    var htmlProt = "";
-    $.each(trees.spirit.protection, function(i, obj) {
-        htmlProt += obj.name + " x" + obj.amount + "<br />";
-    });
-    $("#spirit-protection").html(htmlProt);
-    $("#spirit-protect-cost").text(commaify(protCost));
-    $("#spirit-tot-cost").text(commaify(values.spirit.gp));
-    values.spirit.xp = parseFloat(trees.spirit.plant, 10) + parseFloat(trees.spirit.check, 10);
-    values.spirit.gpxp = values.spirit.gp/values.spirit.xp;
-    $("#spirit-tot-xp").text(commaify(values.spirit.xp));
-    $("#spirit-gp-xp").text(values.spirit.gpxp.toFixed(3));
-    
-    cost = prices.redwood[0];
-    protCost = prices.redwood[1];
-    values.redwood.gp = values.redwood.protect ? cost + protCost : cost;
-    
-    $("#red-en").prop("checked", values.redwood.enabled);
-    $("#red-lvl").text(trees.redwood.level);
-    $("#red-name").text(trees.redwood.name);
-    $("#red-cost").text(commaify(cost));
-    $("#red-protect").prop("checked", values.redwood.protect);
-    $("#red-protection").text(trees.redwood.protection.name + " x" + trees.redwood.protection.amount);
-    $("#red-protect-cost").text(commaify(protCost));
-    $("#red-tot-cost").text(commaify(values.redwood.gp));
-    $("#red-amt").text(1/4);
-    
-    values.redwood.xp = parseFloat(trees.redwood.plant, 10) + parseFloat(trees.redwood.check, 10);
-    values.redwood.gpxp = values.redwood.gp/values.redwood.xp;
-    
-    $("#red-tot-xp").text(commaify(values.redwood.xp));
-    $("#red-gp-xp").text(values.redwood.gpxp.toFixed(3));
 }
 
 function updateStats() {
@@ -354,20 +267,18 @@ function levelCutoffs() {
     values.reg.perday = (currLvl >= 65) ? 6 : 5;
     values.fruit.perday = (currLvl >= 85) ? 6 : 5;
     
-    values.calquat.enabled = (currLvl >= 72);
-    toggleRow("calq", values.calquat.enabled);
+    values.calq.enabled = (currLvl >= 72);
+    toggleRow(3, values.calq.enabled);
     
     values.spirit.enabled = (currLvl >= 83);
-    toggleRow("spirit", values.spirit.enabled);
+    toggleRow(4, values.spirit.enabled);
     
-    values.redwood.enabled = (currLvl >= 90);
-    toggleRow("red", values.redwood.enabled);
+    values.red.enabled = (currLvl >= 90);
+    toggleRow(5, values.red.enabled);
     
     values.spirit.perday = (currLvl >= 99) ? 2.5 : (currLvl >= 91) ? 1 : 0.5;
     
-    populateFruit();
-    populateReg();
-    populateSpecials();
+    $.each(trees, populateRow);
     updateStats();
 }
 
@@ -414,7 +325,8 @@ function updateGoal() {
     $("#goal-lvl").val(goalLvl);
 }
 
-function toggleRow(id, en) {
+function toggleRow(rowNum, en) {
+    var id = trees[rowNum].id;
     if(en) $("#" + id + "-row").removeClass("disable");
     else $("#" + id + "-row").addClass("disable");
     
