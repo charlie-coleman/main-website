@@ -372,7 +372,7 @@ function commaify(n) {
 }
 
 function getPrice(id) {
-    return $.getJSON("http://cors.io/?https://rsbuddy.com/exchange/graphs/1440/"+id.toString()+".json").then(function(data) {
+    return $.getJSON("https://cors-anywhere.herokuapp.com/https://rsbuddy.com/exchange/graphs/1440/"+id.toString()+".json").then(function(data) {
         return data;
     });
 }
