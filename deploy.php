@@ -12,6 +12,7 @@
 		'whoami',
 		'git pull origin master',
 		'git pull --recurse-submodules',
+		'cp ./osrs/* ../../osrscalc.info/'
 	);
 	// Run the commands for output
 	$output = '';
