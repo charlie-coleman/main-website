@@ -2,38 +2,34 @@ const calqAmt = 1;
 const redAmt = 1;
 var currXp = 0, goalXp = 83, currLvl = 1, goalLvl = 2, gpPerXP, gpPerDay, xpPerDay;
 
-var prices = {
-    fruit: [
-        [0, 0],
-        [0, 0],
-        [0, 0],
-        [0, 0],
-        [0, 0],
-        [0, 0],
-        [0, 0],
-        [0, 0],
-    ],
-    reg: [
-        [0, 0],
-        [0, 0],
-        [0, 0],
-        [0, 0],
-        [0, 0],
-    ],
-    hard: [
-        [0, 0],
-        [0, 0],
-    ],
-    calq: [
-        [0, 0],
-    ],
-    spirit: [
-        [0, 0],
-    ],
-    red: [
-        [0, 0],
-    ],
-};
+var protection = [
+    {
+        name: "Ultracompost",
+        "item-id": "21483",
+        price: 0,
+        divisor: 10
+    },
+    {
+        name: "Supercompost",
+        "item-id": "6034",
+        price: 0,
+        divisor: 5,
+    },
+    {
+        name: "Compost",
+        "item-id": "6032",
+        price: 0,
+        divisor: 2
+    },
+    {
+        name: "None",
+        "item-id": "untradeable",
+        price: 0,
+        divisor: 1
+    }
+]
+
+var prices = {};
 
 var values = {
     fruit: {
@@ -82,7 +78,7 @@ var values = {
         gp: 0,
         xp: 0,
         gpxp: 0,
-        perday: 0.25
+        perday: 1/4.5
     }
 }
 
@@ -124,8 +120,8 @@ $(document).ready(function() {
                 ${nameHTML}
                 <td><span class="tree-attr" id="${obj.id}-amt"></span></td>
                 <td><span class="tree-attr" id="${obj.id}-cost"></span></td>
-                <td><input class="tree-enable" id="${obj.id}-protect" type="checkbox" /></td>
-                <td><span class="tree-attr" id="${obj.id}-protection"></span></td>
+                <td><select class="tree-attr" id="${obj.id}-protection"></select></td>
+                <td><span class="tree-attr" id="${obj.id}-survive"></span></td>
                 <td><span class="tree-attr" id="${obj.id}-protect-cost"></span></td>
                 <td><span class="tree-attr" id="${obj.id}-tot-cost"></span></td>
                 <td><span class="tree-attr" id="${obj.id}-tot-xp"></span></td>
@@ -141,6 +137,7 @@ $(document).ready(function() {
         
     
         $("#"+obj.id+"-select").change(function() { populateRow(i); updateStats(); });
+        $("#"+obj.id+"-protection").change(function() { populateRow(i); updateStats(); });
     
         $("#"+ obj.id +"-protect").change(function() { 
             values[obj.id].protect = $("#"+obj.id+"-protect").prop("checked");
@@ -150,15 +147,19 @@ $(document).ready(function() {
     });
     
     
-    initializeForm();
     getAllPrices();
+    initializeForm();
     levelCutoffs();
 });
 
 function getAllPrices() {
     
     $.each(trees, function(i, obj) {
+        prices[obj.id] = new Array(obj.options.length);
         $.each(obj.options, function(j, obj2) {
+            prices[obj.id][j] = new Array(2);
+            prices[obj.id][j][0]=0;
+            prices[obj.id][j][1]=1;
             if(obj2["item-id"] !== "untradeable")    
                 getPrice(obj2["item-id"]).done(function(data) {
                     prices[obj.id][j][0] = data[data.length-1].buyingPrice;
@@ -182,6 +183,13 @@ function getAllPrices() {
                 });
             }
         });
+    });
+    
+    $.each(protection, function(i, obj) {
+        if (obj["item-id"] !== "untradeable")
+            getPrice(obj["item-id"]).done(function(data) {
+                obj.price = data[data.length-1].buyingPrice;
+            });
     });
 }
 
@@ -211,36 +219,56 @@ function populateRow(rowNum) {
     if (trees[rowNum].options.length > 1) i = $("#" + id + "-select").val();
     var cost = prices[id][i][0];
     
+    var protect = $(`#${trees[rowNum].id}-protection`);
+    var selectedProtection = parseInt(protect.val());
+    
     var protString = "";
-    var protCost = 0;
-    values[id].gp = values[id].protect ? cost + protCost : cost;
-    if (trees[rowNum].options[i].protection.length !== undefined) {
+    protect.empty();
+    if (trees[rowNum].options[i].protection.length !== undefined)
         $.each(trees[rowNum].options[i].protection, function(j, obj) {
-            protString += `${trees[rowNum].options[i].protection[j].name} x${trees[rowNum].options[i].protection[j].amount} <br />`;
-            protCost = prices[id][i][1];
+            protString += `${trees[rowNum].options[i].protection[j].name}&times;${trees[rowNum].options[i].protection[j].amount}\n`;
         });
+    else 
+        protString = `${trees[rowNum].options[i].protection.name}&times;${trees[rowNum].options[i].protection.amount}`;
+
+    protect.append($("<option></option>").attr("value", 0).html(protString));
+    $.each(protection, function(i, obj) {
+        protect.append($("<option></option>").attr("value", i+1).text(obj.name));
+    });
+    
+    if (!isNaN(selectedProtection)) protect.val(selectedProtection);
+    
+    if (selectedProtection === 0 || isNaN(selectedProtection)) {
+        protCost = prices[id][i][1];
+        var mul = (trees[rowNum].options[i].protection.length !== undefined) ? 1 : trees[rowNum].options[i].protection.amount;
+        protCost = protCost * mul;
     }
-    else {
-        protString = `${trees[rowNum].options[i].protection.name} x${trees[rowNum].options[i].protection.amount}`;
-        protCost = prices[id][i][1]*parseInt(trees[rowNum].options[i].protection.amount, 10);
-    }
-    values[id].gp = values[id].protect ? cost + protCost : cost;
+    else protCost = protection[selectedProtection-1].price;
+    
+    values[id].gp = cost + protCost;
     
     $("#"+id+"-en").prop("checked", values[id].enabled);
     $("#"+id+"-type").text(trees[rowNum]["row-name"]);
     $("#"+id+"-lvl").text(trees[rowNum].options[i].level);
-    $("#"+id+"-amt").text(values[id].perday);
+    $("#"+id+"-amt").text(values[id].perday.toFixed(2));
     $("#"+id+"-cost").text(commaify(cost));
-    $("#"+id+"-protect").prop("checked", values[id].protect);
-    $("#"+id+"-protection").html(protString);
+    
+    var survivalChance = 1;
+    if (selectedProtection !== 0 && !isNaN(selectedProtection)) {
+        survivalChance = Math.pow(((128 - Math.floor(trees[rowNum].options[i]["disease-chance"] / protection[selectedProtection-1].divisor)) / 128), trees[rowNum].options[i].stages);
+    }
+    
+    $("#"+id+"-survive").text((survivalChance*100).toFixed(1) + "%");
     $("#"+id+"-protect-cost").text(commaify(protCost));
     $("#"+id+"-tot-cost").text(commaify(values[id].gp));
     
-    values[id].xp = parseFloat(trees[rowNum].options[i].plant, 10) + parseFloat(trees[rowNum].options[i].check, 10);
+    values[id].xp = trees[rowNum].options[i].plant + trees[rowNum].options[i].check;
     values[id].xp += (trees[rowNum].options[i].harvest === undefined) ? 0 : 6*trees[rowNum].options[i].harvest;
+    values[id].xp *= survivalChance;
+    values[id].xp = values[id].xp;
     values[id].gpxp = values[id].gp / values[id].xp;
     
-    $("#"+id+"-tot-xp").text(commaify(values[id].xp));
+    $("#"+id+"-tot-xp").text(commaify(values[id].xp.toFixed(1)));
     $("#"+id+"-gp-xp").text(values[id].gpxp.toFixed(3));
     
 }
@@ -250,7 +278,7 @@ function updateStats() {
     $.each(values, function(i, obj) {
         gpPerDay += obj.enabled ? obj.gp * obj.perday : 0;
     });
-    $("#gpday").text(commaify(gpPerDay));
+    $("#gpday").text(commaify(Math.ceil(gpPerDay)));
     xpPerDay = 0;
     $.each(values, function(i, obj) {
         xpPerDay += obj.enabled ? obj.xp * obj.perday : 0;
@@ -260,7 +288,7 @@ function updateStats() {
     $("#gpxp").text(gpPerXP.toFixed(3));
     var daysToGoal = Math.ceil((goalXp - currXp) / xpPerDay);
     $("#days").text(commaify(daysToGoal));
-    var totCost = gpPerDay * daysToGoal;
+    var totCost = Math.ceil(gpPerDay * daysToGoal);
     $("#cost").text(commaify(totCost));
 }
 
@@ -335,7 +363,7 @@ function toggleRow(rowNum, en) {
     else $("#" + id + "-row").addClass("disable");
     
     $("#" + id + "-select").attr("disabled", !en);
-    $("#" + id + "-protect").attr("disabled", !en);
+    $("#" + id + "-protection").attr("disabled", !en);
 }
 
 function commaify(n) {

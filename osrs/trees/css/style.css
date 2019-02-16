@@ -26,3 +26,7 @@ tr:nth-child(even).disable {
 .tree-select {
     width: 100%;
 }
+
+.tree-attr {
+    width: 100%;
+}
