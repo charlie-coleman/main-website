@@ -159,7 +159,7 @@ function getAllPrices() {
         $.each(obj.options, function(j, obj2) {
             prices[obj.id][j] = new Array(2);
             prices[obj.id][j][0]=0;
-            prices[obj.id][j][1]=1;
+            prices[obj.id][j][1]=0;
             if(obj2["item-id"] !== "untradeable")    
                 getPrice(obj2["item-id"]).done(function(data) {
                     prices[obj.id][j][0] = data[data.length-1].buyingPrice;
@@ -325,6 +325,7 @@ function levelFromXP(xpIn) {
 
 function onCurrXpChange() {
     currXp = parseInt($("#curr-xp").val(), 10);
+    currLvl = levelFromXP(currXp);
     if(!isNaN(currXp)) $("#curr-lvl").val(levelFromXP(currXp));
     updateGoal();
     levelCutoffs();
@@ -371,7 +372,7 @@ function commaify(n) {
 }
 
 function getPrice(id) {
-    return $.getJSON("https://cors.io/?https://rsbuddy.com/exchange/graphs/1440/"+id+".json").then(function(data) {
+    return $.getJSON("http://cors.io/?https://rsbuddy.com/exchange/graphs/1440/"+id.toString()+".json").then(function(data) {
         return data;
     });
 }
