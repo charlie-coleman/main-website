@@ -38,6 +38,7 @@ html,body {
 }
 .tree-row:nth-child(odd), .tree-header {
     background-color: #fff;
+    color: #000;
 }
 .tree-row:nth-child(even) {
     background-color: #5f76be;
