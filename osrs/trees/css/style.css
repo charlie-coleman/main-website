@@ -1,14 +1,53 @@
-tr {
+html,body {
+    padding: 0;
+    margin: 0;
+    background-color: #2b4188;
+    font-family: OpenSans, sans-serif;
+}
+
+#page-title {
+    background-color: #fff;
+    
+    margin: 1vw;
+    padding: 1.5vw 0.5vw;
+    border-radius: 0.25vw;
+}
+
+#player-info {
+    margin: 1vw 1vw 0 1vw;
+    padding: 0.5vw 0.5vw 0.5vw 0.5vw;
+    background-color: #fff;
+    border-radius: 0.25vw 0.25vw 0 0;
+}
+
+.input-div {
+    font-weight: bold;
+}
+
+.info-entry {
+    margin-right: 0.5vw;
+}
+
+#tree-table {
+    margin: 0 1vw 0 1vw;
+    width: 98vw;
+}
+
+.tree-row {
     text-align: center;
 }
-tr:nth-child(even) {
-    background-color: #a3e8e5;
+.tree-row:nth-child(odd), .tree-header {
+    background-color: #fff;
 }
-tr.disable {
+.tree-row:nth-child(even) {
+    background-color: #2b4188;
+    color: #fff;
+}
+.tree-row.disable {
     color: #666;
     background-color: #eee;
 }
-tr:nth-child(even).disable {
+.tree-row:nth-child(even).disable {
     color: #666;
     background-color: #ccc;
 }
@@ -18,15 +57,26 @@ tr:nth-child(even).disable {
 }
 
 #tree-table td, th {
-    border: 1px solid #ddd;
     text-align: center;
     padding: 8px;
 }
 
-.tree-select {
+select.tree-select {
     width: 100%;
 }
 
 .tree-attr {
     width: 100%;
+}
+
+#stats {
+    background-color: #fff;
+    margin: 0 1vw;
+    padding: 0.5vw;
+    border-radius: 0 0 0.25vw 0.25vw;
+}
+
+.stat-div {
+    font-weight: bold;
+    margin-right: 1vw;
 }

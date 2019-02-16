@@ -5,6 +5,7 @@
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="description" content="A tool for calculating the GP/XP of daily tree runs" />
+        <link rel="stylesheet" type="text/css" href="/resources/fonts/opensans.css">
         <link rel="stylesheet" href="css/style.css" />
         <link rel="icon" href="./favicon.ico"/>
         <script src="js/jquery-3.3.1.min.js"></script>
@@ -13,56 +14,65 @@
         <script src="js/main.js"></script>
     </head>
     <body>
-        <dir id="player-info">
-            <dir id="current">
-                <span class="input-label">Current level: </span>
-                <input class="lvl-entry" id="curr-lvl" type="number" value="1" min="1" max="126" />
-                <span class="input-label">Current XP: </span>
-                <input class="xp-entry" id="curr-xp" type="number" value="0" min="0" max="200000000" />
-            </dir>
-            <dir id="goal">
-                <span class="input-label">Goal Level: </span>
-                <input class="lvl-entry" id="goal-lvl" type="number" value="2" min="1" max="126" />
-                <span class="input-label">Goal XP: </span>
-                <input class="xp-entry" id="goal-xp" type="number" value="83" min="0" max="200000000" />
-            </dir>
-        </dir>
-        <table width="100%" id="tree-table">
-            <tr>
-                <th>Enabled</th>
-                <th>Type</th>
-                <th>Level</th>
-                <th>Tree</th>
-                <th>Per Day</th>
-                <th>Cost</th>
-                <th>Protection</th>
-                <th>Survive %</th>
-                <th>Protection Cost</th>
-                <th>Total Price</th>
-                <th>Total XP</th>
-                <th>GP/XP</th>
-            </tr>
-        </table>
-        <div id="stats">
-            <div class="stat-display">
-                <span class="stat-label" id="gpday-label">GP/Day: </span>
-                <span class="stat" id="gpday"></span>
+        <div>
+            <h1 id="page-title">OSRS Daily Tree Run GP/XP Calculator</h1>
+        </div>
+        <div id="content">
+            <div id="player-info">
+                <table id="info-table">
+                    <tr class="lvlxp-pair" id="current">
+                        <td><div class="input-div">Current Level </div></td>
+                        <td><input class="info-entry" id="curr-lvl" type="number" value="1" min="1" max="126" /></td>
+                        <td><div class="input-div">XP </div></td>
+                        <td><input class="info-entry" id="curr-xp" type="number" value="0" min="0" max="200000000" /></td>
+                    </tr>
+                    <tr class="lvlxp-pair" id="goal">
+                        <td><div class="input-div">Goal Level </div></td>
+                        <td><input class="info-entry" id="goal-lvl" type="number" value="2" min="1" max="126" /></td>
+                        <td><div class="input-div">XP </div></td>
+                        <td><input class="info-entry" id="goal-xp" type="number" value="83" min="0" max="200000000" /></td>
+                    </tr>
+                </table>
             </div>
-            <div class="stat-display">
-                <span class="stat-label" id="xpday-label">XP/Day: </span>
-                <span class="stat" id="xpday"></span>
-            </div>
-            <div class="stat-display">
-                <span class="stat-label" id="gpxp-label">Overall GP/XP: </span>
-                <span class="stat" id="gpxp"></span>
-            </div>
-            <div class="stat-display">
-                <span class="stat-label" id="days-label">Days to Goal: </span>
-                <span class="stat" id="days"></span>
-            </div>
-            <div class="stat-display">
-                <span class="stat-label" id="cost-label">Total Cost: </span>
-                <span class="stat" id="cost"></span>
+            <table id="tree-table">
+                <tr class="tree-header">
+                    <th>Enabled</th>
+                    <th>Type</th>
+                    <th>Level</th>
+                    <th>Tree</th>
+                    <th>Per Day</th>
+                    <th>Cost</th>
+                    <th>Protection</th>
+                    <th>Survive %</th>
+                    <th>Protection Cost</th>
+                    <th>Total Price</th>
+                    <th>Total XP</th>
+                    <th>GP/XP</th>
+                </tr>
+            </table>
+            <div id="stats">
+                <table>
+                    <tr class="stat-display">
+                        <td><div class="stat-div" id="gpday-div">GP/Day</div></td>
+                        <td><div class="stat" id="gpday"></div></td>
+                    </tr>
+                    <tr class="stat-display">
+                        <td><div class="stat-div" id="xpday-div">XP/Day</div></td>
+                        <td><div class="stat" id="xpday"></div></td>
+                    </tr>
+                    <tr class="stat-display">
+                        <td><div class="stat-div" id="gpxp-div">Overall GP/XP</div></td>
+                        <td><div class="stat" id="gpxp"></div></td>
+                    </tr>
+                    <tr class="stat-display">
+                        <td><div class="stat-div" id="days-div">Days to Goal</div></td>
+                        <td><div class="stat" id="days"></div></td>
+                    </tr>
+                    <tr class="stat-display">
+                        <td><div class="stat-div" id="cost-div">Total Cost</div></td>
+                        <td><div class="stat" id="cost"></div></td>
+                    </tr>
+                </table>
             </div>
         </div>
     </body>
