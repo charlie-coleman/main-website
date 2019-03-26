@@ -1,12 +1,6 @@
-[submodule "schedule"]
-	path=schedule/
-	url=git://github.com/charlie-coleman/schedule-maker.git
 [submodule "school"]
 	path=school/
 	url=git://github.com/charlie-coleman/school.git
-[submodule "chat"]
-	path = chat
-	url = https://github.com/charlie-coleman/networks-proj
 [submodule "networks-proj"]
 	path = networks-proj
 	url = https://github.com/charlie-coleman/networks-proj
