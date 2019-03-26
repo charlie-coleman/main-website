@@ -4,3 +4,6 @@
 [submodule "school"]
 	path=school/
 	url=git://github.com/charlie-coleman/school.git
+[submodule "chat"]
+	path = chat
+	url = https://github.com/charlie-coleman/networks-proj
