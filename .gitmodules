@@ -2,3 +2,6 @@
 [submodule "school"]
 	path = school
 	url = https://github.com/charlie-coleman/school
+[submodule "schedule"]
+	path = schedule
+	url = https://github.com/charlie-coleman/schedule-maker
