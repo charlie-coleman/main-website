@@ -1,6 +1,1 @@
-[submodule "school"]
-	path=school/
-	url=git://github.com/charlie-coleman/school.git
-[submodule "networks-proj"]
-	path = networks-proj
-	url = https://github.com/charlie-coleman/networks-proj
+
