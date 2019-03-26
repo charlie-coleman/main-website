@@ -1,1 +1,4 @@
 
+[submodule "school"]
+	path = school
+	url = https://github.com/charlie-coleman/school
