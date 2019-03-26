@@ -1,0 +1,18 @@
+{
+  "name": "chat",
+  "version": "1.0.0",
+  "description": "Chat client for CSCI 3650 Computer Networks",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Charlie Coleman, Nick Markunas",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.4",
+    "nodemon": "^1.18.10",
+    "pg": "^7.9.0",
+    "sequelize": "^5.1.1",
+    "webrtc": "^1.14.1"
+  }
+}
