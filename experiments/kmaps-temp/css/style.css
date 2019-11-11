@@ -1,0 +1,148 @@
+/*
+ ________________________________________________________________________________________________
+|                                                                                                 |
+|                                                                                                 |
+|                                                                                                 |
+|                                                                                                 |
+|                                                                                                 |
+|                                                                                                 |
+|                                                                                                 |
+|                                                                                                 |
+|                                                                                                 |
+|                                                                                                 |
+|                                                                                                 |
+|                                                                                                 |
+|                                                                                                 |
+|                                                                                                 |
+|                                                                                                 |
+|                                                                                                 |
+|                                                                                                 |
+|                                                                                                 |
+|                                                                                                 |
+|                                                                                                 |
+|                                                                                                 |
+|_________________________________________________________________________________________________|
+
+*/
+body, html {
+  background-color: var(--mono9);
+  color: var(--mono1);
+  font-family: OpenSans, sans-serif;
+  overflow-x: hidden;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+* {
+  box-sizing: border-box;
+}
+
+#content {
+  padding: 2vh 1vw;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  height: 100vh;
+  width: 100%;
+}
+
+#information {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  height: 100%;
+}
+
+.info-header {
+  font-size: 1.8rem;
+  color: var(--med-important-color)
+}
+
+
+.info-section {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  margin: 1vh 0 1vh 0;
+  font-size: 1.25rem;
+  width: 100%;
+  flex-shrink: 1;
+}
+
+.info-section:first-of-type {
+  margin: 0 0 1vh 0;
+}
+
+.entry {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 100%;
+  padding-bottom: 0.5em;
+}
+
+.input-field {
+  background-color: var(--mono2);
+  border-style: none;
+  color: var(--mono9);
+  font-family: inherit;
+  font-size: inherit;
+  width: 100%;
+  padding: 0 0.25em;
+}
+
+#solutions {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: flex-start;
+  flex-grow: 1;
+}
+
+.solution {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.solution-field {
+  background-color: var(--mono2);
+  border-style: none;
+  color: var(--mono9);
+  font-family: inherit;
+  font-size: inherit;
+  width: 100%;
+  resize: none;
+  font-size: 1rem;
+}
+
+#kmap-div {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: center;
+  flex-grow: 1;
+  height: 100%;
+}
+
+#kmap-title {
+  color: var(--med-important-color);
+  font-size: 2rem;
+}
+
+#kmap {
+  width: 20vw;
+  height: 20vh;
+  background-color: #fff;
+  flex-grow: 1;
+}

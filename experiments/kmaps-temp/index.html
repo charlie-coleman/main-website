@@ -1,0 +1,71 @@
+<html>
+  <title>Karnaugh Map Solver</title>
+  <meta name="viewport" content="width=device-width, initial-scale-1.0">
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="description" content="Allows the user to input values for a Karnaugh map and recieve boolean expressions for the output.">
+  <link rel="icon" type="icon/x-icon" href="../../resources/favicon.ico">
+
+  <link rel="stylesheet" type="text/css" href="../../resources/css/palette.css">
+  <link rel="stylesheet" type="text/css" href="../../resources/fonts/opensans.css">
+  <script src="../../resources/js/tracking.js"></script>
+
+  <link rel="stylesheet" type="text/css" href="./css/style.css">
+  <script src="./js/jquery-3.4.1.min.js"></script>
+  <script src="./ts/petrick.js"></script>
+  <script src="./js/main.js"></script>
+
+  <body>
+    <div id="content">
+      <div id="information">
+
+        <div id="attributes" class="info-section">
+          <header class="info-header">Function Info</header>
+          <div class="entry">
+            <label class="entry-label">Output Name:</label>
+            <input id="return-name" type="text" value="f" class="input-field">
+          </div>
+          <div class="entry">
+            <label class="entry-label">Input Names:</label>
+            <input id="variable-names" type="text" value="a,b,c,d" class="input-field">
+          </div>
+        </div>
+
+        <div id="terms" class="info-section">
+          <header class="info-header">Terms</header>
+          <div class="entry">
+            <label class="entry-label">Minterms:</label>
+            <input id="minterms" type="text" value="" class="input-field">
+          </div>
+          <div class="entry">
+            <label class="entry-label">Don't Cares:</label>
+            <input id="dont-cares" type="text" value="" class="input-field">
+          </div>
+        </div>
+
+        <div id="solutions" class="info-section">
+          <header class="info-header">Solutions:</header>
+          <div class="solution">
+            <label class="solution-label">Generic:</label>
+            <textarea cols="60" rows="4" wrap="soft" class="solution-field" readonly id="generic-solution"></textarea>
+          </div>
+          <div class="solution">
+            <label class="solution-label">VHDL:</label>
+            <textarea cols="60" rows="4" wrap="soft" class="solution-field" readonly id="vhdl-solution"></textarea>
+          </div>
+          <div class="solution">
+            <label class="solution-label">Verilog:</label>
+            <textarea cols="60" rows="4" wrap="soft" class="solution-field" readonly id="vhdl-solution"></textarea>
+          </div>
+        </div>
+
+      </div>
+
+      <div id="kmap-div">
+        <header id="kmap-title">Karnaugh Map</header>
+        <table id="kmap" class="kmap-table"></table>
+      </div>
+    </div>
+
+  </body>
+</html>
