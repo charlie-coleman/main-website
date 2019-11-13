@@ -80,7 +80,7 @@ body, html {
   font-size: 1.25rem;
 }
 
-@media screen and (orientation: landscape) {
+@media screen and (orientation: landscape), (min-width: 960px) {
   #content {
     padding: 2vh 1vw;
   }
@@ -110,7 +110,7 @@ body, html {
   }
 }
 
-@media screen and (orientation: portrait) {
+@media screen and (orientation: portrait), (max-width: 960px) {
   #content {
     padding: 1vh 2vw;
   }
