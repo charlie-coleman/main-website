@@ -16,30 +16,35 @@
   <script src="./js/main.js"></script>
 
   <body>
+    <div id="title">
+      <header id="content-title">Karnaugh Map Solver</header>
+    </div>
     <div id="content">
+
       <div id="information">
+        <div id="inputs">
+          <div id="attributes" class="info-section">
+            <header class="info-header">Function Info</header>
+            <div class="entry">
+              <label class="entry-label">Output Name:</label>
+              <input id="return-name" type="text" size="30" value="f" class="input-field">
+            </div>
+            <div class="entry">
+              <label class="entry-label">Input Names:</label>
+              <input id="variable-names" type="text" size="30" value="a,b,c,d" class="input-field">
+            </div>
+          </div>
 
-        <div id="attributes" class="info-section">
-          <header class="info-header">Function Info</header>
-          <div class="entry">
-            <label class="entry-label">Output Name:</label>
-            <input id="return-name" type="text" value="f" class="input-field">
-          </div>
-          <div class="entry">
-            <label class="entry-label">Input Names:</label>
-            <input id="variable-names" type="text" value="a,b,c,d" class="input-field">
-          </div>
-        </div>
-
-        <div id="terms" class="info-section">
-          <header class="info-header">Terms</header>
-          <div class="entry">
-            <label class="entry-label">Minterms:</label>
-            <input id="minterms" type="text" value="" class="input-field">
-          </div>
-          <div class="entry">
-            <label class="entry-label">Don't Cares:</label>
-            <input id="dont-cares" type="text" value="" class="input-field">
+          <div id="terms" class="info-section">
+            <header class="info-header">Terms</header>
+            <div class="entry">
+              <label class="entry-label">Minterms:</label>
+              <input id="minterms" type="text" size="30" value="" class="input-field">
+            </div>
+            <div class="entry">
+              <label class="entry-label">Don't Cares:</label>
+              <input id="dont-cares" type="text" size="30" value="" class="input-field">
+            </div>
           </div>
         </div>
 
@@ -47,23 +52,24 @@
           <header class="info-header">Solutions:</header>
           <div class="solution">
             <label class="solution-label">Generic:</label>
-            <textarea cols="60" rows="4" wrap="soft" class="solution-field" readonly id="generic-solution"></textarea>
+            <textarea cols="80" rows="4" wrap="soft" class="solution-field" readonly id="generic-solution"></textarea>
           </div>
           <div class="solution">
             <label class="solution-label">VHDL:</label>
-            <textarea cols="60" rows="4" wrap="soft" class="solution-field" readonly id="vhdl-solution"></textarea>
+            <textarea cols="80" rows="4" wrap="soft" class="solution-field" readonly id="vhdl-solution"></textarea>
           </div>
           <div class="solution">
             <label class="solution-label">Verilog:</label>
-            <textarea cols="60" rows="4" wrap="soft" class="solution-field" readonly id="vhdl-solution"></textarea>
+            <textarea cols="80" rows="4" wrap="soft" class="solution-field" readonly id="verilog-solution"></textarea>
           </div>
         </div>
-
       </div>
 
       <div id="kmap-div">
         <header id="kmap-title">Karnaugh Map</header>
-        <table id="kmap" class="kmap-table"></table>
+        <div id="kmap-container">
+          <table id="kmap" class="kmap-table"></table>
+        </div>
       </div>
     </div>
 
