@@ -26,7 +26,7 @@
 */
 body, html {
   background-color: var(--mono9);
-  color: var(--mono1);
+  color: var(--mono2);
   font-family: OpenSans, sans-serif;
   height: 100%;
   margin: 0;
@@ -78,6 +78,11 @@ body, html {
   justify-content: center;
   flex-direction: column;
   font-size: 1.25rem;
+}
+
+.info-tooltip {
+  font-size: 0.8rem;
+  color: var(--mono5);
 }
 
 @media screen and (orientation: landscape), (min-width: 960px) {

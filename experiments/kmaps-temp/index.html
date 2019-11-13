@@ -6,7 +6,7 @@
   <meta name="description" content="Allows the user to input values for a Karnaugh map and recieve boolean expressions for the output.">
   <link rel="icon" type="icon/x-icon" href="/resources/favicon.ico">
 
-  <link rel="stylesheet" type="text/css" href="/resources/css/palette.css">
+  <link rel="stylesheet" type="text/css" href="../../resources/css/palette.css">
   <link rel="stylesheet" type="text/css" href="/resources/fonts/opensans.css">
   <script src="/resources/js/tracking.js"></script>
 
@@ -27,10 +27,12 @@
             <header class="info-header">Function Info</header>
             <div class="entry">
               <label class="entry-label">Output Name:</label>
+              <label class="info-tooltip">One string for function result</label>
               <input id="return-name" type="text" size="30" value="f" class="input-field">
             </div>
             <div class="entry">
               <label class="entry-label">Input Names:</label>
+              <label class="info-tooltip">Comma separated list of variable names</label>
               <input id="variable-names" type="text" size="30" value="a,b,c,d" class="input-field">
             </div>
           </div>
@@ -39,10 +41,12 @@
             <header class="info-header">Terms</header>
             <div class="entry">
               <label class="entry-label">Minterms:</label>
+              <label class="info-tooltip">Comma separated list of numbers</label>
               <input id="minterms" type="text" size="30" value="" class="input-field">
             </div>
             <div class="entry">
               <label class="entry-label">Don't Cares:</label>
+              <label class="info-tooltip">Comma separated list of numbers</label>
               <input id="dont-cares" type="text" size="30" value="" class="input-field">
             </div>
           </div>

@@ -10,8 +10,8 @@ $(window).on('load', function() {
 
     $("#variable-names").keyup(onInfoChange);
     $("#return-name").keyup(onInfoChange);
-    $("#minterms").keyup(onInfoChange);
-    $("#dont-cares").keyup(onInfoChange);
+    $("#minterms").keyup(() => onInfoChange(false));
+    $("#dont-cares").keyup(() => onInfoChange(false));
 });
 
 $(window).resize(checkWindowSize);
@@ -27,7 +27,7 @@ function checkWindowSize() {
     }
 }
 
-function onInfoChange() {
+function onInfoChange(forceKmapRedraw = true) {
     let {
         variableNames,
         returnName,
@@ -40,9 +40,7 @@ function onInfoChange() {
         dontCares,
     } = fetchTerms();
 
-    console.log(drawKmap);
-
-    if (drawKmap && dimension <= maxDimension) {
+    if ((forceKmapRedraw) || (drawKmap && dimension <= maxDimension)) {
         if (dimension != prevDimension) {
             prevDimension = dimension;
             createKmap(variableNames, returnName, dimension);
