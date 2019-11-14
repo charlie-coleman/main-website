@@ -2,9 +2,10 @@ var petrick;
 var prevDimension = -1;
 var maxDimension = 10;
 var drawKmap = true;
+var sop = false;
 
 $(window).on('load', function() {
-    petrick = new Petrick([], [], 0, [], "");
+    petrick = new Petrick([], [], [], 0, [], "");
     checkWindowSize();
     onInfoChange();
 
@@ -37,8 +38,9 @@ function onInfoChange(forceKmapRedraw = true) {
 
     let {
         minterms,
+        maxterms,
         dontCares,
-    } = fetchTerms();
+    } = fetchTerms(dimension);
 
     if ((forceKmapRedraw) || (drawKmap && dimension <= maxDimension)) {
         if (dimension != prevDimension) {
@@ -55,8 +57,10 @@ function onInfoChange(forceKmapRedraw = true) {
 
     let { computable, errorStr } = checkInputs(minterms, dontCares, variableNames, returnName, termLimit);
     
-    if (computable)
-        calculate(variableNames, returnName, dimension, minterms, dontCares);
+    if (computable) {
+        let essentials = calculate(variableNames, returnName, dimension, minterms, maxterms, dontCares, sop);
+        colorKmap(essentials, dimension);
+    }
     else {
         setSolution("#generic-solution", errorStr);
         setSolution("#vhdl-solution", "");
@@ -85,19 +89,18 @@ function fetchAttributes() {
     };
 }
 
-function fetchTerms() {
+function fetchTerms(dimension) {
     let minterms = getMinterms();
+    let dontCares = getDontCares();
 
-    temp = getInputStr("#dont-cares").split(",");
-    temp = temp.map(v => $.trim(v));
-    temp = removeEmptyStrings(temp);
-    let dontCares = temp.map(v => parseInt(v, 10));
+    let maxterms = allTerms(dimension).filter(v => (minterms.indexOf(v) == -1 && dontCares.indexOf(v) == -1));
 
     minterms.sort((a, b) => (a - b));
     dontCares.sort((a, b) => (a - b));
 
     return {
         minterms,
+        maxterms,
         dontCares
     }
 }
@@ -106,17 +109,30 @@ function removeEmptyStrings(arr) {
     return arr.filter(v => v != "");
 }
 
-function calculate(vN, rN, dim, mt, dc) {
+function calculate(vN, rN, dim, minterms, maxterms, dc) {
     petrick.setVariableNames(vN);
     petrick.setReturnName(rN);
     petrick.setDimension(dim);
-    petrick.setMinTerms(mt);
+    petrick.setMinterms(minterms);
+    petrick.setMaxterms(maxterms);
     petrick.setDontCares(dc);
 
-    petrick.calculateEssentials();
-    setSolution("#generic-solution", petrick.getGeneric());
-    setSolution("#vhdl-solution", petrick.getVhdl());
-    setSolution("#verilog-solution", petrick.getVerilog());
+    if (sop) {
+        petrick.calculateSOPEssentials();
+        setSolution("#generic-solution", petrick.getSOPGeneric());
+        setSolution("#vhdl-solution", petrick.getSOPVhdl());
+        setSolution("#verilog-solution", petrick.getSOPVerilog());
+        
+        return petrick.getSOPEssentials();
+    }
+    else {
+        petrick.calculatePOSEssentials();
+        setSolution("#generic-solution", petrick.getPOSGeneric());
+        setSolution("#vhdl-solution", petrick.getPOSVhdl());
+        setSolution("#verilog-solution", petrick.getPOSVerilog());
+
+        return petrick.getPOSEssentials();
+    }
 }
 
 function setSolution(id, sol) {
@@ -189,7 +205,7 @@ function createKmap(variableNames, returnName, dimension) {
             let cellId = `cell-${coordsToGray(i, rowDim, j, colDim)}`
             $(`#${rowId}`).append(`
             <td class="kmap-cell" id="${cellId}" onclick="javascript:cellChange(${i}, ${rowDim}, ${j}, ${colDim})">
-                <label class="kmap-cell-label">0</label>
+                <label class="kmap-cell-label" id="${cellId}-label">0</label>
             </td>
             `);
         }
@@ -198,7 +214,6 @@ function createKmap(variableNames, returnName, dimension) {
     let h = $("#cell-0").height();
 
     let size = Math.max(w, h);
-    console.log(w, h, size);
 
     $("#kmap tr, td").width(size);
     $("#kmap tr, td").height(size);
@@ -218,6 +233,71 @@ function populateKmap(minterms, dontCares, dimension) {
             setCell(num, "0");
         }
     });
+}
+
+function colorKmap(essentials, dimension) {
+    let numEss = essentials.length;
+    essentials = essentials.sort((a, b) => (a.length - b.length));
+
+    let rowDim = Math.floor(dimension / 2);
+    let colDim = Math.ceil(dimension / 2);
+
+    let rowNum = Math.pow(2, rowDim);
+    let colNum = Math.pow(2, colDim);
+
+    $(".kmap-cell").css("border", "");
+
+    essentials.forEach(function(terms, i) {
+        let color = createPastel((360 * i / numEss));
+        terms.forEach(function(i, index) {
+            let {row, col} = grayToCoords(i, dimension);
+            let cellId = `#cell-${i}`;
+
+            if ((row + 1) >= rowNum) {
+                if (terms.indexOf(coordsToGray(0, rowDim, col, colDim)) == -1 || containsCol(terms, col, rowDim, colDim)) 
+                    $(cellId).css('border-bottom', `2px solid ${color}`);
+            }
+            else if (terms.indexOf(coordsToGray(row + 1, rowDim, col, colDim)) == -1)
+                $(cellId).css('border-bottom', `2px solid ${color}`);
+                
+            if ((row - 1) < 0) {
+                if (terms.indexOf(coordsToGray(rowNum - 1, rowDim, col, colDim)) == -1 || containsCol(terms, col, rowDim, colDim)) 
+                    $(cellId).css('border-top', `2px solid ${color}`);
+            }
+            else if (terms.indexOf(coordsToGray(row - 1, rowDim, col, colDim)) == -1)
+                $(cellId).css('border-top', `2px solid ${color}`);
+                
+            if ((col + 1) >= colNum) {
+                if (terms.indexOf(coordsToGray(row, rowDim, 0, colDim)) == -1 || containsRow(terms, row, rowDim, colDim)) 
+                    $(cellId).css('border-right', `2px solid ${color}`);
+            }
+            else if (terms.indexOf(coordsToGray(row, rowDim, col + 1, colDim)) == -1)
+                $(cellId).css('border-right', `2px solid ${color}`);
+                
+            if ((col - 1) < 0) {
+                if (terms.indexOf(coordsToGray(row, rowDim, colNum - 1, colDim)) == -1 || containsRow(terms, row, rowDim, colDim)) 
+                    $(cellId).css('border-left', `2px solid ${color}`);
+            }
+            else if (terms.indexOf(coordsToGray(row, rowDim, col - 1, colDim)) == -1)
+                $(cellId).css('border-left', `2px solid ${color}`);
+        });
+    });
+}
+
+function containsRow(terms, row, rowDim, colDim) {
+    for (let i = 0; i < Math.pow(2, rowDim); i++) {
+        if (terms.indexOf(coordsToGray(row, rowDim, i, colDim)) == -1)
+            return false;
+    }
+    return true;
+}
+
+function containsCol(terms, col, rowDim, colDim) {
+    for (let i = 0; i < Math.pow(2, colDim); i++) {
+        if (terms.indexOf(coordsToGray(i, rowDim, col, colDim)) == -1)
+            return false;
+    }
+    return true;
 }
 
 function cellChange(row, rowDim, col, colDim) {
@@ -392,6 +472,10 @@ function coordsToGray(row, rowDim, col, colDim) {
     return gray;
 }
 
+function allTerms(dimension) {
+    return [...Array(Math.pow(2, dimension)).keys()];
+}
+
 function grayToCoords(gray, dim) {
     let str = intToBin(gray, dim);
     let rowDim = Math.floor(dim / 2);
@@ -412,4 +496,8 @@ function indexToGray(index) {
 
 function stripHtml(str) {
     return $("<div />").html(str).text();
+}
+
+function createPastel(i) {
+    return `hsla(${i}, 70%, 80%, 1)`;
 }

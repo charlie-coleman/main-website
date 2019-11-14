@@ -1,53 +1,85 @@
 class Petrick {
-    private minTerms: number[];
+    private minterms: number[];
+    private maxterms: number[];
     private dontCares: number[];
-    private allTerms: number[];
-    private essentials: TableEntry[];
+    private sopEssentials: TableEntry[];
+    private posEssentials: TableEntry[];
     private dimension: number;
     private variableNames: string[];
     private returnName: string;
 
-    constructor(minTerms: number[], dontCares: number[], dimension: number, variableNames: string[], returnName: string) {
-        this.minTerms = minTerms;
+    constructor(minterms: number[], maxterms: number[], dontCares: number[], dimension: number, variableNames: string[], returnName: string) {
+        this.minterms = minterms;
+        this.maxterms = maxterms;
         this.dontCares = dontCares;
-        this.dimension = variableNames.length;
+        this.dimension = dimension;
         this.variableNames = variableNames;
         this.returnName = returnName;
     }
 
-    public getMinTerms(): number[] { return this.minTerms; }
+    public getMinterms(): number[] { return this.minterms; }
     public getDontCares(): number[] { return this.dontCares; }
+    public getMaxterms(): number[] { return this.maxterms; }
     public getDimension(): number { return this.dimension; }
     public getVariableNames(): string[] { return this.variableNames }
     public getReturnName(): string { return this.returnName; }
 
-    public setMinTerms(minTerms: number[]): void { this.minTerms = minTerms; }
+    public setMinterms(minterms: number[]): void { this.minterms = minterms; }
+    public setMaxterms(maxterms: number[]): void { this.maxterms = maxterms; }
     public setDontCares(dontCares: number[]): void { this.dontCares = dontCares; }
     public setDimension(dimension: number): void { this.dimension = dimension; }
     public setVariableNames(variableNames: string[]): void { this.variableNames = variableNames; }
     public setReturnName(returnName: string): void { this.returnName = returnName; }
 
-    public calculateEssentials(): void {
-        this.allTerms = this.minTerms.concat(this.dontCares);
-        this.essentials = new Array<TableEntry>();
+    public calculateSOPEssentials(): void {
+        let allTerms: number[] = this.minterms.concat(this.dontCares);
+        this.sopEssentials = new Array<TableEntry>();
 
-        let groups: TableEntry[][] = this.groupTerms();
-        let reducedGroups: TableEntry[][][] = this.reduceGroupedTerms(groups).slice(0, -1); // the last index of the reduced terms is an empty array
+        let groups: TableEntry[][] = this.groupTerms(allTerms, true);
+        let reducedGroups: TableEntry[][][] = this.reduceGroupedTerms(groups, true).slice(0, -1); // the last index of the reduced terms is an empty array
         let primeImplicants: TableEntry[] = this.getPrimeImplicants(reducedGroups);
-        let columns: TableEntry[][][] = this.getColumns(primeImplicants);
+        let columns: TableEntry[][][] = this.getColumns(primeImplicants, true);
         let reducedColumns: TableEntry[][][] = this.reduceColumns(columns);
-        this.essentials = this.essentials.concat(this.getEssentialImplicants(reducedColumns));
+        this.sopEssentials = this.sopEssentials.concat(this.getEssentialImplicants(reducedColumns));
     }
 
-    public getGeneric(): string {
+    public calculatePOSEssentials(): void {
+        let allTerms: number[] = this.maxterms.concat(this.dontCares);
+        this.posEssentials = new Array<TableEntry>();
+
+        let groups: TableEntry[][] = this.groupTerms(allTerms, false);
+        let reducedGroups: TableEntry[][][] = this.reduceGroupedTerms(groups, false).slice(0, -1);
+        let primeImplicants: TableEntry[] = this.getPrimeImplicants(reducedGroups);
+        let columns: TableEntry[][][] = this.getColumns(primeImplicants, false);
+        let reducedColumns: TableEntry[][][] = this.reduceColumns(columns);
+        this.posEssentials = this.posEssentials.concat(this.getEssentialImplicants(reducedColumns));
+    }
+
+    public getSOPEssentials(): number[][] {
+        let essArr: number[][] = new Array();
+        for (let t of this.sopEssentials) {
+            essArr.push(t.getTerms());
+        }
+        return essArr;
+    }
+
+    public getPOSEssentials(): number[][] {
+        let essArr: number[][] = new Array();
+        for (let t of this.posEssentials) {
+            essArr.push(t.getTerms());
+        }
+        return essArr;
+    }
+
+    public getSOPGeneric(): string {
         let output: string = this.returnName + "(" + this.variableNames.join(", ") + ") = ";
 
-        if (this.essentials.length == 0)
+        if (this.sopEssentials.length == 0)
             return output + "0";
-        if (this.essentials.length == 1 && (this.essentials[0].getBinaryRep() == "-".repeat(this.dimension)))
+        if (this.sopEssentials.length == 1 && (this.sopEssentials[0].getBinaryRep() == "-".repeat(this.dimension)))
             return output + "1";
 
-        for (let e of this.essentials) {
+        for (let e of this.sopEssentials) {
             let entryString: string = e.getBinaryRep();
             for (let i = 0; i < entryString.length; i++) {
                 let c: string = entryString[i];
@@ -61,17 +93,40 @@ class Petrick {
 
         return output.slice(0, -3);
     }
+
+    public getPOSGeneric(): string {
+        let output: string = `${this.returnName}(${this.variableNames.join(", ")}) = `;
+
+        if (this.posEssentials.length == 0)
+            return output + "1";
+        if (this.posEssentials.length == 1 && (this.posEssentials[0].getBinaryRep() == "-".repeat(this.dimension)))
+            return output + "0";
+        
+        for (let e of this.posEssentials) {
+            output += "(";
+            let entryString: string = e.getBinaryRep();
+            for (let i = 0; i < entryString.length; i++) {
+                let c: string = entryString[i];
+                if (c == "0")
+                    output += this.variableNames[i] + " + ";
+                else if (c == "1")
+                    output += this.variableNames[i] + '\' + ';
+            }
+            output = output.slice(0, -3) + ")";
+        }
+        return output;
+    }
  
-    public getVhdl(): string {
+    public getSOPVhdl(): string {
         let output: string = this.returnName + " <= ";
 
-        if (this.essentials.length == 0)
+        if (this.sopEssentials.length == 0)
             return output + "0;";
-        else if (this.essentials.length == 1 && (this.essentials[0].getBinaryRep() == "-".repeat(this.dimension)))
+        else if (this.sopEssentials.length == 1 && (this.sopEssentials[0].getBinaryRep() == "-".repeat(this.dimension)))
             return output + "1;"
 
         output += "("
-        for (let e of this.essentials) {
+        for (let e of this.sopEssentials) {
             let entryString: string = e.getBinaryRep();
             for (let i = 0; i < entryString.length; i++) {
                 let c: string = entryString[i];
@@ -88,16 +143,39 @@ class Petrick {
         return output;
     }
 
-    public getVerilog(): string {
+    public getPOSVhdl(): string {
+        let output: string = `${this.returnName} <= `;
+
+        if (this.posEssentials.length == 0)
+            return output + "1;";
+        if (this.posEssentials.length == 1 && (this.posEssentials[0].getBinaryRep() == "-".repeat(this.dimension)))
+            return output + "0;";
+        
+        for (let e of this.posEssentials) {
+            output += "(";
+            let entryString: string = e.getBinaryRep();
+            for (let i = 0; i < entryString.length; i++) {
+                let c: string = entryString[i];
+                if (c == "0")
+                    output += this.variableNames[i] + ' or ';
+                else if (c == "1")
+                    output += 'not ' + this.variableNames[i] + ' or ';
+            }
+            output = output.slice(0, -4) + ") and ";
+        }
+        return output.slice(0, -5) + ";";
+    }
+
+    public getSOPVerilog(): string {
         let output: string = "assign " + this.returnName + " = ";
 
-        if (this.essentials.length == 0)
+        if (this.sopEssentials.length == 0)
             return output + "0;";
-        else if (this.essentials.length == 1 && (this.essentials[0].getBinaryRep() == "-".repeat(this.dimension)))
+        else if (this.sopEssentials.length == 1 && (this.sopEssentials[0].getBinaryRep() == "-".repeat(this.dimension)))
             return output + "1;"
 
         output += "(";
-        for (let e of this.essentials) {
+        for (let e of this.sopEssentials) {
             let entryString: string = e.getBinaryRep();
             for (let i = 0; i < entryString.length; i++) {
                 let c: string = entryString[i];
@@ -114,12 +192,38 @@ class Petrick {
         return output;
     }
 
-    private groupTerms(): TableEntry[][] {
+    public getPOSVerilog(): string {
+        let output: string = "assign " + this.returnName + " = ";
+
+        if (this.posEssentials.length == 0)
+            return output + "1;";
+        else if (this.posEssentials.length == 1 && (this.posEssentials[0].getBinaryRep() == "-".repeat(this.dimension)))
+            return output + "0;"
+
+        output += "(";
+        for (let e of this.posEssentials) {
+            let entryString: string = e.getBinaryRep();
+            for (let i = 0; i < entryString.length; i++) {
+                let c: string = entryString[i];
+                let varName: string = this.variableNames[i];
+
+                if (c == "0")
+                    output += varName + " | ";
+                else if (c == "1")
+                    output += "~" + varName + " | ";
+            }
+            output = output.slice(0, -3) + ") & (";
+        }
+        output = output.slice(0, -4) + ";";
+        return output;
+    }
+
+    private groupTerms(terms: number[], sop: boolean): TableEntry[][] {
         let groups: TableEntry[][] = this.createGroupsArray();
 
-        for (let i = 0; i < this.allTerms.length; i++) {
-            let term: number = this.allTerms[i];
-            let num1s: number = this.numberOf1s(term);
+        for (let i = 0; i < terms.length; i++) {
+            let term: number = terms[i];
+            let num1s: number = this.numberOf(term, sop);
 
             // organize the groups by number of 1s in their binary representation
             groups[num1s].push(new TableEntry([term], this.dimension));
@@ -128,7 +232,7 @@ class Petrick {
         return groups;
     }
 
-    private reduceGroupedTerms(groupedTerms: TableEntry[][]): TableEntry[][][] {
+    private reduceGroupedTerms(groupedTerms: TableEntry[][], sop: boolean): TableEntry[][][] {
         let groups: TableEntry[][] = this.createGroupsArray();
         let mergedEntries: TableEntry[][] = this.createGroupsArray();
         let cont: boolean = false;
@@ -143,7 +247,7 @@ class Petrick {
                         let t2: TableEntry = groupedTerms[j][l];
 
                         // don't check it against itself
-                        merged = this.checkTableEntries(t1, t2, groups);
+                        merged = this.checkTableEntries(t1, t2, groups, sop);
 
                         // keep a list of terms that have been reduced/merged. we don't remove now because they make be able to make more reductions
                         if (merged) {
@@ -174,7 +278,7 @@ class Petrick {
 
         // we save the smaller sized implicants because they aren't covered by a larger implicant
         if (cont)
-            return [groupedTerms].concat(this.reduceGroupedTerms(groups));
+            return [groupedTerms].concat(this.reduceGroupedTerms(groups, sop));
         else
             return [groupedTerms].concat([groups]);
     }
@@ -190,22 +294,26 @@ class Petrick {
         return primeImplicants;
     }
 
-    private getColumns(primeImplicants: TableEntry[]): TableEntry[][][] {
+    private getColumns(primeImplicants: TableEntry[], sop: boolean): TableEntry[][][] {
         let columns: Map<number, TableEntry[][]> = new Map<number, TableEntry[][]>();
-        for (let i = 0; i < this.minTerms.length; i++) {
-            columns.set(this.minTerms[i], new Array());
+        let essentials: TableEntry[] = new Array<TableEntry>();
+
+        let terms: number[] = sop ? this.minterms : this.maxterms;
+
+        for (let i = 0; i < this.minterms.length; i++) {
+            columns.set(this.minterms[i], new Array());
         }
 
-        this.minTerms.forEach(function(minTerm: number, index: number) {
-            columns.set(minTerm, primeImplicants.filter(function(implicant, index) {
-                return (implicant.getTerms().indexOf(minTerm) != -1);
+        terms.forEach(function(term: number, index: number) {
+            columns.set(term, primeImplicants.filter(function(implicant, index) {
+                return (implicant.getTerms().indexOf(term) != -1);
             }).map((implicant) => ([implicant])));
         });
 
         for (let [key, value] of columns) {
             if (value.length === 1) {
-                this.minTerms = this.minTerms.filter((v) => (v != key));
-                this.essentials.push(value[0][0]);
+                terms = terms.filter((v) => (v != key));
+                essentials.push(value[0][0]);
                 for (let k of value[0][0].getTerms())
                     columns.delete(k);
             }
@@ -213,10 +321,16 @@ class Petrick {
 
         let columnArr: TableEntry[][][] = new Array();
 
-        let ess = this.essentials;
         columns.forEach(function(value, key) {
-            columnArr.push(value.filter(v => (ess.indexOf(v[0]) < 0)));
+            columnArr.push(value.filter(v => (essentials.indexOf(v[0]) < 0)));
         });
+
+        if (sop) {
+            this.sopEssentials = essentials;
+        }
+        else {
+            this.posEssentials = essentials;
+        }
 
         return columnArr;
     }
@@ -287,18 +401,20 @@ class Petrick {
         return true;
     }
 
-    private numberOf1s(val: number): number {
+    private numberOf(val: number, ones: boolean): number {
         let ret: number = 0;
         while (val) {
             ret += (val & 1);
             val = val >> 1;
         }
 
+        ret = (ones) ? ret : this.dimension - ret;
+
         return ret;
     }
 
-    private onesInString(s: string): number {
-        return (s.match(/1/g) || []).length;
+    private charInString(s: string, ones: boolean): number {
+        return ones ? (s.match(/1/g) || []).length : (s.match(/0/g) || []).length;
     }
 
     private createGroupsArray(): TableEntry[][] {
@@ -309,10 +425,10 @@ class Petrick {
         return groups;
     }
 
-    private checkTableEntries(t1: TableEntry, t2: TableEntry, groups: TableEntry[][]): boolean {
+    private checkTableEntries(t1: TableEntry, t2: TableEntry, groups: TableEntry[][], sop: boolean): boolean {
         if (t1.isAdjacent(t2)) {
             let t3: TableEntry = t1.mergeEntry(t2);
-            let num1s: number = this.onesInString(t3.getBinaryRep());
+            let num1s: number = this.charInString(t3.getBinaryRep(), sop);
 
             groups[num1s].push(t3);
             return true;

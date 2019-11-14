@@ -256,6 +256,8 @@ body, html {
 .kmap-cell {
   text-align: center;
   color: var(--mono4);
+  border: 0px;
+  border-radius: 3px;
 }
 
 .row-label, .col-label, .var-label {
