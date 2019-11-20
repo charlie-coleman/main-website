@@ -238,8 +238,8 @@ class Petrick {
         let columns = new Map();
         let essentials = new Array();
         let terms = sop ? this.minterms : this.maxterms;
-        for (let i = 0; i < this.minterms.length; i++) {
-            columns.set(this.minterms[i], new Array());
+        for (let i = 0; i < terms.length; i++) {
+            columns.set(terms[i], new Array());
         }
         terms.forEach(function (term, index) {
             columns.set(term, primeImplicants.filter(function (implicant, index) {

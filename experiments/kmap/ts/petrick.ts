@@ -45,6 +45,7 @@ class Petrick {
 
     public calculatePOSEssentials(): void {
         let allTerms: number[] = this.maxterms.concat(this.dontCares);
+
         this.posEssentials = new Array<TableEntry>();
 
         let groups: TableEntry[][] = this.groupTerms(allTerms, false);
@@ -300,8 +301,8 @@ class Petrick {
 
         let terms: number[] = sop ? this.minterms : this.maxterms;
 
-        for (let i = 0; i < this.minterms.length; i++) {
-            columns.set(this.minterms[i], new Array());
+        for (let i = 0; i < terms.length; i++) {
+            columns.set(terms[i], new Array());
         }
 
         terms.forEach(function(term: number, index: number) {

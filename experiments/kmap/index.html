@@ -1,80 +1,96 @@
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html>
+  <title>Karnaugh Map Solver</title>
+  <meta name="viewport" content="width=device-width, initial-scale-1.0">
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="description" content="Allows the user to input values for a Karnaugh map and recieve boolean expressions for the output.">
+  <link rel="icon" type="icon/x-icon" href="/resources/favicon.ico">
 
-<head>
-    <title>Karnaugh Map Solver</title>
-    <meta name="viewport" content="width=device-width, initial-scale-1.0">
-    <meta charset="utf-8">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <meta name="description" content="Allows the user to input values for a Karnaugh map and recieve boolean expressions for the output.">
-    <link rel="icon" type="icon/x-icon" href="/resources/favicon.ico">
+  <link rel="stylesheet" type="text/css" href="../../resources/css/palette.css">
+  <link rel="stylesheet" type="text/css" href="/resources/fonts/opensans.css">
+  <script src="/resources/js/tracking.js"></script>
 
-    <link rel="stylesheet" type="text/css" href="/resources/css/palette.css">
-    <link rel="stylesheet" type="text/css" href="/resources/fonts/opensans.css">
-    <script src="/resources/js/jquery.js"></script>
-    <script src="/resources/js/tracking.js"></script>
+  <link rel="stylesheet" type="text/css" href="./css/style.css">
+  <script src="./js/jquery-3.4.1.min.js"></script>
+  <script src="./ts/petrick.js"></script>
+  <script src="./js/main.js"></script>
 
-    <link rel="stylesheet" type="text/css" href="./css/style.css">
-    <script src="./js/petrick.js"></script>
-    <script src="./js/main.js"></script>
-
-    <!--<link rel="stylesheet" type="text/css" href="./css/style.min.css">
-    <script src="./js/petrick.min.js"></script>
-    <script src="./js/main.min.js"></script>-->
-</head>
-
-<body>
-    <div id="setup" class="screen" style="display:block;">
-        <div class="screen-container" style="height:85%;">
-            <form id="setup-form" class="setup-input-container" action="javascript:setupContinue();" class="form">
-                <div class="setup-input">Number of Inputs: <input id="dimension" type="text" value="4" size="10" class="input-field"></div>
-                <div class="setup-input">Input Names: <input id="variables" type="text" value="A,B,C,D" size="10" class="input-field"></div>
-                <div class="setup-input">Output: <input id="output-var" type="text" value="F" size="1" class="input-field"></div>
-                <input class="hidden-submission" type="submit" tabindex="-1">
-            </form>
-        </div>
-        <div class="screen-container" style="height:15%;">
-            <button id="setup-continue" class="continue" onclick="javascript:setupContinue();">Continue</button>
-        </div>
+  <body>
+    <div id="title">
+      <header id="content-title">Karnaugh Map Solver</header>
     </div>
+    <div id="content">
 
-    <div id="map" class="screen" style="display:none;">
-        <div class="screen-container" style="height:20%;">
-            <form id="map-form" action="javascript:mapContinue();" class="form">
-                <div class="setup-input">&Sigma;m = (<input id="minterms" type="text" size="10" class="input-field">)</div>
-                <div class="setup-input">with don't cares (<input id="dontcares" type="text" size="10" class="input-field">)</div>
-                <button type="button" id="map-clear" class="continue" onclick="javascript:mapClear();">Clear</button><br>
-                <h5>(If a value is present in both &Sigma;m and don't cares, &Sigma;m has priority)</h5>
-                <input class="hidden-submission" type="submit" tabindex="-1">
-            </form>
-        </div>
-        <div class="screen-container" style="height:60vh;">
-            <table id="kmap" class="map-table" style="">
-            </table>
-        </div>
-        <div class="solution-container" style="height:20vh;">
-            <button id="map-restart" class="continue" onclick="javascript:mapRestart();">Restart</button> &emsp;
-            <button id="map-continue" class="continue" onclick="javascript:mapContinue();">Continue</button>
-        </div>
-    </div>
-
-    <div id="solution" class="screen" style="display:none;">
-        <div class="screen-container" style="height:90vh;">
-            <div class="solution-middle">
-                <div id="solution-title">Solutions:</div>
-                <div class="solution-label">Generic:</div>
-                <textarea cols="80" rows="4" wrap="soft" class="solution-field" readonly id="genSolution"></textarea><br>
-                <div class="solution-label">VHDL:</div>
-                <textarea cols="80" rows="4" wrap="soft" class="solution-field" readonly id="VHDLSolution"></textarea>
-                <div class="solution-label">Verilog:</div>
-                <textarea cols="80" rows="4" wrap="soft" class="solution-field" readonly id="verilogSolution"></textarea>
+      <div id="information">
+        <div id="inputs">
+          <div id="attributes" class="info-section">
+            <header class="info-header">Function Info</header>
+            <div class="entry">
+              <label class="entry-label">Output Name:</label>
+              <label class="info-tooltip">One string for function result</label>
+              <input id="return-name" type="text" size="30" value="f" class="input-field">
             </div>
-        </div>
-        <div class="screen-container" style="height:10vh">
-            <button id="solution-back" class="continue" onclick="javascript:solBack();">Back</button> &emsp;
-            <button id="solution-restart" class="continue" onclick="javascript:solRestart();">Restart</button>
-        </div>
-    </div>
-</body>
+            <div class="entry">
+              <label class="entry-label">Input Names:</label>
+              <label class="info-tooltip">Comma separated list of variable names</label>
+              <input id="variable-names" type="text" size="30" value="a,b,c,d" class="input-field">
+            </div>
+          </div>
 
+          <div id="settings" class="info-section">
+            <header class="info-header">Settings:</header>
+            <label id="sop-label"><input type="radio" name="method" value="sop" checked> Sum of Products</label>
+            <label id="sop-label"><input type="radio" name="method" value="pos"> Product of Sums</label>
+            <label id="sop-label"><input type="checkbox" name="draw-groups" value="draw" checked> Draw groupings</label>
+          </div>
+
+          <div id="clear-button-container">
+            <button id="clear-kmap" onclick="javascript:resetEverything()">Reset Everything</button>
+          </div>
+        </div>
+
+        <div id="terms" class="info-section">
+          <header class="info-header">Terms</header>
+          <div class="entry">
+            <label class="entry-label">Minterms:</label>
+            <label class="info-tooltip">Comma separated list of numbers</label>
+            <input id="minterms" type="text" size="30" value="" class="input-field">
+          </div>
+          <div class="entry">
+            <label class="entry-label">Don't Cares:</label>
+            <label class="info-tooltip">Comma separated list of numbers</label>
+            <input id="dont-cares" type="text" size="30" value="" class="input-field">
+          </div>
+        </div>
+
+        <div id="solutions" class="info-section">
+          <header class="info-header">Solutions:</header>
+          <div class="solution">
+            <label class="solution-label">Generic:</label>
+            <textarea cols="80" rows="4" wrap="soft" class="solution-field" readonly id="generic-solution"></textarea>
+          </div>
+          <div class="solution">
+            <label class="solution-label">VHDL:</label>
+            <textarea cols="80" rows="4" wrap="soft" class="solution-field" readonly id="vhdl-solution"></textarea>
+          </div>
+          <div class="solution">
+            <label class="solution-label">Verilog:</label>
+            <textarea cols="80" rows="4" wrap="soft" class="solution-field" readonly id="verilog-solution"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div id="kmap-div">
+        <header id="kmap-title">Karnaugh Map</header>
+        <div id="kmap-container">
+          <table id="kmap" class="kmap-table"></table>
+        </div>
+      </div>
+
+      <div class="footer">
+        First update to my Karnaugh map solver in >2 years, hopefully it works better. If you prefer the old solver, head <a href="https://charlie-coleman.com/experiments/kmap-orig">here.</a><br>
+        Feel free to send any bugs or feedback to <em>kmaps (at) charlie-coleman.com</em>
+      </div>
+    </div>
+  </body>
 </html>

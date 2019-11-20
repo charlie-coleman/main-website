@@ -1,284 +1,727 @@
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// ~~~~~~~~~~~~~~~~~ GLOBAL VARIABLES ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-var defaultDim, defaultVar, defaultOut;
-var dimension, variables, output;
-
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// ~~~~~~~~~~~~~~~~~ WINDOW LOAD AND RESIZE FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+var petrick;
+var prevDimension = -1;
+var maxDimension = 10;
+var drawKmap = true;
+var sop = true;
+var drawGroups = true;
+var essentials;
 
 $(window).on('load', function() {
-    defaultDim = $("#dimension").val();
-    defaultVar = $("#variables").val();
-    defaultOut = $("#output-var").val();
-    
-    $("#minterms").keyup(mapInput);
-    $("#dontcares").keyup(mapInput);
+    petrick = new Petrick([], [], [], 0, [], "");
+    checkWindowSize();
+    onInfoChange();
+
+    $("#variable-names").keyup(onVariableNamesChange);
+    $("#return-name").keyup(onReturnNameChange);
+    $("#minterms").keyup(onMintermsChange);
+    $("#dont-cares").keyup(() => onInfoChange(false));
+
+    $('input[type=radio][name=method]').change(onMethodChange);
+    $('input[type=checkbox][name=draw-groups]').change(onDrawChange);
 });
 
-$(window).resize(function() {
-    
-});
+$(window).resize(checkWindowSize);
 
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// ~~~~~~~~~~~~~~~~~ CONTINUE FROM EACH STEP ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-setupContinue = function() {
-    dimension = parseInt(stripHTML($("#dimension").val()), 10);
-    variables = stripHTML($("#variables").val()).split(',');
-    output = stripHTML($("#output-var").val());
-    if (assertSetupInputs(dimension, variables, output)) {
-        buildTable(dimension, variables, output);
-        
-        $("#map").css({"display":"block"});
-        $("html, body").animate({
-            scrollTop: $("#map").offset().top
-        }, 1000);
-        $("html, body").promise().done( function() {
-            $("#setup").css({"display":"none"});
-        });
+function checkWindowSize() {
+    if ($(window).width() < 960 && drawKmap) {
+        drawKmap = false;
+        onInfoChange();
+    }
+    else if ($(window).width() >= 960 && !drawKmap) {
+        drawKmap = true;
+        onInfoChange();
     }
 }
 
-mapContinue = function() {
-    var minterms = stripHTML($("#minterms").val()).split(',');
-    if(minterms.length == 1 && minterms[0] == '')
-        minterms = [];
-    for (var i = 0; i < minterms.length; i++) minterms[i] = +minterms[i];
-    var dontcares = stripHTML($("#dontcares").val()).split(',');
-    if(dontcares.length == 1 && dontcares[0] == '')
-        dontcares = [];
-    for (var i = 0; i < dontcares.length; i++) dontcares[i] = +dontcares[i];
-    
-    $("#solution").css({"display":"block"});
-    $("html, body").animate({
-        scrollTop: $("#solution").offset().top
-    }, 1000);
-    $("html, body").promise().done( function() {
-        $("#map").css({"display":"none"});
-    });
-    var strings = petrick(minterms, dontcares, dimension, variables, output);
-    $('#genSolution').text(strings[0]);
-    $('#VHDLSolution').text(strings[1]);
-    $('#verilogSolution').text(strings[2]);
-}
+function onMintermsChange() {
+    let { variableNames, dimension, termLimit } = getVariableNames();
+    let { minterms, maxterms, dontCares } = fetchTerms(dimension);
 
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// ~~~~~~~~~~~~~~~~~ RESTART FROM EACH STEP ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    let { computable, errorStr } = checkMinterms(minterms);
 
-mapRestart = function() {
-    $("#dimension").val(defaultDim);
-    $("#variables").val(defaultVar);
-    $("#output-var").val(defaultOut);
-    $("#minterms").val("");
-    $("#dontcares").val("");
-    
-    $("#setup").css({"display":"block"});
-    $("#map").css({"display":"none"});
-}
+    populateKmap(minterms, dontCares, dimension);
 
-solBack = function() {
-    var minterms = stripHTML($("#minterms").val()).split(',');
-    var dontcares = stripHTML($("#dontcares").val()).split(',');
-    
-    $("#map").css({"display":"block"});
-    $("#solution").css({"display":"none"});
-}
-
-solRestart = function() {
-    $("#dimension").val(defaultDim);
-    $("#variables").val(defaultVar);
-    $("#output-var").val(defaultOut);
-    $("#minterms").val("");
-    $("#dontcares").val("");
-    
-    $("#setup").css({"display":"block"});
-    $("#solution").css({"display":"none"});
-}
-
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// ~~~~~~~~~~~~~~~~~ BUILD KARNAUGH MAP ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-buildTable = function(d, v, o) {
-    $("#kmap").empty();
-    var rowNum = 2 ** Math.floor(d / 2);
-    var colNum = 2 ** Math.ceil(d / 2);
-    $("#kmap").append('<tr class="map-row-labels" id="row-title" style="height:0%;">'+
-                        '<td class="column-label" id="column-label-space1">'+output+': </td>'+
-                        '<td class="column-label" id="column-label-space2"></td>'+
-                        '<td class="column-label" style="vertical-align:bottom;">'+v.slice(Math.floor(d/2), Math.floor(d/2)+Math.ceil(d/2)).join('')+'</td>'+
-                      '</tr>' );
-    $("#kmap").append('<tr class="map-row-labels" id="label-row"></tr>');
-    $("#label-row").append('<td class="map-row-label" id="label-fill1"></td>');
-    $("#label-row").append('<td class="map-row-label" id="label-fill2"></td>');
-    for(var i = 1; i < colNum+1; i++) {
-        $("#label-row").append('<td class="map-row-label" id="row-label-'+i+'">'+generateGray(i-1, Math.ceil(d/2))+'</td>');
-    }
-    for (var i = 0; i < rowNum; i++) {
-        $("#kmap").append("<tr id='row-"+i+"'class='map-table-row'></tr>");
-        var letters = (i == 0) ? v.slice(0, Math.floor(d/2)).join('') : '';
-        $("#row-"+i).append("<td id='row-label'>"+letters+"</td>");
-        $("#row-"+i).append('<td class="map-column-label" id="col-label-'+i+' style="height:1em;">'+generateGray(i, Math.floor(d/2))+'</td>')
-        for (var j = 0; j < colNum; j++) {
-            $("#row-"+i).append('<td class="map-table-cell" id="cell-'+i+'-'+j+'">'+
-                                '<button class="map-table-button" id="button-'+i+'-'+j+'" onclick="javascript:changeButton('+i+','+j+');">0</button>'+
-                                '</td>');
-        }
-    }
-    mapInput();
-}
-
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// ~~~~~~~~~~~~~~~~~ VERIFY SETUP INPUTS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-assertSetupInputs = function(d, v, o) {
-    if (isNaN(d) || (parseInt(d, 10) != d)) {
-        alert("Number of inputs must be an integer.");
-        return false;
-    }
-    else if ( parseInt(d,10) <= 1) {
-        alert("Number of inputs must be greater than 1.");
-        return false;
-    }
-    if (v.length != parseInt(d)) {
-        alert("Number of variables must equal number of given variable names. (make sure they're comma-seperated)");
-        return false;
-    }
-    return true;
-}
-
-assertMapInputs = function(min, dont) {
-    var minterms = min.split(',');
-    var dontcares = dont.split(',');
-    for (var i = 0; i < minterms.length; i++) {
-        if(isNaN(minterms[i]))
-            return false;
-    }
-    for (var i = 0; i < dontcares; i++) {
-        if (isNaN(dontcares[i]))
-            return false;
-    }
-    return true;
-}
-
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// ~~~~~~~~~~~~~~~~~ ACCEPT KMAP INPUTS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-changeButton = function(r, c) {
-    var currVal = stripHTML($("#button-"+r+"-"+c).text());
-    var loc = parseInt(generateGray(r, Math.floor(dimension/2)) + generateGray(c, Math.ceil(dimension/2)),2).toString(10);
-    var nextVal;
-    if (currVal == '0') {
-        nextVal = '1';
-        
-        var minVal = stripHTML($('#minterms').val());
-        var newString = (minVal == '') ? loc : minVal + ',' + loc;
-        $('#minterms').val(newString);
-    }
-    else if (currVal == '1') {
-        nextVal = '-';
-        
-        var dVal = stripHTML($('#dontcares').val());
-        var newString = (dVal == '') ? loc : dVal + ',' + loc;
-        $('#dontcares').val(newString);
-        
-        var minVal = stripHTML($('#minterms').val());
-        var newString = minVal.replace(loc, '');
-        newString = newString.replace(',,',',');
-        newString = (newString.substr(0,1) == ',') ? newString.substr(1) : newString;
-        newString = (newString.substr(newString.length-1) == ',') ? newString.substr(0, newString.length-1) : newString;
-        $('#minterms').val(newString);
+    if (computable) {
+        petrick.setMinterms(minterms);
+        petrick.setMaxterms(maxterms);
+        essentials = calculate();
+        setSolutionStrings();
+        colorKmap(essentials, dimension);
     }
     else {
-        nextVal = '0';
-        
-        var dVal = stripHTML($('#dontcares').val());
-        var newString = dVal.replace(loc, '');
-        newString = newString.replace(',,',',');
-        newString = (newString.substr(0,1) == ',') ? newString.substr(1) : newString;
-        newString = (newString.substr(newString.length-1) == ',') ? newString.substr(0, newString.length-1) : newString;
-        $('#dontcares').val(newString);
+        setErrorStr(errorStr);
     }
-    $('#minterms').val(stripHTML($('#minterms').val()).split(',').sort(function(a, b){return a-b}).join(','));
-    $('#dontcares').val(stripHTML($('#dontcares').val()).split(',').sort(function(a, b){return a-b}).join(','));
-    $('#button-'+r+'-'+c).text(nextVal);
+
 }
 
-mapInput = function() {
-    var minValues = stripHTML($("#minterms").val()).split(',').filter(function(n){return (n != "") && (n <= 2**dimension);});
-    var dValues = stripHTML($("#dontcares").val()).split(',').filter(function(n){return n != "";});
-    $(".map-table-button").text('0');
-    for (var i = 0; i < dValues.length; i++) {
-        var binString = leftPadString(parseInt(dValues[i],10).toString(2), dimension, "0");
-        var rowNum = generateBin(parseInt(binString.substr(0, Math.floor(dimension/2)),2)); 
-        var colNum = generateBin(parseInt(binString.substr(Math.floor(dimension/2), Math.ceil(dimension/2)),2));
-        $("#button-"+rowNum+"-"+colNum).text('-');
+function onDrawChange() {
+    drawGroups = this.checked;
+    
+    if (!drawGroups)
+        clearColors();
+    else
+        colorKmap(essentials, prevDimension);
+}
+
+function onMethodChange() {
+    if (this.value == "pos") {
+        sop = false;
     }
-    for (var i = 0; i < minValues.length; i++) {
-        var binString = leftPadString(parseInt(minValues[i],10).toString(2), dimension, "0");
-        var rowNum = generateBin(parseInt(binString.substr(0, Math.floor(dimension/2)),2)); 
-        var colNum = generateBin(parseInt(binString.substr(Math.floor(dimension/2), Math.ceil(dimension/2)),2));
-        $("#button-"+rowNum+"-"+colNum).text('1');
+    else {
+        sop = true;
+    }
+
+    essentials = recalculate();
+    if (drawGroups)
+        colorKmap(essentials, prevDimension);
+}
+
+function onVariableNamesChange() {
+    let { variableNames, returnName, dimension, termLimit } = fetchAttributes();
+    let { minterms, maxterms, dontCares } = fetchTerms(dimension);
+
+    if (drawKmap && dimension <= maxDimension) {
+        createKmap(variableNames, returnName, dimension);
+    }
+    else if (!(drawKmap && dimension <= maxDimension)) {
+        $("#kmap").empty();
+        $("#kmap").append(`<label id="kmap-replace-text">Kmap too large to display</label>`);
+    }
+    populateKmap(minterms, dontCares, dimension);
+
+    let { computable, errorStr } = checkInputs(minterms, maxterms, dontCares, variableNames, returnName, termLimit);
+
+    if (computable) {
+        if (dimension != prevDimension) {
+            setAllVariables(variableNames, returnName, dimension, minterms, maxterms, dontCares);
+            essentials = calculate();
+            prevDimension = dimension;
+        }
+        setSolutionStrings();
+    }
+    else {
+        setErrorStr(errorStr);
+    }
+
+    if (typeof essentials !== 'undefined' && drawGroups)
+        colorKmap(essentials, dimension);
+}
+
+function setErrorStr(errorStr) {
+    setSolution("#generic-solution", errorStr);
+    setSolution("#vhdl-solution", "");
+    setSolution("#verilog-solution", "");
+}
+
+function onReturnNameChange() {
+    let returnName = getReturnName();
+    setReturnVariableString(returnName);
+    setSolutionStrings();
+}
+
+function setReturnVariableString(str) {
+    $("#return-variable").text(str);
+    petrick.setReturnName(str);
+}
+
+function setSolutionStrings() {
+    if (sop) {
+        setSolution("#generic-solution", petrick.getSOPGeneric());
+        setSolution("#vhdl-solution", petrick.getSOPVhdl());
+        setSolution("#verilog-solution", petrick.getSOPVerilog());
+    }
+    else {
+        setSolution("#generic-solution", petrick.getPOSGeneric());
+        setSolution("#vhdl-solution", petrick.getPOSVhdl());
+        setSolution("#verilog-solution", petrick.getPOSVerilog());
     }
 }
 
-mapClear = function() {
-    var clear = confirm("This will clear the Karnaugh map. Continue?");
-    if (clear) {
-        $("#minterms, #dontcares").val('');
-        $(".map-table-button").text("0");
+function resetEverything() {
+    setVariableNames(["a", "b", "c", "d"]);
+    setReturnName("f");
+    setMinterms([]);
+    setDontCares([]);
+    onInfoChange();
+}
+
+function setVariableNames(variableNames) {
+    $("#variable-names").val(variableNames.join(", "));
+}
+
+function setReturnName(returnName) {
+    $("#return-name").val(returnName);
+}
+
+function onInfoChange(forceKmapRedraw = true) {
+    let {
+        variableNames,
+        returnName,
+        dimension,
+        termLimit
+    } = fetchAttributes();
+
+    let {
+        minterms,
+        maxterms,
+        dontCares,
+    } = fetchTerms(dimension);
+
+    if ((forceKmapRedraw) || (drawKmap && dimension <= maxDimension)) {
+        if (dimension != prevDimension) {
+            prevDimension = dimension;
+            createKmap(variableNames, returnName, dimension);
+        }
+        populateKmap(minterms, dontCares, dimension);
+    }
+    else {
+        $("#kmap").empty();
+        $("#kmap").append(`<label id="kmap-replace-text">Kmap too large to display</label>`);
+        prevDimension = dimension;
+    }
+
+    let { computable, errorStr } = checkInputs(minterms, maxterms, dontCares, variableNames, returnName, termLimit);
+    
+    if (computable) {
+        setAllVariables(variableNames, returnName, dimension, minterms, maxterms, dontCares);
+        essentials = calculate();
+        if (drawGroups)
+            colorKmap(essentials, dimension);
+    }
+    else {
+        setSolution("#generic-solution", errorStr);
+        setSolution("#vhdl-solution", "");
+        setSolution("#verilog-solution", "");
     }
 }
 
+function fetchAttributes() {
+    let { variableNames, dimension, termLimit } = getVariableNames();
+    let returnName = getReturnName();
 
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// ~~~~~~~~~~~~~~~~~ HELPER FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-generateGray = function(i, b) {
-    i = i ^ (i >> 1);
-    i = i.toString(2);
-    i = Array(b - i.length + 1).join("0") + i;
-    return i;
+    return {
+        variableNames,
+        returnName,
+        dimension,
+        termLimit
+    };
 }
 
-generateBin = function(g) {
-    var b = g;
-    for (var i = 1; i < b.toString(2).length; i++) {
-        b = b ^ (g >> i);
+function getVariableNames() {
+    let variableNames = getInputStr("#variable-names").split(",");
+    variableNames = variableNames.map(function(val, i) {
+        return $.trim(val);
+    });
+    variableNames = removeEmptyStrings(variableNames);
+
+    let dimension = variableNames.length;
+    let termLimit = Math.pow(2, dimension) - 1;
+
+    return {
+        variableNames,
+        dimension,
+        termLimit
+    };
+}
+
+function getReturnName() {
+    return getInputStr("#return-name");
+}
+
+function fetchTerms(dimension) {
+    let minterms = getMinterms();
+    let dontCares = getDontCares();
+
+    let maxterms = allTerms(dimension).filter(v => (minterms.indexOf(v) == -1 && dontCares.indexOf(v) == -1));
+
+    minterms.sort((a, b) => (a - b));
+    dontCares.sort((a, b) => (a - b));
+
+    return {
+        minterms,
+        maxterms,
+        dontCares
     }
-    return b;
 }
 
-leftPadString = function(s, l, p) {
-    s = Array(l - s.length + 1).join(p) + s;
-    return s;
+function removeEmptyStrings(arr) {
+    return arr.filter(v => v != "");
 }
 
-function stripHTML(str){
-  var strippedText = $("<div/>").html(str).text();
-  return strippedText;
+function setAllVariables(vn, rn, dim, minterms, maxterms, dc) {
+    petrick.setVariableNames(vn);
+    petrick.setReturnName(rn);
+    petrick.setDimension(dim);
+    petrick.setMinterms(minterms);
+    petrick.setMaxterms(maxterms);
+    petrick.setDontCares(dc);
+}
+
+function calculate() {
+    if (sop) {
+        petrick.calculateSOPEssentials();
+        setSolutionStrings();
+        return petrick.getSOPEssentials();
+    }
+    else {
+        petrick.calculatePOSEssentials();
+        setSolutionStrings();
+
+        return petrick.getPOSEssentials();
+    }
+}
+
+function recalculate() {
+    if (sop) {
+        petrick.calculateSOPEssentials();
+        setSolutionStrings();
+        return petrick.getSOPEssentials();
+    }
+    else {
+        petrick.calculatePOSEssentials();
+        setSolutionStrings();
+        return petrick.getPOSEssentials();
+    }
+}
+
+function setSolution(id, sol) {
+    $(id).val(sol);
+} 
+
+function checkInputs(minterms, maxterms, dontCares, variableNames, returnName, termLimit) {
+    let ret = checkMinterms(minterms, termLimit);
+    if (!ret.computable) return ret;
+
+    ret = checkMaxterms(maxterms,  termLimit);
+    if (!ret.computable) return ret;
+
+    ret = checkDontCares(dontCares, termLimit);
+    if (!ret.computable) return ret;
+
+    ret = checkVariableNames(variableNames);
+    if (!ret.computable) return ret;
+
+    ret = checkReturnName(returnName);
+    if (!ret.computable) return ret;
+
+    else {
+        return {
+            computable: true,
+            errorStr: ""
+        };
+    }
+}
+
+function checkVariableNames(variableNames) {
+    if (variableNames.length === 0)
+        return setError("No inputs set.");
+    
+    return {
+        computable: true,
+        errorStr: ""
+    }
+}
+
+function checkReturnName(returnName) {
+    if (returnName === "")
+        return setError("Function output name is unset.");
+    
+    return {
+        computable: true,
+        errorStr: ""
+    }
+}
+
+function checkMinterms(minterms, termLimit) {
+    if (minterms.includes(NaN))
+        return setError("One of your minterms is not a number.");
+    else if (minterms.length > 0 && !termsInBounds(minterms, termLimit))
+        return setError("One of your minterms is out of range (too high or below zero).");
+    
+    return {
+        computable: true,
+        errorStr: ""
+    }
+}
+
+function checkMaxterms(maxterms, termLimit) {
+    if (maxterms.includes(NaN))
+        return setError("One of your minterms is not a number.");
+    else if (maxterms.length > 0 && !termsInBounds(maxterms, termLimit))
+        return setError("One of your minterms is out of range (too high or below zero).");
+
+    return {
+        computable: true,
+        errorStr: ""
+    }
+}
+
+function checkDontCares(dontCares, termLimit) {
+    if (dontCares.includes(NaN))
+        return setError("One of your don't cares is not a number.");
+    else if (dontCares.length > 0 && !termsInBounds(dontCares, termLimit))
+        return setError("One of your don't cares is out of range (too high or below zero).");
+
+    return {
+        computable: true,
+        errorStr: ""
+    }
+}
+
+function setError(str) {
+    return {
+        computable: false,
+        errorStr: str,
+    };
+}
+
+function createKmap(variableNames, returnName, dimension) {
+    $("#kmap").empty();
+
+    if (dimension == 0) return;
+
+    let rowDim = Math.floor(dimension / 2);
+    let colDim = Math.ceil(dimension / 2);
+    let rowNum = Math.pow(2, rowDim);
+    let colNum = Math.pow(2, colDim);
+
+    if (dimension > 6)
+        $("#kmap").css("font-size", "1rem");
+
+    $("#kmap").append(`
+    <tr class="map-row" id="title-row">
+        <td class="var-label" id="return-variable">${ returnName }:</td>
+        <td class="column-label" />
+        <td class="var-label" id="col-variables" colspan="${rowNum}"> ${ variableNames.slice(rowDim).join(',') }</td>
+    </tr>        
+    `);
+
+    $("#kmap").append(`<tr class="map-row" id="binary-label"></tr>`);
+    $("#binary-label").append('<td></td>'.repeat(2));
+
+    for (let i = 0; i < colNum; i++) {
+        let str = intToBin(indexToGray(i), colDim);
+        $("#binary-label").append(`<td class="col-label" id="col-${ str }">${ str }</td>`);
+    }
+
+    for (let i = 0; i < rowNum; i++) {
+        let rowId = `row-${i}`;
+        let rowStr = intToBin(indexToGray(i), rowDim);
+        $("#kmap").append(`<tr id="${rowId}" class="kmap-row"></tr>`);
+
+        $(`#${rowId}`).append(`<td ${ (i == 0) ? `class="var-label" id="row-variables"` : "" }>${ (i == 0) ? variableNames.slice(0, rowDim).join(',') : "" }</td>`);
+        $(`#${rowId}`).append(`<td class="row-label" id="row-${ rowStr }">${ rowStr }</td>`);
+
+        for (let j = 0; j < colNum; j++) {
+            let cellId = `cell-${coordsToGray(i, rowDim, j, colDim)}`
+            $(`#${rowId}`).append(`
+            <td class="kmap-cell" id="${cellId}" onclick="javascript:cellChange(${i}, ${rowDim}, ${j}, ${colDim})">
+                <label class="kmap-cell-label" id="${cellId}-label">0</label>
+            </td>
+            `);
+        }
+    }
+    let w = $("#cell-0").width();
+    let h = $("#cell-0").height();
+
+    let size = Math.max(w, h);
+
+    $("#kmap .kmap-cell").width(size);
+    $("#kmap .kmap-cell").height(size);
+}
+
+function populateKmap(minterms, dontCares, dimension) {
+    let limit = Math.pow(2, dimension) - 1;
+    Array.from($(".kmap-cell")).forEach(function(val) {
+        let num = parseInt(val.id.slice(5), 10);
+        if (minterms.indexOf(num) !== -1) {
+            setCell(num, "1");
+        }
+        else if (dontCares.indexOf(num) !== -1) {
+            setCell(num, "-");
+        }
+        else {
+            setCell(num, "0");
+        }
+    });
+}
+
+function clearColors() {
+    $(".kmap-cell").css("border", "");
+}
+
+function colorKmap(essentials, dimension) {
+    let numEss = essentials.length;
+    essentials = essentials.sort((a, b) => (a.length - b.length));
+
+    let rowDim = Math.floor(dimension / 2);
+    let colDim = Math.ceil(dimension / 2);
+
+    let rowNum = Math.pow(2, rowDim);
+    let colNum = Math.pow(2, colDim);
+
+    $(".kmap-cell").css("border", "");
+
+    essentials.forEach(function(terms, i) {
+        let color = createPastel((360 * i / numEss));
+        terms.forEach(function(i) {
+            let {row, col} = grayToCoords(i, dimension);
+
+            let cellId = `#cell-${i}`;
+
+            if ((row + 1) >= rowNum) {
+                if (terms.indexOf(coordsToGray(0, rowDim, col, colDim)) == -1 || containsCol(terms, col, rowDim, colDim)) {
+                    $(cellId).css('border-bottom', `2px solid ${color}`);
+                }
+            }
+            else if (terms.indexOf(coordsToGray(row + 1, rowDim, col, colDim)) == -1) {
+                $(cellId).css('border-bottom', `2px solid ${color}`);
+            }
+                
+            if ((row - 1) < 0) {
+                if (terms.indexOf(coordsToGray(rowNum - 1, rowDim, col, colDim)) == -1 || containsCol(terms, col, rowDim, colDim)) {
+                    $(cellId).css('border-top', `2px solid ${color}`);
+                }
+            }
+            else if (terms.indexOf(coordsToGray(row - 1, rowDim, col, colDim)) == -1) {
+                $(cellId).css('border-top', `2px solid ${color}`);
+            }
+                
+            if ((col + 1) >= colNum) {
+                if (terms.indexOf(coordsToGray(row, rowDim, 0, colDim)) == -1 || containsRow(terms, row, rowDim, colDim)) { 
+                    $(cellId).css('border-right', `2px solid ${color}`);
+                }
+            }
+            else if (terms.indexOf(coordsToGray(row, rowDim, col + 1, colDim)) == -1) {
+                $(cellId).css('border-right', `2px solid ${color}`);
+            }
+                
+            if ((col - 1) < 0) {
+                if (terms.indexOf(coordsToGray(row, rowDim, colNum - 1, colDim)) == -1 || containsRow(terms, row, rowDim, colDim)) { 
+                    $(cellId).css('border-left', `2px solid ${color}`);
+                }
+            }
+            else if (terms.indexOf(coordsToGray(row, rowDim, col - 1, colDim)) == -1) {
+                $(cellId).css('border-left', `2px solid ${color}`);
+            }
+        });
+    });
+}
+
+function containsRow(terms, row, rowDim, colDim) {
+    for (let i = 0; i < Math.pow(2, colDim); i++) {
+        if (terms.indexOf(coordsToGray(row, rowDim, i, colDim)) == -1)
+            return false;
+    }
+    return true;
+}
+
+function containsCol(terms, col, rowDim, colDim) {
+    for (let i = 0; i < Math.pow(2, rowDim); i++) {
+        if (terms.indexOf(coordsToGray(i, rowDim, col, colDim)) == -1)
+            return false;
+    }
+    return true;
+}
+
+function cellChange(row, rowDim, col, colDim) {
+    let gray = coordsToGray(row, rowDim, col, colDim);
+    let cellId = `cell-${gray}`;
+    let currentValue = getLabelText(`#${cellId} label`);
+    let success = false;
+
+    if (currentValue == "0") {
+        setLabelText(`#${cellId} label`, "1");
+        success = addToMinterms(gray);
+    }
+    else if (currentValue == "1") {
+        setLabelText(`#${cellId} label`, "-");
+        success = removeFromMinterms(gray);
+        success = success && addToDontCares(gray);
+    }
+    else if (currentValue == "-") {
+        setLabelText(`#${cellId} label`, "0");
+        success = removeFromDontCares(gray);
+    }
+
+    if(success)
+        onInfoChange();
+    else
+        throw("Somehow you broke the kmap. Congratulations?");
+}
+
+function setCell(number, value) {
+    let cellId = `#cell-${number}`;
+    let labelId = `${cellId} label`;
+    let currentValue = getLabelText(labelId);
+
+    if (currentValue == value)
+        return;
+    else if (currentValue == "0") {
+        switch(value) {
+            case "1":
+                setLabelText(labelId, value);
+                addToMinterms(number);
+                break;
+            case "-":
+                setLabelText(labelId, value);
+                addToDontCares(number);
+                break;
+        }
+    }
+    else if (currentValue == "1") {
+        switch(value) {
+            case "0":
+                setLabelText(labelId, value);
+                removeFromMinterms(number);
+                break;
+            case "-":
+                setLabelText(labelId, value);
+                removeFromMinterms(number);
+                addToDontCares(number);
+                break;
+        }
+    }
+    else if (currentValue == "-") {
+        switch(value) {
+            case "0":
+                setLabelText(labelId, value);
+                removeFromDontCares(number);
+                break;
+            case "1":
+                setLabelText(labelId, value);
+                removeFromDontCares(number);
+                addToMinterms(number);
+                break;
+        }
+    }
+}
+
+function addToMinterms(val) {
+    let minterms = getMinterms();
+    if (minterms.indexOf(val) === -1) {
+        minterms.push(val);
+        minterms.sort((a, b) => (a - b));
+        setMinterms(minterms);
+        return true;
+    }
+    return false;
+}
+
+function removeFromMinterms(val) {
+    let minterms = getMinterms();
+    if (minterms.indexOf(val) !== -1) {
+        minterms = minterms.filter(v => (v != val));
+        setMinterms(minterms);
+        return true;
+    }
+    return false;
+}
+
+function addToDontCares(val) {
+    let dontCares = getDontCares();
+    if (dontCares.indexOf(val) == -1) {
+        dontCares.push(val);
+        dontCares.sort((a, b) => (a - b));
+        setDontCares(dontCares);
+        return true;
+    }
+    return false;
+}
+
+function removeFromDontCares(val) {
+    let dontCares = getDontCares();
+    if (dontCares.indexOf(val) !== -1) {
+        dontCares = dontCares.filter(v => (v != val));
+        setDontCares(dontCares);
+        return true;
+    }
+    return false;
+}
+
+function getMinterms() {
+    let temp = getInputStr("#minterms").split(",");
+    temp = temp.map(v => $.trim(v));
+    temp = removeEmptyStrings(temp);
+    return temp.map(v => parseInt(v, 10));
+}
+
+function setMinterms(minterms) {
+    $("#minterms").val(minterms.join(","));
+}
+
+function getDontCares() {
+    let temp = getInputStr("#dont-cares").split(",");
+    temp = temp.map(v => $.trim(v));
+    temp = removeEmptyStrings(temp);
+    return temp.map(v => parseInt(v, 10));
+}
+
+function setDontCares(dontCares) {
+    $('#dont-cares').val(dontCares.join(","));
+}
+
+function termsInBounds(terms, termLimit) {
+    let oobTerms = terms.filter((v) => (v < 0 || v > termLimit));
+    return (oobTerms.length == 0);
+}
+
+function getInputStr(id) {
+    return stripHtml($(id).val());
+}
+
+function setInputStr(id, str) {
+    $(id).val(str);
+}
+
+function getLabelText(id) {
+    return $.trim(stripHtml($(id).text()));
+}
+
+function setLabelText(id, text) {
+    $(id).text(text);
+}
+
+function grayToIndex(gray) {
+    let mask = gray >> 1;
+    while (mask != 0) {
+        gray = gray ^ mask;
+        mask = mask >> 1;
+    }
+    return gray;
+}
+
+function coordsToGray(row, rowDim, col, colDim) {
+    let gray = parseInt(intToBin(indexToGray(row), rowDim) + intToBin(indexToGray(col), colDim), 2);
+    return gray;
+}
+
+function allTerms(dimension) {
+    return [...Array(Math.pow(2, dimension)).keys()];
+}
+
+function grayToCoords(gray, dim) {
+    let str = intToBin(gray, dim);
+    let rowDim = Math.floor(dim / 2);
+    return {
+        row: grayToIndex(parseInt(str.slice(0, rowDim), 2)),
+        col: grayToIndex(parseInt(str.slice(rowDim), 2)),
+    };
+}
+
+function intToBin(num, dim) {
+    let str = num.toString(2);
+    return Array(dim - str.length + 1).join("0") + str;
+}
+
+function indexToGray(index) {
+    return (index ^ (index >> 1));
+}
+
+function stripHtml(str) {
+    return $("<div />").html(str).text();
+}
+
+function createPastel(i) {
+    return `hsla(${i}, 70%, 80%, 1)`;
 }
