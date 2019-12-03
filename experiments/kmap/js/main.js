@@ -1,6 +1,6 @@
 var petrick;
 var prevDimension = -1;
-var maxDimension = 8;
+var maxDimension = 10;
 var drawKmap = true;
 var userSet = false;
 var sop = true;
