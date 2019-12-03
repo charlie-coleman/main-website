@@ -1,7 +1,8 @@
 var petrick;
 var prevDimension = -1;
-var maxDimension = 10;
+var maxDimension = 8;
 var drawKmap = true;
+var userSet = false;
 var sop = true;
 var drawGroups = true;
 var essentials;
@@ -13,11 +14,12 @@ $(window).on('load', function() {
 
     $("#variable-names").keyup(onVariableNamesChange);
     $("#return-name").keyup(onReturnNameChange);
-    $("#minterms").keyup(onMintermsChange);
-    $("#dont-cares").keyup(() => onInfoChange(false));
+    $("#minterms").keyup(onTermChange);
+    $("#dont-cares").keyup(onTermChange);
 
     $('input[type=radio][name=method]').change(onMethodChange);
     $('input[type=checkbox][name=draw-groups]').change(onDrawChange);
+    $('input[type=checkbox][name=draw-kmap]').change(toggleDrawKmap);
 });
 
 $(window).resize(checkWindowSize);
@@ -33,17 +35,19 @@ function checkWindowSize() {
     }
 }
 
-function onMintermsChange() {
+function onTermChange(populate = true) {
     let { variableNames, dimension, termLimit } = getVariableNames();
     let { minterms, maxterms, dontCares } = fetchTerms(dimension);
 
     let { computable, errorStr } = checkMinterms(minterms);
 
-    populateKmap(minterms, dontCares, dimension);
+    if (drawKmap && populate)
+        populateKmap(minterms, dontCares, dimension);
 
     if (computable) {
         petrick.setMinterms(minterms);
         petrick.setMaxterms(maxterms);
+        petrick.setDontCares(dontCares);
         essentials = calculate();
         setSolutionStrings();
         colorKmap(essentials, dimension);
@@ -52,6 +56,27 @@ function onMintermsChange() {
         setErrorStr(errorStr);
     }
 
+}
+
+function toggleDrawKmap() {
+    drawKmap = this.checked;
+    userSet = true;
+
+    if (drawKmap) {
+        $("#kmap-div").css("display", "flex");
+
+        let { variableNames, returnName, dimension, termLimit } = fetchAttributes();
+        let { minterms, maxterms, dontCares } = fetchTerms(dimension);
+        createKmap(variableNames, returnName, dimension);
+        populateKmap(minterms, dontCares, dimension);
+
+        if (typeof essentials !== 'undefined' && drawGroups)
+            colorKmap(essentials, dimension);
+    }
+    else {
+        $("#kmap").empty();
+        $("#kmap-div").css("display", "none");
+    }
 }
 
 function onDrawChange() {
@@ -80,23 +105,27 @@ function onVariableNamesChange() {
     let { variableNames, returnName, dimension, termLimit } = fetchAttributes();
     let { minterms, maxterms, dontCares } = fetchTerms(dimension);
 
-    if (drawKmap && dimension <= maxDimension) {
+    if (!userSet) {
+        drawKmap = (dimension <= maxDimension);
+        $('input[type=checkbox][name=draw-kmap]').prop("checked", drawKmap);
+    }
+
+    if (drawKmap) {
+        $("#kmap-div").css("display", "flex");
         createKmap(variableNames, returnName, dimension);
+        populateKmap(minterms, dontCares, dimension);
     }
-    else if (!(drawKmap && dimension <= maxDimension)) {
+    else if (!drawKmap) {
         $("#kmap").empty();
-        $("#kmap").append(`<label id="kmap-replace-text">Kmap too large to display</label>`);
+        $("#kmap-div").css("display", "none");
     }
-    populateKmap(minterms, dontCares, dimension);
 
     let { computable, errorStr } = checkInputs(minterms, maxterms, dontCares, variableNames, returnName, termLimit);
 
     if (computable) {
-        if (dimension != prevDimension) {
-            setAllVariables(variableNames, returnName, dimension, minterms, maxterms, dontCares);
-            essentials = calculate();
-            prevDimension = dimension;
-        }
+        setAllVariables(variableNames, returnName, dimension, minterms, maxterms, dontCares);
+        essentials = calculate();
+        prevDimension = dimension;
         setSolutionStrings();
     }
     else {
@@ -143,6 +172,13 @@ function resetEverything() {
     setMinterms([]);
     setDontCares([]);
     onInfoChange();
+    userSet = false;
+}
+
+function resetTerms() {
+    setMinterms([]);
+    setDontCares([]);
+    onInfoChange();
 }
 
 function setVariableNames(variableNames) {
@@ -167,7 +203,12 @@ function onInfoChange(forceKmapRedraw = true) {
         dontCares,
     } = fetchTerms(dimension);
 
-    if ((forceKmapRedraw) || (drawKmap && dimension <= maxDimension)) {
+    if (!userSet) {
+        drawKmap = (dimension <= maxDimension);
+        $('input[type=checkbox][name=draw-kmap]').prop("checked", drawKmap);
+    }
+
+    if (forceKmapRedraw || drawKmap) {
         if (dimension != prevDimension) {
             prevDimension = dimension;
             createKmap(variableNames, returnName, dimension);
@@ -390,7 +431,7 @@ function createKmap(variableNames, returnName, dimension) {
 
     $("#kmap").append(`
     <tr class="map-row" id="title-row">
-        <td class="var-label" id="return-variable">${ returnName }:</td>
+        <td class="var-label" id="return-variable">${ returnName }</td>
         <td class="column-label" />
         <td class="var-label" id="col-variables" colspan="${rowNum}"> ${ variableNames.slice(rowDim).join(',') }</td>
     </tr>        
@@ -431,19 +472,10 @@ function createKmap(variableNames, returnName, dimension) {
 }
 
 function populateKmap(minterms, dontCares, dimension) {
-    let limit = Math.pow(2, dimension) - 1;
-    Array.from($(".kmap-cell")).forEach(function(val) {
-        let num = parseInt(val.id.slice(5), 10);
-        if (minterms.indexOf(num) !== -1) {
-            setCell(num, "1");
-        }
-        else if (dontCares.indexOf(num) !== -1) {
-            setCell(num, "-");
-        }
-        else {
-            setCell(num, "0");
-        }
-    });
+    $(".kmap-cell label").text("0");
+
+    minterms.forEach((v, i) => setCell(v, "1"));
+    dontCares.forEach((v, i) => setCell(v, "-"));
 }
 
 function clearColors() {
@@ -545,7 +577,7 @@ function cellChange(row, rowDim, col, colDim) {
     }
 
     if(success)
-        onInfoChange();
+        onTermChange();
     else
         throw("Somehow you broke the kmap. Congratulations?");
 }

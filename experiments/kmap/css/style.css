@@ -1,29 +1,3 @@
-/*
- ________________________________________________________________________________________________
-|                                                                                                 |
-|                                                                                                 |
-|                                                                                                 |
-|                                                                                                 |
-|                                                                                                 |
-|                                                                                                 |
-|                                                                                                 |
-|                                                                                                 |
-|                                                                                                 |
-|                                                                                                 |
-|                                                                                                 |
-|                                                                                                 |
-|                                                                                                 |
-|                                                                                                 |
-|                                                                                                 |
-|                                                                                                 |
-|                                                                                                 |
-|                                                                                                 |
-|                                                                                                 |
-|                                                                                                 |
-|                                                                                                 |
-|_________________________________________________________________________________________________|
-
-*/
 body, html {
   background-color: var(--mono9);
   color: var(--mono2);
@@ -37,6 +11,50 @@ body, html {
 }
 * {
   box-sizing: border-box;
+}
+
+@media screen and (orientation: landscape), (min-width: 960px) {
+  #content {
+    padding: 2vh 1vw;
+  }
+
+  #information {
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: flex-start;
+    padding-bottom: 3vh; 
+  }
+
+  #inputs {
+    align-items: flex-start;
+    height: 100%;
+  }
+
+  .input-field {
+    max-width: 90%;
+  }
+}
+
+@media screen and (orientation: portrait), (max-width: 960px) {
+  #content {
+    padding: 1vh 2vw;
+  }
+
+  #information {
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: nowrap
+  }
+
+  #inputs {
+    align-items: center;
+    padding-bottom: 5vh;
+  }
+
+  .info-section {
+    max-width: 80%;
+  }
 }
 
 #title {
@@ -72,6 +90,12 @@ body, html {
   justify-content: flex-start;
 }
 
+.info-section {
+  display: flex;
+  flex-direction: column;
+  font-size: 1.25rem;
+}
+
 #settings {
   display: flex;
   flex-direction: column;
@@ -81,80 +105,9 @@ body, html {
   padding-bottom: 1vh;
 }
 
-.solution {
-  display: flex;
-  flex-direction: column;
-  flex-wrap: nowrap;
-  justify-content: flex-start;
-  align-items: flex-start;
-}
-
 .info-header {
   font-size: 1.8rem;
   color: var(--med-important-color)
-}
-
-.info-section {
-  display: flex;
-  flex-direction: column;
-  font-size: 1.25rem;
-}
-
-.info-tooltip {
-  font-size: 0.8rem;
-  color: var(--mono5);
-}
-
-@media screen and (orientation: landscape), (min-width: 960px) {
-  #content {
-    padding: 2vh 1vw;
-  }
-
-  #information {
-    flex-direction: row;
-    justify-content: space-evenly;
-    align-items: flex-start;
-    padding-bottom: 3vh; 
-  }
-
-  #inputs {
-    align-items: flex-start;
-    height: 100%;
-  }
-
-  .input-field {
-    max-width: 90%;
-  }
-  
-  #kmap-div {
-    display: flex;
-  }
-}
-
-@media screen and (orientation: portrait), (max-width: 960px) {
-  #content {
-    padding: 1vh 2vw;
-  }
-
-  #information {
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    flex-wrap: nowrap
-  }
-
-  #inputs {
-    align-items: center;
-    padding-bottom: 5vh;
-  }
-
-  .info-section {
-    max-width: 80%;
-  }
-
-  #kmap-div {
-    display: none;
-  }
 }
 
 .entry {
@@ -167,6 +120,11 @@ body, html {
   padding-bottom: 0.5em;
 }
 
+.info-tooltip {
+  font-size: 0.8rem;
+  color: var(--mono5);
+}
+
 .input-field {
   background-color: var(--mono2);
   border-style: none;
@@ -175,6 +133,26 @@ body, html {
   font-size: inherit;
   width: 100%;
   padding: 0 0.25em;
+}
+    
+.clear-button {
+  padding: 0.25rem;
+  background: var(--med-important-color);
+  color: var(--mono9);
+  border: none;
+  font-style: inherit;
+  font-family: inherit;
+  font-size: 1.25rem;
+  cursor: pointer;
+  outline: inherit;
+}
+
+.solution {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: flex-start;
 }
 
 #solutions {
@@ -205,24 +183,8 @@ body, html {
   font-size: 1rem;
 }
 
-#clear-button-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-#clear-kmap {
-  background: var(--med-important-color);
-  color: var(--mono9);
-  border: none;
-  font-style: inherit;
-  font-family: inherit;
-  font-size: 1.25rem;
-	cursor: pointer;
-	outline: inherit;
-}
-
 #kmap-div {
+  display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
   justify-content: center;
@@ -320,4 +282,8 @@ a {
   font-size: 1rem;
   color: var(--med-important-color);
   padding-top: 2vh;
+}
+
+.no-text-wrap {
+  white-space: nowrap;
 }
