@@ -7,6 +7,9 @@ var sop = true;
 var drawGroups = true;
 var essentials;
 
+var prevMinterms = [];
+var prevDontCares = [];
+
 $(window).on('load', function() {
     petrick = new Petrick([], [], [], 0, [], "");
     checkWindowSize();
@@ -96,7 +99,7 @@ function onMethodChange() {
         sop = true;
     }
 
-    essentials = recalculate();
+    essentials = calculate();
     if (drawGroups)
         colorKmap(essentials, prevDimension);
 }
@@ -110,19 +113,19 @@ function onVariableNamesChange() {
         $('input[type=checkbox][name=draw-kmap]').prop("checked", drawKmap);
     }
 
-    if (drawKmap) {
-        $("#kmap-div").css("display", "flex");
-        createKmap(variableNames, returnName, dimension);
-        populateKmap(minterms, dontCares, dimension);
-    }
-    else if (!drawKmap) {
-        $("#kmap").empty();
-        $("#kmap-div").css("display", "none");
-    }
-
     let { computable, errorStr } = checkInputs(minterms, maxterms, dontCares, variableNames, returnName, termLimit);
 
     if (computable) {
+        if (drawKmap) {
+            $("#kmap-div").css("display", "flex");
+            createKmap(variableNames, returnName, dimension);
+            populateKmap(minterms, dontCares, dimension);
+        }
+        else if (!drawKmap) {
+            $("#kmap").empty();
+            $("#kmap-div").css("display", "none");
+        }
+
         setAllVariables(variableNames, returnName, dimension, minterms, maxterms, dontCares);
         essentials = calculate();
         prevDimension = dimension;
@@ -208,22 +211,22 @@ function onInfoChange(forceKmapRedraw = true) {
         $('input[type=checkbox][name=draw-kmap]').prop("checked", drawKmap);
     }
 
-    if (forceKmapRedraw || drawKmap) {
-        if (dimension != prevDimension) {
-            prevDimension = dimension;
-            createKmap(variableNames, returnName, dimension);
-        }
-        populateKmap(minterms, dontCares, dimension);
-    }
-    else {
-        $("#kmap").empty();
-        $("#kmap").append(`<label id="kmap-replace-text">Kmap too large to display</label>`);
-        prevDimension = dimension;
-    }
-
     let { computable, errorStr } = checkInputs(minterms, maxterms, dontCares, variableNames, returnName, termLimit);
     
     if (computable) {
+        if (forceKmapRedraw || drawKmap) {
+            if (dimension != prevDimension) {
+                prevDimension = dimension;
+                createKmap(variableNames, returnName, dimension);
+            }
+            populateKmap(minterms, dontCares, dimension);
+        }
+        else {
+            $("#kmap").empty();
+            $("#kmap").append(`<label id="kmap-replace-text">Kmap too large to display</label>`);
+            prevDimension = dimension;
+        }
+
         setAllVariables(variableNames, returnName, dimension, minterms, maxterms, dontCares);
         essentials = calculate();
         if (drawGroups)
@@ -302,25 +305,13 @@ function calculate() {
     if (sop) {
         petrick.calculateSOPEssentials();
         setSolutionStrings();
+
         return petrick.getSOPEssentials();
     }
     else {
         petrick.calculatePOSEssentials();
         setSolutionStrings();
 
-        return petrick.getPOSEssentials();
-    }
-}
-
-function recalculate() {
-    if (sop) {
-        petrick.calculateSOPEssentials();
-        setSolutionStrings();
-        return petrick.getSOPEssentials();
-    }
-    else {
-        petrick.calculatePOSEssentials();
-        setSolutionStrings();
         return petrick.getPOSEssentials();
     }
 }
@@ -472,10 +463,14 @@ function createKmap(variableNames, returnName, dimension) {
 }
 
 function populateKmap(minterms, dontCares, dimension) {
-    $(".kmap-cell label").text("0");
+    prevMinterms.filter(v => (minterms.indexOf(v) == -1)).forEach(v => setCell(v, "0"));
+    prevDontCares.filter(v => (dontCares.indexOf(v) == -1)).forEach(v => setCell(v, "0"));
 
-    minterms.forEach((v, i) => setCell(v, "1"));
-    dontCares.forEach((v, i) => setCell(v, "-"));
+    minterms.filter(v => (prevMinterms.indexOf(v) == -1)).forEach(v => setCell(v, "1"));
+    dontCares.filter(v => (prevDontCares.indexOf(v) == -1)).forEach(v => setCell(v, "-"));
+
+    prevMinterms = minterms;
+    prevDontCares = dontCares;
 }
 
 function clearColors() {
