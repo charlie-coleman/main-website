@@ -38,13 +38,13 @@ function checkWindowSize() {
     }
 }
 
-function onTermChange(populate = true) {
+function onTermChange() {
     let { variableNames, dimension, termLimit } = getVariableNames();
     let { minterms, maxterms, dontCares } = fetchTerms(dimension);
 
     let { computable, errorStr } = checkMinterms(minterms);
 
-    if (drawKmap && populate)
+    if (drawKmap)
         populateKmap(minterms, dontCares, dimension);
 
     if (computable) {
@@ -119,9 +119,10 @@ function onVariableNamesChange() {
         if (drawKmap) {
             $("#kmap-div").css("display", "flex");
             createKmap(variableNames, returnName, dimension);
+            prevMinterms = prevDontCares = [];
             populateKmap(minterms, dontCares, dimension);
         }
-        else if (!drawKmap) {
+        else {
             $("#kmap").empty();
             $("#kmap-div").css("display", "none");
         }
@@ -463,6 +464,11 @@ function createKmap(variableNames, returnName, dimension) {
 }
 
 function populateKmap(minterms, dontCares, dimension) {
+    console.log(prevMinterms);
+    console.log(minterms);
+
+    console.log(prevMinterms.filter(v => (minterms.indexOf(v) == -1)));
+
     prevMinterms.filter(v => (minterms.indexOf(v) == -1)).forEach(v => setCell(v, "0"));
     prevDontCares.filter(v => (dontCares.indexOf(v) == -1)).forEach(v => setCell(v, "0"));
 

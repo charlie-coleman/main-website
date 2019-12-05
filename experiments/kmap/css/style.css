@@ -1,5 +1,5 @@
 body, html {
-  background-color: var(--mono9);
+  background-color: var(--mono10);
   color: var(--mono2);
   font-family: OpenSans, sans-serif;
   height: 100%;
@@ -142,17 +142,17 @@ body, html {
 .input-field {
   background-color: var(--mono2);
   border-style: none;
-  color: var(--mono9);
+  color: var(--mono10);
   font-family: inherit;
   font-size: inherit;
   width: 100%;
-  padding: 0 0.25em;
+  padding: 0.125rem 0.25rem;
 }
     
 .clear-button {
   padding: 0.25rem;
-  background: var(--med-important-color);
-  color: var(--mono9);
+  background: var(--light-important-color);
+  color: var(--mono10);
   border: none;
   font-style: inherit;
   font-family: inherit;
@@ -187,14 +187,14 @@ body, html {
 }
 
 .solution-field {
-  background-color: var(--mono2);
   border-style: none;
-  color: var(--mono9);
+  background-color: var(--mono2);
+  color: var(--mono10);
   font-family: inherit;
-  font-size: inherit;
   width: 100%;
   resize: none;
-  font-size: 1rem;
+  font-size: 1.25rem;
+  padding: 0.125rem 0.25rem;
 }
 
 #kmap-div {
@@ -280,12 +280,13 @@ a {
 .kmap-row:nth-child(even) .kmap-cell:nth-child(odd):hover,
 .kmap-row:nth-child(odd)  .kmap-cell:nth-child(even):hover{
   background-color: var(--light-important-color);
-  color: var(--mono10);
+  color: var(--mono12);
 }
 
 .kmap-row:nth-child(even) .kmap-cell:nth-child(even):hover,
 .kmap-row:nth-child(odd)  .kmap-cell:nth-child(odd):hover{
   background-color: var(--dark-important-color);
+  color: var(--mono1);
 }
 
 .footer {
