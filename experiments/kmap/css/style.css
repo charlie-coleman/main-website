@@ -136,7 +136,7 @@ body, html {
 
 .info-tooltip {
   font-size: 0.8rem;
-  color: var(--mono5);
+  color: var(--mono3);
 }
 
 .input-field {
@@ -264,7 +264,7 @@ a {
 
 .kmap-cell {
   text-align: center;
-  color: var(--mono4);
+  color: var(--mono2);
   border: 0px;
 }
 
@@ -280,7 +280,7 @@ a {
 .kmap-row:nth-child(even) .kmap-cell:nth-child(odd):hover,
 .kmap-row:nth-child(odd)  .kmap-cell:nth-child(even):hover{
   background-color: var(--light-important-color);
-  color: var(--mono8);
+  color: var(--mono10);
 }
 
 .kmap-row:nth-child(even) .kmap-cell:nth-child(even):hover,
