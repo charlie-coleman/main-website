@@ -1,20 +1,13 @@
-<html>
-  <title>Karnaugh Map Solver</title>
-  <meta name="viewport" content="width=device-width, initial-scale-1.0">
-  <meta charset="utf-8">
-  <meta http-equiv="x-ua-compatible" content="ie=edge">
-  <meta name="description" content="Allows the user to input values for a Karnaugh map and recieve boolean expressions for the output.">
-  <link rel="icon" type="icon/x-icon" href="/resources/favicon.ico">
-
-  <link rel="stylesheet" type="text/css" href="../../resources/css/palette.css">
-  <link rel="stylesheet" type="text/css" href="/resources/fonts/opensans.css">
-  <script src="/resources/js/tracking.js"></script>
-
-  <link rel="stylesheet" type="text/css" href="./css/style.css">
-  <script src="./js/jquery-3.4.1.min.js"></script>
-  <script src="./ts/petrick.js"></script>
-  <script src="./js/main.js"></script>
-
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Karnaugh Map Solver</title>
+    <meta name="viewport" content="width=device-width, initial-scale-1.0">
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="Allows the user to input values for a Karnaugh map and recieve boolean expressions for the output.">
+    <link rel="icon" type="icon/x-icon" href="/resources/favicon.ico">
+  </head>
   <body>
     <div id="title">
       <header id="content-title">Karnaugh Map Solver</header>
@@ -26,12 +19,12 @@
           <div id="attributes" class="info-section">
             <header class="info-header">Function Info</header>
             <div class="entry">
-              <label class="entry-label">Output Name:</label>
+              <label for="return-name" class="entry-label">Output Name:</label>
               <label class="info-tooltip">One string for function result</label>
               <input id="return-name" type="text" size="30" value="f" class="input-field">
             </div>
             <div class="entry">
-              <label class="entry-label">Input Names:</label>
+              <label for="variable-names" class="entry-label">Input Names:</label>
               <label class="info-tooltip">Comma separated list of variable names</label>
               <input id="variable-names" type="text" size="30" value="a,b,c,d" class="input-field">
             </div>
@@ -39,11 +32,11 @@
 
           <div id="settings" class="info-section">
             <header class="info-header">Settings:</header>
-            <label id="sop-label"><input type="radio" name="method" value="sop" checked> Sum of Products</label>
-            <label id="sop-label"><input type="radio" name="method" value="pos"> Product of Sums</label>
+            <label class="setting-label"><input type="radio" name="method" value="sop" checked> Sum of Products</label>
+            <label class="setting-label"><input type="radio" name="method" value="pos"> Product of Sums</label>
             <label class="info-tooltip"> (very slow with &gt;10 variables)</label>
-            <label id="sop-label"><input type="checkbox" name="draw-kmap" value="map" checked> Draw Kmap</label>
-            <label id="sop-label"><input type="checkbox" name="draw-groups" value="draw" checked> Draw groupings</label>
+            <label class="setting-label"><input type="checkbox" name="draw-kmap" value="map" checked> Draw Kmap</label>
+            <label class="setting-label"><input type="checkbox" name="draw-groups" value="draw" checked> Draw groupings</label>
           </div>
 
           <div class="clear-button-container">
@@ -54,12 +47,12 @@
         <div id="terms" class="info-section">
           <header class="info-header">Terms</header>
           <div class="entry">
-            <label class="entry-label">Minterms:</label>
+            <label for="minterms" class="entry-label">Minterms:</label>
             <label class="info-tooltip">Comma separated list of numbers</label>
             <input id="minterms" type="text" size="30" value="" class="input-field">
           </div>
           <div class="entry">
-            <label class="entry-label">Don't Cares:</label>
+            <label for="dont-cares" class="entry-label">Don't Cares:</label>
             <label class="info-tooltip">Comma separated list of numbers</label>
             <input id="dont-cares" type="text" size="30" value="" class="input-field">
           </div>
@@ -72,15 +65,15 @@
         <div id="solutions" class="info-section">
           <header class="info-header">Solutions:</header>
           <div class="solution">
-            <label class="solution-label">Generic:</label>
+            <label for="generic-solution" class="solution-label">Generic:</label>
             <textarea cols="80" rows="4" wrap="soft" class="solution-field" readonly id="generic-solution"></textarea>
           </div>
           <div class="solution">
-            <label class="solution-label">VHDL:</label>
+            <label for="vhdl-solution" class="solution-label">VHDL:</label>
             <textarea cols="80" rows="4" wrap="soft" class="solution-field" readonly id="vhdl-solution"></textarea>
           </div>
           <div class="solution">
-            <label class="solution-label">Verilog:</label>
+            <label for="verilog-solution" class="solution-label">Verilog:</label>
             <textarea cols="80" rows="4" wrap="soft" class="solution-field" readonly id="verilog-solution"></textarea>
           </div>
         </div>
@@ -99,4 +92,13 @@
       </div>
     </div>
   </body>
+
+  <link rel="stylesheet" type="text/css" href="/resources/css/palette.css">
+  <link rel="stylesheet" type="text/css" href="/resources/fonts/opensans.css">
+  <script src="/resources/js/tracking.js"></script>
+  <link rel="stylesheet" type="text/css" href="./css/style.css">
+
+  <script src="./js/jquery-3.4.1.min.js"></script>
+  <script src="./ts/petrick.js"></script>
+  <script src="./js/main.js"></script>
 </html>
