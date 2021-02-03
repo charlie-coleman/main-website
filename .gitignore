@@ -1,5 +1,5 @@
 experiments/lsystem/resources/
 experiments/kmap/resources/
-./SSL/
-./deploy.php
+SSL/
 */node_modules
+artifacts/
