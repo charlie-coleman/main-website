@@ -17,8 +17,32 @@ $(window).on('load', function() {
 
     $("#variable-names").keyup(onVariableNamesChange);
     $("#return-name").keyup(onReturnNameChange);
-    $("#minterms").keyup(onTermChange);
-    $("#dont-cares").keyup(onTermChange);
+    $("#minterms").keyup(function(event) {
+        let input = getInputStr("#minterms");
+        
+        if (event.which == 9 || event.which == 16) {
+            return;
+        }
+
+        if (input == "" || input.slice(-1) == "," || event.which == 13)
+        {
+            onMintermChange(input.slice(-1) == ",");
+        }
+    });
+    $("#minterms").focusout(() => onMintermChange(false));
+    $("#dont-cares").keyup(function(event) {
+        let input = getInputStr("#dont-cares");
+        
+        if (event.which == 9 || event.which == 16) {
+            return;
+        }
+
+        if (input == "" || input.slice(-1) == "," || event.which == 13)
+        {
+            onDontCareChange(input.slice(-1) == ",");
+        }
+    });
+    $("#dont-cares").focusout(() => onDontCareChange(false));
 
     $('input[type=radio][name=method]').change(onMethodChange);
     $('input[type=checkbox][name=draw-groups]').change(onDrawChange);
@@ -38,9 +62,17 @@ function checkWindowSize() {
     }
 }
 
-function onTermChange() {
+function onMintermChange(appendComma = false) {
     let { variableNames, dimension, termLimit } = getVariableNames();
     let { minterms, maxterms, dontCares } = fetchTerms(dimension);
+
+    dontCares = dontCares.filter(function(v)
+    {
+        return minterms.findIndex(e => e == v) == -1;
+    });
+
+    setMinterms(minterms, appendComma);
+    setDontCares(dontCares);
 
     let { computable, errorStr } = checkMinterms(minterms);
 
@@ -59,6 +91,36 @@ function onTermChange() {
         setErrorStr(errorStr);
     }
 
+}
+
+function onDontCareChange(appendComma = false) {
+    let { variableNames, dimension, termLimit } = getVariableNames();
+    let { minterms, maxterms, dontCares } = fetchTerms(dimension);
+
+    minterms = minterms.filter(function(v)
+    {
+        return dontCares.findIndex(e => e == v) == -1;
+    });
+
+    setMinterms(minterms);
+    setDontCares(dontCares, appendComma);
+
+    let { computable, errorStr } = checkMinterms(minterms);
+
+    if (drawKmap)
+        populateKmap(minterms, dontCares, dimension);
+
+    if (computable) {
+        petrick.setMinterms(minterms);
+        petrick.setMaxterms(maxterms);
+        petrick.setDontCares(dontCares);
+        essentials = calculate();
+        setSolutionStrings();
+        colorKmap(essentials, dimension);
+    }
+    else {
+        setErrorStr(errorStr);
+    }
 }
 
 function toggleDrawKmap() {
@@ -464,11 +526,6 @@ function createKmap(variableNames, returnName, dimension) {
 }
 
 function populateKmap(minterms, dontCares, dimension) {
-    console.log(prevMinterms);
-    console.log(minterms);
-
-    console.log(prevMinterms.filter(v => (minterms.indexOf(v) == -1)));
-
     prevMinterms.filter(v => (minterms.indexOf(v) == -1)).forEach(v => setCell(v, "0"));
     prevDontCares.filter(v => (dontCares.indexOf(v) == -1)).forEach(v => setCell(v, "0"));
 
@@ -578,7 +635,7 @@ function cellChange(row, rowDim, col, colDim) {
     }
 
     if(success)
-        onTermChange();
+        onMintermChange();
     else
         throw("Somehow you broke the kmap. Congratulations?");
 }
@@ -679,8 +736,8 @@ function getMinterms() {
     return temp.map(v => parseInt(v, 10));
 }
 
-function setMinterms(minterms) {
-    $("#minterms").val(minterms.join(","));
+function setMinterms(minterms, appendComma = false) {
+    $("#minterms").val(minterms.join(",") + ((appendComma) ? "," : ""));
 }
 
 function getDontCares() {
@@ -690,8 +747,8 @@ function getDontCares() {
     return temp.map(v => parseInt(v, 10));
 }
 
-function setDontCares(dontCares) {
-    $('#dont-cares').val(dontCares.join(","));
+function setDontCares(dontCares, appendComma = false) {
+    $('#dont-cares').val(dontCares.join(",") + ((appendComma) ? "," : ""));
 }
 
 function termsInBounds(terms, termLimit) {

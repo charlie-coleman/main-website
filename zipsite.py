@@ -12,8 +12,9 @@ def addfile(reldir, path, ziph):
     ziph.write(os.path.realpath(path), os.path.relpath(os.path.realpath(path), os.path.realpath(reldir)))
 
 if __name__ == '__main__':
-    os.mkdir('./artifacts/')
-    zipf = zipfile.ZipFile('./artifacts/charlie-coleman.com.zip', 'w', zipfile.ZIP_DEFLATED)
+    if (not os.path.exists('./artifacts/')):
+        os.mkdir('./artifacts/')
+    zipf = zipfile.ZipFile('./artifacts/main-website.zip', 'w', zipfile.ZIP_DEFLATED)
     addfiles('./404/', zipf)
     addfiles('./css/', zipf)
     addfiles('./downloadables/', zipf)
