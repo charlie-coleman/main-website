@@ -1,12 +1,15 @@
 a {
     all: unset;
 }
+
 body {
     background-color: var(--mono1);
 }
+
 #image-div {
     
 }
+
 .image {
     position: fixed;
     top: 0;
@@ -27,24 +30,23 @@ body {
     transition: 0.5s ease-in-out;
     overflow: hidden;
 }
-#schedule-img {
-    background-image: url('/resources/img/schedule.jpg')
+
+#kmap-img {
+  background-image: url('/resources/img/kmap.png');
 }
-#text-img {
-    background-image: url('/resources/img/text-to-color.png');
-}
-#balls-img {
-    background-image: url('/resources/img/bouncy-balls.png');
-}
-#btext-img {
-    background-image: url('/resources/img/bouncy-text.png');
-}
+
 #system-img {
     background-image: url('/resources/img/lsystem.png');
 }
-#trusty-img {
-    background-image: url('/resources/img/trusty.png');
+
+#schedule-img {
+    background-image: url('/resources/img/schedule.jpg');
 }
+
+#text-img {
+    background-image: url('/resources/img/text-to-color.png');
+}
+
 html {
     background-color: var(--mono1);
     background-size: cover;
@@ -66,18 +68,22 @@ html {
     padding: 0.1% 1% 0% 1%;
     border-bottom: 1px solid currentColor;
 }
+
 #title-div h1, h2 {
     font-weight: normal;
     font-family: OpenSans;
     padding: 0;
     margin: 0;
 }
+
 #title-div h1 {
     float: left;
 }
+
 #title-div h2 {
     float: right;
 }
+
 #link-list {
     float: right;
 }
@@ -87,6 +93,7 @@ html {
     display: inline-block;
     margin-right: 4%;
 }
+
 #list-content {
     opacity: 0;
     position: absolute;
@@ -101,6 +108,7 @@ html {
     -ms-transition: 0.25s ease-in-out;        
     transition: 0.25s ease-in-out;
 }
+
 #link-list ul {
     font-family: OpenSans;
     width: 100%;
@@ -109,6 +117,7 @@ html {
     padding-bottom: 5%;
     padding-right: 5%;
 }
+
 #link-list li {
     -webkit-transition: 0.5s ease-in-out;
     -moz-transition: 0.5s ease-in-out;
@@ -116,12 +125,15 @@ html {
     -ms-transition: 0.5s ease-in-out;        
     transition: 0.5s ease-in-out;
 }
+
 #link-list li:hover {
     background-color: var(--mono3);
 }
+
 #list-content a {
     text-decoration: underline;
 }
+
 #link-list:hover #list-content {
     opacity: 1;
     z-index: 1;
@@ -185,6 +197,7 @@ html {
     justify-content: flex-start;
     align-items: center;
 }
+
 #me-div a {
     text-decoration: underline;
 }
