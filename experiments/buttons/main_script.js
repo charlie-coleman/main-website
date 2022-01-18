@@ -1,22 +1,22 @@
-var soundFiles = ["airhorn", "iliketurtles", "whatisgoingon", "bekfest",
+var soundFiles = ["airhorn", "iliketurtles", "thatsthesoundofthepolice",
                   "damnson", "imagiraffe", "itsatrap", "leeroyjenkins",
                   "profamity", "shiasuprise", "smallloan", "surprisemotherfucker",
                   "triple", "weedeveryday", "xfiles", "sniper",
                   "china", "fuckherrightinthepussy", "hitmarker", "getthecamera",
                   "fatality", "timallengrunt", "ballsofsteel", "awfuck",
                   "icantbelieve", "fuckrichard", "itsonlygame", "whyyouhavetobemad",
-                  "loudestorgasm", "iknowwords", "thatsaten", "smacking",
-                  "really", "onthespectrum", "aysat", "jcijb",
+                  "iknowwords", "thatsaten", "smacking",
+                  "really", "aysat", "jcijb",
                   "hughmungus", "wot", "jimboonieonly", "bork"];
-var soundNames = ["Airhorn", "I like turtles", "What is going on here?", "BEKFEST",
+var soundNames = ["Airhorn", "I like turtles", "Siren",
                   "Damn son, where\'d you find this?", "I\'m a giraffe", "It\'s a trap!", "Leeroy Jenkins",
                   "Watch yo profamity", "Just do it!", "Small loan", "Suprise, motherfucker",
                   "Oh Baby a Triple!", "Smoke Weed Everyday", "XFiles", "Intervention",
                   "China", "In the pussy", "Hitmarker", "Mom, get the camera!",
                   "Fatality", "Tim Allen", "Balls of Steel", "Aw Fuck",
                   "I Can\'t Believe", "What the fuck.", "It\'s only game", "Why you have to be mad?",
-                  "Loudest Orgasm", "I Know Words","That\'s A Ten", "Cover All 9000 Tastebuds",
-                  "Really!", "Thanks Mr. On-the-Spectrum!", "Are you sure?", "Jesus Christ",
+                  "I Know Words", "That\'s A Ten", "Cover All 9000 Tastebuds",
+                  "Really!", "Are you sure?", "Jesus Christ",
                   "Hugh. Mungus.", "Wot?", "It\'s free!", "bork"];
 var start_filepath = "soundfiles/";
 var extension = '.mp3';

@@ -1,13 +1,13 @@
 @font-face {
-    font-family: BebasNeue;
-    src:url(BebasNeue.otf);
+  font-family: OpenSansExtraBold;
+  src:url(/resources/fonts/open-sans/OpenSans-ExtraBold.ttf);
 }
 @font-face {
-    font-family: HarabaraMais;
-    src: url(HarabaraMaisDemo.otf);
+  font-family: OpenSans;
+  src:url(/resources/fonts/open-sans/OpenSans-Regular.ttf);
 }
 .exp {
-    font-family: BebasNeue;
+    font-family: OpenSans;
     font-size: 24;
 }
 .exp:before {

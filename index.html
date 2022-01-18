@@ -6,13 +6,10 @@
     </head>
     <body>
         <div id='image-div'>
-            <div class='image' id='schedule-img'></div>
-            <div class='image' id='kmap-img'></div>
-            <div class='image' id='system-img'></div>
-            <div class='image' id='text-img'></div>
-            <div class='image' id='balls-img'></div>
-            <div class='image' id='btext-img'></div>
-            <div class='image' id='trusty-img'></div>
+          <div class='image' id='kmap-img'></div>
+          <div class='image' id='system-img'></div>
+          <div class='image' id='schedule-img'></div>
+          <div class='image' id='text-img'></div>
         </div>
         <div id='title-div'>
             <h1>Charlie Coleman</h1>
@@ -20,83 +17,59 @@
             <div id='link-list'>
                 <div id='list-title'><h2>Quick Links</h2></div>
                 <ul id='list-content'>
-                    <li><a href='/schedule'>Schedule Maker</a></li>
-                    <li><a href='/experiments/kmap'>KMap Solver</a></li>
-                    <li><a href='/experiments/lsystem'>Fractal Generator</a></li>
-                    <li><a href='/experiments/1'>Text to Color</a></li>
-                    <li><a href='/experiments/2'>Bouncy Balls</a></li>
-                    <li><a href='/experiments/3'>Bouncy Text</a></li>
-                    <li><a href='/trusty'>TrustyClicker</a></li>
-                    <li><a href='/gray'>GrayClicker</a></li>
-                    <li><a href='/trusty48'>Trusty48</a></li>
+                  <li><a href='/experiments/kmap'>Karnaugh Map Solver</a></li>
+                  <li><a href='/experiments/lsystem'>Fractal Generator</a></li>
+                  <li><a href='/schedule'>Schedule Maker</a></li>
+                  <li><a href='/experiments/1'>Text to Color</a></li>
+                  <li><a href='/experiments/clock'>Rainbow Clock</a></li>
                 </ul>
             </div>
         </div>
         <div id='link-div'>
-            <div id='schedule' class='link'>
-                <a href='/schedule'>
-                    <div class='title'>Class Schedule Creator</div>
-                </a>
-                <div class='desc'><p>Web application that makes it easy to plan and visualize schedules.</p></div>
-            </div>
-            <div id='kmap' class='link'>
-                <a href='/experiments/kmap'>
-                    <div class='title'>Karnaugh Map Solver</div>
-                </a>
-                <div class='desc'><p>Solves Karnaugh maps for the boolean equation with minimum logic to implement the truth table.</p></div>
-            </div>
-            <div id='lsystem' class='link'>
-                <a href='/experiments/lsystem/'>
-                    <div class='title'>Fractal Generator</div>
-                </a>
-                <div class='desc'><p>This experiment uses Lindenmayer Systems to draw fractals and space filling curves. There are a lot of examples to show you what it can do. Check it out! Choose some constants, an axiom, and define the rules and see how it turns out. Learn more about L-Systems <a href='https://en.wikipedia.org/wiki/L-system'>here</a> or <a href='http://algorithmicbotany.org/papers/abop/abop.pdf'>here</a>.</p></div>
-            </div>
-            <div id='text-to-color' class='link'>
-                <a href="/experiments/1">
-                    <div class="title">Text to Color</div>
-                </a>
-                <div class='desc'><p>This experiment first takes a string and converts it into a hexadecimal color and it's opposite. The experiment is based on the idea that any string of numbers and letters can be viewed as a base 36 number.</p></div>
-            </div>
-            <div id='bouncy-balls' class='link'>
-                <a href="/experiments/2">
-                    <div class="title">Bouncing, Colorful Balls</div>
-                </a>
-                <div class='desc'><p>This experiment draws a canvas that contains any number of (almost) perfectly elastic balls. The experiment then takes the average distance between the balls and puts it through a series of equations and spits out an RGB color to which the background is set, and the balls, the inverse.</p></div>
-            </div>
-            <div id='bouncy-text' class='link'>
-                <a href="/experiments/3">
-                    <div class="title">Bouncing Text</div>
-                </a>
-                <div class='desc'><p>This experiment draws a canvas that contains any number of strings of text and images. These strings and/or images bounce around the canvas. Type your name into the text box and hit add to see your name. To add an image, start with a backslash (\) and then input the link to the image and hit add.</p></div>
-            </div>
-            <div id='dowling' class='link'>
-                <div class='title'>Dowling Stuff</div>
-                <div class='desc'>
-                    <p>
-                    The games I've made that have something to do with Dowling. <br>
-                    <ul>
-                        <li><a href='/trusty'>TrustyClicker</a></li>
-                        <li><a href='/gray'>GrayClicker</a></li>
-                        <li><a href='/trusty48'>Trusty48</a></li>
-                    </ul>
-                    </p>
-                </div>
-            </div>
+          <div id='kmap' class='link'>
+              <a href='/experiments/kmap'>
+                  <div class='title'>Karnaugh Map Solver</div>
+              </a>
+              <div class='desc'><p>Solves Karnaugh maps for the boolean equation with minimum logic to implement the truth table.</p></div>
+          </div>
+          <div id='lsystem' class='link'>
+              <a href='/experiments/lsystem/'>
+                  <div class='title'>Fractal Generator</div>
+              </a>
+              <div class='desc'><p>Use Lindenmayer Systems to draw fractals and space filling curves. There are a lot of examples to show you what it can do. Check it out! Choose some constants, an axiom, and define the rules and see how it turns out. Learn more about L-Systems <a href='https://en.wikipedia.org/wiki/L-system'>here</a> or <a href='http://algorithmicbotany.org/papers/abop/abop.pdf'>here</a>.</p></div>
+          </div>
+          <div id='schedule' class='link'>
+              <a href='/schedule'>
+                  <div class='title'>Class Schedule Creator</div>
+              </a>
+              <div class='desc'><p>WPlan and visualize class schedules.</p></div>
+          </div>
+          <div id='text-to-color' class='link'>
+              <a href="/experiments/1">
+                  <div class="title">Text to Color</div>
+              </a>
+              <div class='desc'><p>Take a string and convert it into a hexadecimal color and it's opposite. The experiment is based on the idea that any string of numbers and letters can be viewed as a base 36 number.</p></div>
+          </div>
+          <div id="clock" class="link">
+            <a href="/experiments/clock">
+              <div class="title">Rainbow Clock</div>
+            </a>
+            <div class="desc"><p>It's just a clock that cycles through the color wheel every 60 seconds.</p></div>
+          </div>
         </div>
         <div id='me-div'>
             <div id='me-content' class='link'>
                 <div class='about-title'>Charlie Coleman</div>
-                <div class='about-section-title'><a href="mailto:me@charlie-coleman.com">Email me</a></div><br>
+                <div class='about-section-title'>Email me: me (at) charlie-coleman.com</a></div><br>
                 <div class='about-section-title'>Education</div>
                 Bachelor of Science in Computer Engineering, May 2019<br>
                 <div class="about-tabbed">GPA: 3.50</div>
                 <h6>Saint Louis University - Saint Louis, MO</h6><br><br>
                 <div class="about-section-title">Skills</div><br>
                 <div class="about-italicize">Programming and Web Development</div>
-                <div class="about-tabbed">Experienced with Java, JavaScript, Python, HTML, CSS, C++, and Visual Basic</div><br>
-                <div class="about-italicize">Computer Related</div>
-                <div class="about-tabbed">Very experienced with Windows and Linux operating systems</div>
-                <div class="about-tabbed">Experienced with Microsoft Office products, Autodesk Inventor and Revit, and various IDEs for programming languages</div><br>
+                <div class="about-tabbed">Experienced with C, C++, C#, Python, JavaScript</div><br>
+                <div class="about-italicize">Misc.</div>
+                <div class="about-tabbed">Experienced with Unity, LaTeX, Agile, Git, Windows, and Linux</div><br>
             </div> 
         </div>
     </body>
